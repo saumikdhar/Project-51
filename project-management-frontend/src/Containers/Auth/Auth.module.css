@@ -1,0 +1,25 @@
+.Auth {
+  margin:auto;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 2px 3px #ccc;
+  border: 1px solid #3b0062;
+  box-sizing: border-box;
+  top: 50%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 18px;
+
+}
+
+.Auth h1 {
+  color: #3b0062;
+}
+
+@media (min-width: 600px) {
+  .Auth {
+    width: 500px;
+  }
+}
