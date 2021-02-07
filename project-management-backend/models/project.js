@@ -12,6 +12,26 @@ const Project = sequelize.define('project', {
     type: Sequelize.STRING,
     allowNull: false
   },
+  managerName: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  projectStatus: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  projectSize: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  quickWin: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  projectType: {
+    type: Sequelize.STRING,
+    allowNull: false
+  }
 });
 
 module.exports = Project;
