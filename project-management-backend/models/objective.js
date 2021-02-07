@@ -11,6 +11,6 @@ const Objective = sequelize.define("objective", {
   type: {
     type: Sequelize.STRING
   }
-});
+}, {timestamps: false});
 
 module.exports = Objective;

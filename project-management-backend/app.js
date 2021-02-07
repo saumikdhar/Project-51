@@ -27,14 +27,14 @@ app.use((req, res, next) => {
   next();
 });
 
-User.belongsToMany(Project, { through: UserProject });
-Project.belongsToMany(User, { through: UserProject });
+User.belongsToMany(Project, { through: UserProject, constraints: true, onDelete: 'CASCADE'  });
+Project.belongsToMany(User, { through: UserProject, constraints: true, onDelete: 'CASCADE'  });
 
 Project.hasOne(BusinessCase);
 BusinessCase.belongsTo(Project);
 
-Updater.belongsToMany(Project,{through: UpdaterProject});
-Project.belongsToMany(Updater, {through: UpdaterProject});
+Updater.belongsToMany(Project,{through: UpdaterProject, constraints: true, onDelete: 'CASCADE' });
+Project.belongsToMany(Updater, {through: UpdaterProject, constraints: true, onDelete: 'CASCADE' });
 
 Project.hasOne(Scoreboard);
 Scoreboard.hasMany(Objective);

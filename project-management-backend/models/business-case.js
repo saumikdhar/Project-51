@@ -47,6 +47,6 @@ const BusinessCase = sequelize.define('business_case', {
   investmentAppraisal: {
     type: Sequelize.STRING
   }
-});
+}, {timestamps: false});
 
 module.exports = BusinessCase;

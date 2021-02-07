@@ -11,6 +11,6 @@ const Risk = sequelize.define("risk", {
   type: {
     type: Sequelize.STRING
   }
-});
+}, {timestamps: false});
 
 module.exports = Risk;

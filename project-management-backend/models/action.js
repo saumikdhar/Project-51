@@ -10,8 +10,7 @@ const Action = sequelize.define("action", {
   },
   type: {
     type: Sequelize.STRING
-  },
-
-});
+  }
+}, {timestamps: false} );
 
 module.exports = Action;

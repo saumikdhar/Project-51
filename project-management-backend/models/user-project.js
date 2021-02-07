@@ -8,6 +8,6 @@ const UserProject = sequelize.define('user_project', {
     allowNull: false,
     primaryKey: true
   }
-});
+}, {timestamps: false});
 
 module.exports = UserProject;
