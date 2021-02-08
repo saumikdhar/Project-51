@@ -42,8 +42,8 @@ Scoreboard.hasMany(Risk);
 Scoreboard.hasMany(Action);
 
 sequelize
-  // .sync({force: true}) //Only use this when changing tables or fields
-  .sync()
+  .sync({force: true}) //Only use this when changing tables or fields
+  // .sync()
   .catch(err => console.log(err));
 
 const server = app.listen(8080);
