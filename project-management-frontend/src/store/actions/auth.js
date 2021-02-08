@@ -6,12 +6,12 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = (token, userId, name) => {
+export const authSuccess = (token, userId, role) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     token: token,
     userId: userId,
-    name: name
+    role: role
   };
 };
 
@@ -25,7 +25,7 @@ export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("expirationDate");
   localStorage.removeItem("userId");
-  localStorage.removeItem("name");
+  localStorage.removeItem("role");
   return {
     type: actionTypes.AUTH_LOGOUT
   };
@@ -39,18 +39,18 @@ export const checkAuthTimeout = expirationTime => {
   };
 };
 
-export const auth = (email, password, isSignUp, name) => {
+export const auth = (email, password) => {
   return dispatch => {
     dispatch(authStart());
 
     const url = "http://localhost:8080/auth/login";
     const method = "POST";
+    const header = {"Content-Type": "application/json"};
+
 
     fetch(url, {
       method: method,
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: header,
       body: JSON.stringify({
         email: email,
         password: password
@@ -65,10 +65,10 @@ export const auth = (email, password, isSignUp, name) => {
         return res.json();
       })
       .then(resData => {
-        dispatch(authSuccess(resData.token, resData.userId, resData.name));
+        dispatch(authSuccess(resData.token, resData.userId, resData.role));
         localStorage.setItem("token", resData.token);
         localStorage.setItem("userId", resData.userId);
-        localStorage.setItem("name", resData.name);
+        localStorage.setItem("role", resData.role);
         console.log("token is now", localStorage.getItem("token"));
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(

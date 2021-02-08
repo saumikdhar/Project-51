@@ -10,14 +10,20 @@ import {connect} from "react-redux";
 const Auth = (props) => {
     const [authForm, setAuthForm] = useState({
         email:  {
-            type: "email",
-            value: "",
-            label: "Email Address",
+            elementType: "input",
+            elementConfig: {
+                type: "email",
+                placeholder: "name@Hafod.com"
+            },
+            label: 'Email Address',
             valid: false
         },
         password:{
-            type: "password",
-            value: "",
+            elementType: "input",
+            elementConfig: {
+                type: "password",
+                placeholder: "password"
+            },
             label: "Password",
             valid: false
         }
@@ -66,7 +72,7 @@ const Auth = (props) => {
           <Input
             style={{display: 'none'}}
             key={formElement.id}
-            elementType="input"
+            elementType={formElement.config.elementType}
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             label={formElement.config.label}
@@ -93,10 +99,14 @@ const Auth = (props) => {
 
     const submitHandler = event => {
         event.preventDefault();
-        props.onAuth(
-          authForm.email.value,
-          authForm.password.value
-        );
+        if (authForm.email.value && authForm.password.value) {
+            props.onAuth(
+              authForm.email.value,
+              authForm.password.value
+            );
+        }else {
+            errorMessage = "One of the fields is blank";
+        }
     };
 
     return (
@@ -107,7 +117,7 @@ const Auth = (props) => {
               <form onSubmit={submitHandler}>
                   {errorMessage}
                   {form}
-                  <Button btnType="Submit">Submit</Button>
+                  <Button btnType="Submit">Sign In</Button>
               </form>
           </div>
       </>

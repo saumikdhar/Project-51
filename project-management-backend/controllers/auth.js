@@ -7,7 +7,6 @@ const User = require('../models/user');
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  let loadedUser;
   try {
     const user = await User.findOne({where: { email: email} });
     if (!user) {
@@ -15,7 +14,7 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    loadedUser = user;
+
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
       const error = new Error('Wrong password!');
@@ -25,8 +24,8 @@ exports.login = async (req, res, next) => {
     }
     const token = jwt.sign(
         {
-          email: loadedUser.email,
-          userId: loadedUser._id
+          email: user.email,
+          userId: user._id
         },
         'MIIEowIBAAKCAQEAw9ti2r3zJl7h7cSPbeNj+BtvaDGyPrOoG4lbUqEnRL3locQj\n' +
       'c/xZTAlzlVXM44sQ164QWFPCDfKalIfC2WJksm65RpbMGSA16aHO/4SXVOIycSYi\n' +
@@ -55,7 +54,7 @@ exports.login = async (req, res, next) => {
       'p820+e23sMORL+Vt/5CgxnEw1fXKWAUj37tgDAfFwFRD9/j28vHY',
         { expiresIn: '1h' }
     );
-    res.status(200).json({ token: token, userId: loadedUser._id });
+    res.status(200).json({ token: token, userId: user._id, role: user.role });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

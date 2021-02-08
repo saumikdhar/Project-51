@@ -7,7 +7,8 @@ const initialState = {
     error: null,
     loading: false,
     authRedirectPath: "/",
-    isAuthorise: false
+    isAuthorise: false,
+    role: null
 };
 
 const authStart = (state, action) => {
@@ -21,7 +22,7 @@ const authSuccess = (state, action) => {
         error: null,
         loading: false,
         isAuthorise: true,
-        name: action.name
+        role: action.role
     });
 };
 
@@ -30,7 +31,7 @@ const authFail = (state, action) => {
 };
 
 const authLogout = (state, action) => {
-    return updateObject(state, { token: null, userId: null, name:null });
+    return updateObject(state, { token: null, userId: null, role:null });
 };
 
 const setAuthRedirectPath = (state, action) => {

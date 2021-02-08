@@ -2,6 +2,7 @@ import React from 'react';
 import classes from './Toolbar.module.css'
 import Logo from "../../Logo/Logo";
 import NavItems from "../NavItems/NavItems";
+import {connect} from "react-redux";
 
 const Toolbar = (props) => {
     return (
@@ -11,7 +12,7 @@ const Toolbar = (props) => {
                 <Logo/>
             </div>
             <div className={classes.AppTitle}>
-                Project Management
+              {!props.role ? 'Project Management' : props.role}
             </div>
             <nav className={classes.DesktopOnly}>
                 <NavItems/>
@@ -19,5 +20,9 @@ const Toolbar = (props) => {
         </header>
     );
 };
-
-export default Toolbar;
+const mapStateToProps = state => {
+  return {
+    role: state.auth.role
+  };
+};
+export default connect(mapStateToProps)(Toolbar);
