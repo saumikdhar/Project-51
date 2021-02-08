@@ -6,6 +6,7 @@ import { updateObject } from "../../store/utility";
 import * as actions from "../../store/actions/index";
 import {Redirect} from "react-router-dom";
 import {connect} from "react-redux";
+import Spinner from "../../components/UI/Spinner/Spinner";
 
 const Auth = (props) => {
     const [authForm, setAuthForm] = useState({
@@ -83,7 +84,7 @@ const Auth = (props) => {
     });
 
     if (props.loading) {
-        form = "Loading...";//spinner here
+        form = <Spinner/>;//spinner here
     }
 
     let errorMessage = null;

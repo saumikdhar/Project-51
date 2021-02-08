@@ -1,0 +1,16 @@
+.Path {
+    stroke-dasharray: 3200;
+    animation: dash 5s linear infinite;
+    margin-bottom: 100px;
+}
+
+svg {
+    width: 10rem;
+    height: 10rem;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 12700;
+    }
+}
