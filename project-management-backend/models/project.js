@@ -31,6 +31,10 @@ const Project = sequelize.define('project', {
   projectType: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  questions: {
+    type: Sequelize.JSON,
+    allowNull: false
   }
 });
 
