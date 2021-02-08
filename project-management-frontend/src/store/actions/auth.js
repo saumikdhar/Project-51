@@ -101,7 +101,8 @@ export const authCheckState = () => {
         dispatch(logout());
       } else {
         const userId = localStorage.getItem("userId");
-        dispatch(authSuccess(token, userId));
+        const userRole = localStorage.getItem("role");
+        dispatch(authSuccess(token, userId, userRole));
         dispatch(
           checkAuthTimeout(
             (expirationDate.getTime() - new Date().getTime())

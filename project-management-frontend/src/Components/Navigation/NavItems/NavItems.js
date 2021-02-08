@@ -8,7 +8,7 @@ export const NavItems = (props) => {
     <ul className={classes.NavigationItems}>
       {props.isAuthorise ? <NavItem link="/logout">Logout</NavItem>: <NavItem link="/auth">Login</NavItem>}
 
-      {/*follow the example below for employees, managers, Transformation Team and It Dep*/}
+      {/*follow the example below for employees, managers, Transformation Team and It Dep routes*/}
       {/*{props.role === 'employee' ? 'Nav item all the employee links' :null}*/}
     </ul>
   );
