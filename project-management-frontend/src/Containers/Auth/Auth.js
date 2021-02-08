@@ -84,7 +84,7 @@ const Auth = (props) => {
     });
 
     if (props.loading) {
-        form = <Spinner/>;//spinner here
+        form = <Spinner/>;
     }
 
     let errorMessage = null;
