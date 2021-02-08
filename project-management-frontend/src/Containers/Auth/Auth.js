@@ -1,20 +1,54 @@
 import React, {useState} from "react";
 import classes from "./Auth.module.css";
-import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
-import Button from "../../Components/UI/Button/Button";
-import Input from "../../Components/UI/Input/Input";
+import Button from "../../components/UI/Button/Button";
+import Input from "../../components/UI/Input/Input";
+import { updateObject } from "../../store/utility";
 
 const Auth = (props) => {
     const [authForm, setAuthForm] = useState({
         email:  {
             type: "email",
-            value: ""
+            value: "",
+            label: "Email Address",
+            valid: false
         },
         password:{
             type: "password",
-            value: ""
+            value: "",
+            label: "Password",
+            valid: false
         }
-    })
+    });
+
+    const inputChangedHandler = (event, controlName) => {
+        const updatedControls = updateObject(authForm, {
+            [controlName]: updateObject(authForm[controlName], {
+                value: event.target.value,
+                valid: checkValidity(
+                  event.target.value.trim(),
+                  authForm[controlName].validation
+                )
+            })
+        });
+        setAuthForm(updatedControls);
+    };
+
+    const checkValidity = (value, rules) => {
+        let isValid = true;
+        if (!rules) {
+            return true;
+        }
+        if (rules.required) {
+            isValid = value.trim() !== "" && isValid;
+        }
+        if (rules.minLength) {
+            isValid = value.length >= rules.minLength && isValid;
+        }
+        if (rules.maxLength) {
+            isValid = value.length <= rules.maxLength && isValid;
+        }
+        return isValid;
+    };
 
     const formElementsArray = [];
     for (let key in authForm) {
@@ -32,25 +66,33 @@ const Auth = (props) => {
             elementType="input"
             elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
-            // changed={event => inputChangeHandler(event, formElement.id)}
+            label={formElement.config.label}
+            changed={event => inputChangedHandler(event, formElement.id)}
+            shouldValidate={formElement.config.validation}
           />
         );
     });
+
+    let errorMessage = null;
+    if (!authForm.email.valid || !authForm.password.valid) {
+        errorMessage = <p>Email and password needs to be filled in</p>;
+    }
 
     const submitHandler = event => {
         event.preventDefault();
     };
 
     return (
-      <Auxiliary>
+      <>
           <div className={classes.Auth}>
               <h1>Sign in</h1>
               <form onSubmit={submitHandler}>
+                  {errorMessage}
                   {form}
                   <Button btnType="Submit">Submit</Button>
               </form>
           </div>
-      </Auxiliary>
+      </>
     );
 }
 

@@ -2,12 +2,11 @@
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
+    text-align: left;
 }
 
 .Input input {
-    border-radius: 13px;
-    margin: auto;
-    max-width: 20rem;
+    border-radius: 9px;
 }
 
 .Label {
