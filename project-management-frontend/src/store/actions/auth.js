@@ -60,7 +60,7 @@ export const auth = (email, password) => {
         if (res.status === 422) {
           throw new Error("Validation failed.");
         } else if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not authenticate you!");
+          throw new Error("Email or password was incorrect!");
         }
         return res.json();
       })
