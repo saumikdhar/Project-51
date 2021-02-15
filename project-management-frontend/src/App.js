@@ -6,6 +6,7 @@ import Logout from "./Containers/Auth/Logout/Logout";
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "./store/actions";
+import AssignProjects from "./Containers/Assign-projects/AssignProjects";
 
 
 const App = (props) => {
@@ -26,6 +27,7 @@ const App = (props) => {
     routes = (
       <Switch>
         <Route path="/logout" component={Logout}/>
+        <Route path="/assign-projects" component={AssignProjects}/>
         {/*  all other possible ROUTES HERE*/}
         <Redirect to="/projects"/>
       </Switch>

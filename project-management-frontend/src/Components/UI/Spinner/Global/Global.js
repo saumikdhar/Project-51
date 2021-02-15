@@ -2,6 +2,7 @@ import React from "react";
 import classes from "./Global.module.css";
 const Global = () => {
   return (
+    <div className={classes.Svg}>
     <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
          width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000"
          preserveAspectRatio="xMidYMid meet">
@@ -72,6 +73,7 @@ c70 -36 99 -101 98 -217 -1 -71 -6 -95 -25 -128 -26 -46 -90 -94 -130 -95 -15
 -44 -170 -125 -170 -69 0 -112 63 -113 165 -1 134 79 204 174 155z"/>
       </g>
     </svg>
+    </div>
   );
 };
 
