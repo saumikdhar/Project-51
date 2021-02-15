@@ -45,7 +45,7 @@ export const auth = (email, password) => {
 
     const url = "http://localhost:8080/auth/login";
     const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const header = { "Content-Type": "application/json" };
 
 
     fetch(url, {
@@ -67,9 +67,6 @@ export const auth = (email, password) => {
       .then(resData => {
         dispatch(authSuccess(resData.token, resData.userId, resData.role));
         localStorage.setItem("token", resData.token);
-        localStorage.setItem("userId", resData.userId);
-        localStorage.setItem("role", resData.role);
-        console.log("token is now", localStorage.getItem("token"));
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds
@@ -93,6 +90,7 @@ export const setAuthRedirectPath = path => {
 export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       dispatch(logout());
     } else {
@@ -100,9 +98,30 @@ export const authCheckState = () => {
       if (expirationDate <= new Date()) {
         dispatch(logout());
       } else {
-        const userId = localStorage.getItem("userId");
-        const userRole = localStorage.getItem("role");
-        dispatch(authSuccess(token, userId, userRole));
+
+        const url = "http://localhost:8080/auth/userDetails";
+        const method = "GET";
+        const header = {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json"
+        };
+
+        fetch(url, {
+          method: method,
+          headers: header
+        })
+          .then(res => {
+            if (res.status !== 200 && res.status !== 201) {
+              throw new Error("User not found");
+            }
+            return res.json();
+          })
+          .then(resData => {
+            dispatch(authSuccess(token, resData.userId, resData.role));
+          })
+          .catch(error => {
+            dispatch(authFail(error));
+          });
         dispatch(
           checkAuthTimeout(
             (expirationDate.getTime() - new Date().getTime())
