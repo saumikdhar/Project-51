@@ -13,28 +13,24 @@ const Project = sequelize.define('project', {
     allowNull: false
   },
   managerName: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectStatus: {
     type: Sequelize.STRING,
     allowNull: false
   },
   projectSize: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   quickWin: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   projectType: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   questions: {
-    type: Sequelize.JSON,
-    allowNull: false
+    type: Sequelize.JSON
   }
 });
 

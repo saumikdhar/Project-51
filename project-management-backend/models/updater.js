@@ -11,7 +11,7 @@ const Updater = sequelize.define("updater", {
   firstName: {
     type: Sequelize.STRING,
   },
-  lastName: {
+  surname: {
     type: Sequelize.STRING,
   },
   email: {
@@ -21,7 +21,7 @@ const Updater = sequelize.define("updater", {
     type: Sequelize.STRING,
   },
   keepMeUpdated: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
   }
 });
 

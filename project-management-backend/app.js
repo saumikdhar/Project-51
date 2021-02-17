@@ -61,24 +61,99 @@ app.use((error, req, res, next) => {
 
 const server = app.listen(8080);
 
-//pre-population data for login
-const createUser = async() =>{
+//pre-population dummy data
+const populateDummyData = async() =>{
+  console.log("Adding dummy data...");
   const hpw = await bcrypt.hash("password", 12);
-  User.create({
-    firstName: "foo",
-    surname: "bar",
-    email: "test@test.com",
+  const user1 = User.create({
+    firstName: "fn1",
+    surname: "sur1",
+    email: "test1@test.com",
     password: hpw,
     role: "employee"
-})}
+  });
+  const user2 = User.create({
+    firstName: "fn2",
+    surname: "sur2",
+    email: "test2@test.com",
+    password: hpw,
+    role: "employee"
+  });
 
-/*
-sequelize
-  .sync({force: true}) //Only use this when changing tables or fields
-  // .sync()
-  .then(user => {
-    return createUser();
-    })
-  .catch(err => console.log(err));
-*/
+  const project1 = Project.create({
+    name: "My Dummy Project",
+    projectStatus: "Ongoing",
+    quickWin: true,
+    projectType: "Dummy Project",
+    questions: {},
+  });
+
+  const userProject1 = UserProject.create({
+    userId: user1.id,
+    projectId: project1.id
+  });
+  const userProject2 = UserProject.create({
+    userId: user2.id,
+    projectId: project1.id
+  });
+
+  const businessCase1 = BusinessCase.create({
+    benefit: "Big Benefit",
+    estimatedCost: "20000",
+    sponsor: "George Tester",
+    executiveSummary: "Big and Good Summary",
+    reason: "Important Reason",
+    businessOption: "The Option",
+    duration: "2021-05-06T12:00:00.000Z",
+    benefitTimescale: "Long",
+    negativeImpact: "Low",
+    customerImpactAndEngagement: "High",
+    majorRisks: null,
+    diversityAndInclusionConsiderations: "Yes",
+    investmentAppraisal: "30000",
+
+  });
+
+  const scoreboard1 = Scoreboard.create({
+    riskNarrative: "The Risk Narrative",
+    objectiveNarrative: "The Objective Narrative",
+    actionNarrative: "The Action Narrative"
+  });
+
+  const action1 = Action.create({
+    type: "Big Action Type"
+  });
+
+  const objective1 = Objective.create({
+    type: "Big Objective Type"
+  });
+
+  const risk1 = Risk.create({
+    type: "Big Risk Type"
+  });
+
+  const updater1 = Updater.create({
+    firstName: "fn3",
+    surname: "sur3",
+    email: "test3@test.com",
+    phoneNumber: "098765432101",
+    keepMeUpdated: false
+  });
+
+  const updaterProject1 = UpdaterProject.create({
+
+  });
+
+  console.log("Adding dummy data complete!")
+};
+
+
+// sequelize
+//   .sync({force: true}) //Only use this when changing tables or fields
+//   // .sync()
+//   .then(dummyData => {
+//     return populateDummyData();
+//     })
+//   .catch(err => console.log(err));
+
 
