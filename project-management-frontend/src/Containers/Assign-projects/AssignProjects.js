@@ -17,7 +17,6 @@ const AssignProjects = () => {
       "#999999", "#333399", "#407294", "#87d068", "#0000ff",
       "#912CEE", "#5ac18e", "#800000", "#81d8d0"
     ]);
-    const [searchInput, setSearchInput] = useState("");
     const [dataSource] = useState([]);
     const [filterTable, setFilterTable] = useState([]);
     const { Search } = Input;
@@ -73,13 +72,13 @@ const AssignProjects = () => {
       }
     ;
 
-    const searchHandler = () => {
-      const filteredData = dataSource.filter(o =>
-      Object.keys(o).some(k =>
-      String(o[k])
-        .toLowerCase()
-        .includes(searchInput.toLowerCase())
-      ));
+    const searchHandler = (value) => {
+        const filteredData = dataSource.filter(o =>
+          Object.keys(o).some(k =>
+            String(o[k])
+              .toLowerCase()
+              .includes(value.toLowerCase())
+          ));
         setFilterTable(filteredData);
       }
     ;
@@ -103,7 +102,6 @@ const AssignProjects = () => {
         <div className={classes.User}>
           <Search
             placeholder={"Search"}
-            onChange={(e) => {setSearchInput(e.target.value)}}
             onSearch={searchHandler}
             enterButton
             allowClear
