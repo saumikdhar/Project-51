@@ -3,6 +3,7 @@ import { withRouter, Switch, Route, Redirect } from "react-router";
 import Layout from "./hoc/Layout/Layout";
 import Auth from "./Containers/Auth/Auth";
 import Logout from "./Containers/Auth/Logout/Logout";
+import Users from "./Containers/Users/Users";
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "./store/actions";
@@ -18,6 +19,7 @@ const App = (props) => {
   let routes = (
     <Switch>
       <Route path="/auth" component={Auth}/>
+      <Route path="/users" component={Users}/>
       <Redirect to="/"/>
     </Switch>
   );
@@ -26,6 +28,7 @@ const App = (props) => {
     routes = (
       <Switch>
         <Route path="/logout" component={Logout}/>
+        <Route path="/users" component={Users}/>
         {/*  all other possible ROUTES HERE*/}
         <Redirect to="/projects"/>
       </Switch>

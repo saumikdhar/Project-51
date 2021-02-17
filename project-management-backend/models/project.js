@@ -13,16 +13,14 @@ const Project = sequelize.define('project', {
     allowNull: false
   },
   managerName: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectStatus: {
     type: Sequelize.STRING,
     allowNull: false
   },
   projectSize: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   quickWin: {
     type: Sequelize.STRING,

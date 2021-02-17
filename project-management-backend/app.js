@@ -16,6 +16,7 @@ const Scoreboard = require("./models/scoreboard");
 
 //routes
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 //bcrypt (remove this after and pre-populating data after functionality has been implmented)
 const bcrypt = require("bcryptjs");
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 
 // Set up routes to DB
 app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 User.belongsToMany(Project, { through: UserProject, constraints: true, onDelete: "CASCADE" });
 Project.belongsToMany(User, { through: UserProject, constraints: true, onDelete: "CASCADE" });
@@ -61,23 +63,46 @@ app.use((error, req, res, next) => {
 
 const server = app.listen(8080);
 
-//pre-population data for login
-const createUser = async() =>{
+//pre-population dummy data
+const populateDummyData = async() =>{
   const hpw = await bcrypt.hash("password", 12);
-  User.create({
+  const user1 = User.create({
     firstName: "foo",
     surname: "bar",
     email: "test@test.com",
     password: hpw,
     role: "employee"
-})}
+  });
+  const user2 = User.create({
+    firstName: "fee",
+    surname: "bor",
+    email: "test1@test.com",
+    password: hpw,
+    role: "employee"
+  });
+  const project1 = Project.create({
+    name: "My Dummy Project",
+    projectStatus: "Ongoing",
+    quickWin: "Yes",
+    projectType: "Dummy Project",
+    questions: {},
+  });
+  const userProject1 = UserProject.create({
+    userId: user1.id,
+    projectId: project1.id
+  });
+  const userProject2 = UserProject.create({
+    userId: user2.id,
+    projectId: project1.id
+  });
+};
 
-/*
+/* // Reinitialise database
 sequelize
   .sync({force: true}) //Only use this when changing tables or fields
   // .sync()
-  .then(user => {
-    return createUser();
+  .then(dummyData => {
+    return populateDummyData();
     })
   .catch(err => console.log(err));
 */
