@@ -1,35 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Tag, Table, Button } from "antd";
+import { Tag, Table, Button, Input } from "antd";
 import "antd/lib/tag/style/css";
 import "antd/lib/table/style/css";
 import "antd/lib/button/style/css";
+import "antd/lib/input/style/css";
 import classes from "./AssignProjects.module.css";
 import "./index-2.css";
 
 const AssignProjects = () => {
-
     const [loadingButton, setLoadingButton] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-    const [users, setUsers] = useState(["Saumik Dhar", "Dan Addis"]);
+    const [users, setUsers] = useState([]);
     const [arrayOfUsers, setArrayOfUsers] = useState([]);
     const [colours, setColours] = useState([
       "#ffc0cb", "#ff00ff", "#ff0000", "#108ee9", "#f50",
       "#999999", "#333399", "#407294", "#87d068", "#0000ff",
       "#912CEE", "#5ac18e", "#800000", "#81d8d0"
     ]);
-
-    const dataSource = [
-      {
-        key: "0",
-        name: "Daniel D",
-        role: "employee"
-      },
-      {
-        key: "1",
-        name: "Ben C",
-        role: "employee"
-      }
-    ];
+    const [searchInput, setSearchInput] = useState("");
+    const [dataSource] = useState([]);
+    const [filterTable, setFilterTable] = useState([]);
+    const { Search } = Input;
     const columns = [
       {
         title: "Name",
@@ -40,25 +31,37 @@ const AssignProjects = () => {
         title: "Role",
         dataIndex: "role",
         key: "role"
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email"
       }
-
-
     ];
 
     useEffect(() => {
+      for (let i = 0; i < 100; i++) {
+        dataSource.push({
+          key: i,
+          name: `Dan ${i + 1}`,
+          role: "employee",
+          email: `Dan${i + 1}@Hafod.co.uk`
+        });
+      }
+    }, [dataSource]);
+
+    useEffect(() => {
       const listOfUsers = users.map((user, index) => (
-        <Tag color={colours[Math.round(Math.random() * colours.length) + 1]} closable="true" key={index}>{user}</Tag>
+        <Tag color={colours[Math.round(Math.random() * colours.length) + 1]} closable key={index}>{user}</Tag>
       ));
       setArrayOfUsers(listOfUsers);
     }, [colours, users]);
-    
-    const start = (event) => {
-        event.preventDefault();
-        setLoadingButton(true);
 
+    const start = () => {
+        setLoadingButton(true);
         const oldUsers = [...arrayOfUsers];
         let updatedUsers = selectedRowKeys.map((user) => (
-          <Tag color={colours[Math.round(Math.random() * colours.length) + 1]} closable="true"
+          <Tag color={colours[Math.round(Math.random() * colours.length) + 1]} closable
                key={user}>{dataSource[user].name}</Tag>
         ));
 
@@ -70,6 +73,16 @@ const AssignProjects = () => {
       }
     ;
 
+    const searchHandler = () => {
+      const filteredData = dataSource.filter(o =>
+      Object.keys(o).some(k =>
+      String(o[k])
+        .toLowerCase()
+        .includes(searchInput.toLowerCase())
+      ));
+        setFilterTable(filteredData);
+      }
+    ;
     const onSelectChange = selectedRowKeys => {
       setSelectedRowKeys(selectedRowKeys);
     };
@@ -80,21 +93,37 @@ const AssignProjects = () => {
     };
 
     const hasSelected = selectedRowKeys.length > 0;
-
     return (
-      <div className={classes.AssignProjects}>
-        <h2> People assigned to this project</h2>
-        {arrayOfUsers}
-        <Button shape="round" onClick={(e) => start(e)} type="primary" loading={loadingButton} disabled={!hasSelected}>Assign
-          to
-          Project</Button>
-        <span style={{ marginLeft: 8 }}>
-            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+      <>
+        <div className={classes.AssignProjects}>
+          <h2> Employees assigned to this project</h2>
+          {arrayOfUsers}
+
+        </div>
+        <div className={classes.User}>
+          <Search
+            placeholder={"Search"}
+            onChange={(e) => {setSearchInput(e.target.value)}}
+            onSearch={searchHandler}
+            enterButton
+            allowClear
+            style={{ width: 300, marginBottom: 8, marginRight: 8 }}
+          />
+        </div>
+        <div className={classes.Button}>
+          <Button
+            shape="round"
+            onClick={() => start()}
+            type="primary"
+            loading={loadingButton}
+            disabled={!hasSelected}> Assign to Project </Button>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} users` : ""}
           </span>
-        <Table rowSelection={rowSelection} dataSource={dataSource} columns={columns}
-               pagination={{ position: ["bottomCenter"] }}/>
-        {/*{console.log("rendering")}*/}
-      </div>
+        </div>
+        <Table rowSelection={rowSelection} dataSource={!filterTable ? dataSource : filterTable} columns={columns}
+               pagination={{ position: ["bottomCenter"], pageSizeOptions: [5, 10, 20, 30, 50, 100] }}/>
+      </>
     );
   }
 ;
