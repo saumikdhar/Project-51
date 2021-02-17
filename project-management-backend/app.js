@@ -111,25 +111,29 @@ const populateDummyData = async() =>{
     majorRisks: null,
     diversityAndInclusionConsiderations: "Yes",
     investmentAppraisal: "30000",
-
+    projectId: project1.id
   });
 
   const scoreboard1 = Scoreboard.create({
     riskNarrative: "The Risk Narrative",
     objectiveNarrative: "The Objective Narrative",
-    actionNarrative: "The Action Narrative"
+    actionNarrative: "The Action Narrative",
+    projectId: project1.id
   });
 
   const action1 = Action.create({
-    type: "Big Action Type"
+    type: "Big Action Type",
+    scoreboardId: scoreboard1.id
   });
 
   const objective1 = Objective.create({
-    type: "Big Objective Type"
+    type: "Big Objective Type",
+    scoreboardId: scoreboard1.id
   });
 
   const risk1 = Risk.create({
-    type: "Big Risk Type"
+    type: "Big Risk Type",
+    scoreboardId: scoreboard1.id
   });
 
   const updater1 = Updater.create({
@@ -141,7 +145,8 @@ const populateDummyData = async() =>{
   });
 
   const updaterProject1 = UpdaterProject.create({
-
+    projectId: project1.id,
+    updaterId: updater1.id
   });
 
   console.log("Adding dummy data complete!")

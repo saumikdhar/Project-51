@@ -16,12 +16,10 @@ const Project = sequelize.define('project', {
     type: Sequelize.STRING
   },
   transformationLead: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectScore: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectStatus: {
     type: Sequelize.STRING,
