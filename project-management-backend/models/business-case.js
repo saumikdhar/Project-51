@@ -27,7 +27,7 @@ const BusinessCase = sequelize.define('businessCase', {
     type: Sequelize.STRING
   },
   duration: {
-    type: Sequelize.TIME
+    type: Sequelize.DATE
   },
   benefitTimescale: {
     type: Sequelize.STRING
