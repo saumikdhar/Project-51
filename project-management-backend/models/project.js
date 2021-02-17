@@ -15,6 +15,14 @@ const Project = sequelize.define('project', {
   managerName: {
     type: Sequelize.STRING
   },
+  transformationLead: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  projectScore: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   projectStatus: {
     type: Sequelize.STRING,
     allowNull: false

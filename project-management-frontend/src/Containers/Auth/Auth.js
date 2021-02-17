@@ -17,7 +17,8 @@ const Auth = (props) => {
                 placeholder: "name@Hafod.com"
             },
             label: 'Email Address',
-            valid: false
+            valid: false,
+            value: ''
         },
         password:{
             elementType: "input",
@@ -26,7 +27,8 @@ const Auth = (props) => {
                 placeholder: "password"
             },
             label: "Password",
-            valid: false
+            valid: false,
+            value: ''
         }
     });
 
@@ -100,7 +102,7 @@ const Auth = (props) => {
 
     const submitHandler = event => {
         event.preventDefault();
-        if (authForm.email.value && authForm.password.value) {
+        if (authForm.email.valid && authForm.password.valid) {
             props.onAuth(
               authForm.email.value,
               authForm.password.value
@@ -135,8 +137,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignUp, name) =>
-          dispatch(actions.auth(email, password, isSignUp, name)),
+        onAuth: (email, password) =>
+          dispatch(actions.auth(email, password)),
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
     };
 };
