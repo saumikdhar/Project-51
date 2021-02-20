@@ -16,6 +16,9 @@ const Scoreboard = require("./models/scoreboard");
 
 //routes
 const authRoutes = require("./routes/auth");
+const projectRoutes = require("./routes/projects")
+const scoreboardRoutes=require('./routes/scoreboard')
+const businessCaseRoutes=require('./routes/businessCase')
 
 //bcrypt (remove this after and pre-populating data after functionality has been implmented)
 const bcrypt = require("bcryptjs");
@@ -34,8 +37,12 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // Set up routes to DB
 app.use("/auth", authRoutes);
+app.use("/projects", projectRoutes)
+app.use('/scoreboards',scoreboardRoutes)
+app.use('/businessCase',businessCaseRoutes)
 
 User.belongsToMany(Project, { through: UserProject, constraints: true, onDelete: "CASCADE" });
 Project.belongsToMany(User, { through: UserProject, constraints: true, onDelete: "CASCADE" });
@@ -111,14 +118,14 @@ const populateDummyData = async() =>{
     majorRisks: null,
     diversityAndInclusionConsiderations: "Yes",
     investmentAppraisal: "30000",
-    projectId: project1.id
+    projectId: "1"
   });
 
   const scoreboard1 = Scoreboard.create({
     riskNarrative: "The Risk Narrative",
     objectiveNarrative: "The Objective Narrative",
     actionNarrative: "The Action Narrative",
-    projectId: project1.id
+    projectId: "1"
   });
 
   const action1 = Action.create({
