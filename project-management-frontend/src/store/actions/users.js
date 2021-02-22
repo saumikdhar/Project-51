@@ -92,7 +92,6 @@ export const getUser = () => {
 
 export const getUsers = () => {
   return dispatch => {
-    console.log("START getUsers")
     dispatch(getUsersStart());
 
     const url = "http://localhost:8080/users/getAll";
@@ -110,11 +109,10 @@ export const getUsers = () => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Could not retrieve users!");
         }
-        console.log("res: ", res);
         return res.json();
       })
       .then(resData => {
-        dispatch(getUsersSuccess(resData.users));
+        dispatch(getUsersSuccess(resData.users, resData.projectId));
       })
       .catch(error => {
         dispatch(getUsersFail(error));
@@ -122,27 +120,30 @@ export const getUsers = () => {
   };
 };
 
-export const addUser = (firstName, surname, email, password, role) => {
+export const addUser = (values) => {
   return dispatch => {
     dispatch(addUserStart());
 
     const url = "http://localhost:8080/users/add";
     const method = "POST";
     const header = {"Content-Type": "application/json"};
+    console.log(values.firstName, values.surname, values.email, values.password, values.role, values.projectId);
 
 
     fetch(url, {
       method: method,
       headers: header,
       body: JSON.stringify({
-        firstName: firstName,
-        surname: surname,
-        email: email,
-        password: password,
-        role: role,
+        firstName: values.firstName,
+        surname: values.surname,
+        email: values.email,
+        password: values.password,
+        role: values.role,
+        projectId: values.projectId
       })
     })
       .then(res => {
+        console.log("res: ", res)
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Could not add user!");
         }

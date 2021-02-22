@@ -3,11 +3,12 @@ import classes from "./Users.module.css";
 import {getUser, getUsers} from "../../store/actions/index";
 import {connect} from "react-redux";
 import {Button, Divider, Table, Tag} from 'antd';
+import {UserAddOutlined} from '@ant-design/icons';
+import AddUserModal from './Modals/AddUserModal'
 
 class Users extends React.Component {
 
   componentDidMount() {
-    console.log("MOUNTED")
     this.props.dispatch(getUsers())
   }
 
@@ -25,40 +26,37 @@ class Users extends React.Component {
     this.currentUser = getUser();
     this.columns = [
       {
-        title: 'Role',
-        key: 'Role',
-        width: '5%',
-        render: (text, record) => (
-          <Tag>
-            {record.role}
-          </Tag>),
-
-      },
-      {
         title: 'First name',
         key: 'Firstname',
-        render: (text, record) => (<p>{record.user.firstName}</p>),
+        render: (text, record) => (<p>{record.firstName}</p>),
 
       },
       {
         title: 'Surname',
         key: 'Surname',
-        render: (text, record) => (<p>{record.user.surname}</p>),
+        render: (text, record) => (<p>{record.surname}</p>),
       },
       {
         title: 'Email',
         key: 'Email',
-        render: (text, record) => (<p>{record.user.email}</p>),
+        render: (text, record) => (<p>{record.email}</p>),
+      },
+      {
+        title: 'Role',
+        key: 'Role',
+        width: '5%',
+        render: (text, record) => (<p>{record.role}</p>),
+
       },
       {
         title: 'Action',
         key: 'action',
         render: (text, record) => {
-          //const isYou = this.currentUser.email === record.user.email;
+          const isYou = parseInt(localStorage.getItem("userId")) === record.id;
           return (
             <>
-              isYou ? <Tag color={'green'}>You</Tag> :
-              <span>
+              {isYou ? <Tag color={'green'}>You</Tag> :
+                <span>
                 <Button type="link"
                   //onClick={() => this.showEditUserModal(record)}
                 >
@@ -70,7 +68,7 @@ class Users extends React.Component {
                 >
                   Delete
                 </Button>
-              </span>
+              </span>}
             </>
           )
         }
@@ -80,12 +78,18 @@ class Users extends React.Component {
   }
 
   render() {
-    const {users, loading} = this.props;
-    console.log("users: ", users);
+    const {users, projectId, loading} = this.props;
     return (
       <>
         <div className={classes.Users}>
-          <h1>Users</h1>
+          <h1>Project Users</h1>
+          <div style={{textAlign: "right"}}>
+            <Button style={{marginBottom: "10px"}} type="primary"
+                    icon={<UserAddOutlined/>}
+                    onClick={this.showAddUserModal}>
+              Add User
+            </Button>
+          </div>
           <Table
             bordered
             dataSource={users}
@@ -94,16 +98,23 @@ class Users extends React.Component {
             loading={loading}
           />
         </div>
+
+        <AddUserModal
+          visible={this.state.addUserModalVisible}
+          hideModal={this.hideAddUserModal}
+          handleSave={this.addUser}
+          projectId={projectId}
+        />
       </>
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.log("state: ", state);
   return {
-    // users: state.users.users,
-    // loading: state.users.loading
+    users: state.users.users,
+    projectId: state.users.projectId,
+    loading: state.users.loading
   };
 };
 

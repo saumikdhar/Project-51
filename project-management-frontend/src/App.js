@@ -7,7 +7,8 @@ import Users from "./Containers/Users/Users";
 import { connect } from "react-redux";
 import React, { useEffect } from "react";
 import * as actions from "./store/actions";
-
+import 'antd/dist/antd.css';
+import 'antd/dist/antd.less';
 
 const App = (props) => {
   const { onTryAutoSignUp } = props;
