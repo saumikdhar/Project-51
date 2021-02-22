@@ -36,12 +36,12 @@ exports.allUsers = async (req, res) => {
   try {
     const userProject = await UserProject.findOne({where: { id: userId} });
     const userProjects = await UserProject.findAll({where: { projectId: userProject.projectId} });
-    let users = [];
 
+    let users = [];
     for(let userP of userProjects){
-      users.push(await User.findOne({where: { id: userP.userId}, attributes:
-          ['firstName', 'surname', 'email', 'role']
-      }))
+      users.push((await User.findOne({where: { id: userP.dataValues.id}, attributes:
+          ['id', 'firstName', 'surname', 'email', 'role']
+      })).dataValues)
     }
 
     res.status(200).json({ users:users });

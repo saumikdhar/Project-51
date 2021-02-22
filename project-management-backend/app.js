@@ -97,7 +97,7 @@ const populateDummyData = async() =>{
   });
 };
 
-/* // Reinitialise database
+/*// Reinitialise database
 sequelize
   .sync({force: true}) //Only use this when changing tables or fields
   // .sync()

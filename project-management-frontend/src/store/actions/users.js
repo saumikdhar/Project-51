@@ -92,12 +92,12 @@ export const getUser = () => {
 
 export const getUsers = () => {
   return dispatch => {
+    console.log("START getUsers")
     dispatch(getUsersStart());
 
     const url = "http://localhost:8080/users/getAll";
     const method = "POST";
     const header = {"Content-Type": "application/json"};
-
 
     fetch(url, {
       method: method,

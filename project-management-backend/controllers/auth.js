@@ -54,7 +54,7 @@ exports.login = async (req, res, next) => {
       'p820+e23sMORL+Vt/5CgxnEw1fXKWAUj37tgDAfFwFRD9/j28vHY',
         { expiresIn: '1h' }
     );
-    res.status(200).json({ token: token, userId: user._id, role: user.role });
+    res.status(200).json({ token: token, userId: user.id, role: user.role });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;

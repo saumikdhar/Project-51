@@ -69,6 +69,7 @@ export const auth = (email, password) => {
         localStorage.setItem("token", resData.token);
         localStorage.setItem("userId", resData.userId);
         localStorage.setItem("role", resData.role);
+        console.log("resData: ", resData);
         console.log("token is now", localStorage.getItem("token"));
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
