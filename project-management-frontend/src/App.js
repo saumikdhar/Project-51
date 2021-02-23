@@ -20,7 +20,6 @@ const App = (props) => {
   let routes = (
     <Switch>
       <Route path="/auth" component={Auth}/>
-      <Route path="/users" component={Users}/>
       <Redirect to="/"/>
     </Switch>
   );
@@ -28,8 +27,8 @@ const App = (props) => {
   if (props.isAuthorise) {
     routes = (
       <Switch>
-        <Route path="/logout" component={Logout}/>
         <Route path="/users" component={Users}/>
+        <Route path="/logout" component={Logout}/>
         {/*  all other possible ROUTES HERE*/}
         <Redirect to="/projects"/>
       </Switch>
