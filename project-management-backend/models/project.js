@@ -16,12 +16,10 @@ const Project = sequelize.define('project', {
     type: Sequelize.STRING
   },
   transformationLead: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectScore: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   projectStatus: {
     type: Sequelize.STRING,
@@ -31,16 +29,14 @@ const Project = sequelize.define('project', {
     type: Sequelize.STRING
   },
   quickWin: {
-    type: Sequelize.STRING,
+    type: Sequelize.BOOLEAN,
     allowNull: false
   },
   projectType: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   questions: {
-    type: Sequelize.JSON,
-    allowNull: false
+    type: Sequelize.JSON
   }
 });
 
