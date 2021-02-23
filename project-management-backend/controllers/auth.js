@@ -14,7 +14,6 @@ exports.login = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-
     const isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
       const error = new Error('Wrong password!');
@@ -25,7 +24,7 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign(
         {
           email: user.email,
-          userId: user._id
+          userId: user.id
         },
         'MIIEowIBAAKCAQEAw9ti2r3zJl7h7cSPbeNj+BtvaDGyPrOoG4lbUqEnRL3locQj\n' +
       'c/xZTAlzlVXM44sQ164QWFPCDfKalIfC2WJksm65RpbMGSA16aHO/4SXVOIycSYi\n' +
@@ -55,6 +54,24 @@ exports.login = async (req, res, next) => {
         { expiresIn: '1h' }
     );
     res.status(200).json({ token: token, userId: user.id, role: user.role });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.userDetails = async (req, res, next) => {
+  const userEmail = req.userEmail;
+  try {
+    const user = await User.findOne({where: { email: userEmail} });
+    if (!user) {
+      const error = new Error('User not found!');
+      error.statusCode = 401;
+      throw error;
+    }
+    res.status(200).json({ userId: user.id, role: user.role });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
