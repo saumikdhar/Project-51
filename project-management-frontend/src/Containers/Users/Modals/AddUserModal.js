@@ -10,9 +10,13 @@ const Option = Select.Option;
 class AddUserModal extends React.Component {
 
   onSubmit = values => {
-    values.push({"projectId": this.props.projectId});
+    values["projectId"] = this.props.projectId;
     this.props.onSubmit(values);
+    this.props.hideModal();
+
   };
+
+  refreshUsers = () => this.props.refreshUsers();
 
 
   render() {
@@ -122,8 +126,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: (firstName, surname, email, password, role) =>
-      dispatch(addUser(firstName, surname, email, password, role))
+    onSubmit: (firstName, surname, email, password, role) => {
+      dispatch(addUser(firstName, surname, email, password, role));
+    }
   }
 };
 

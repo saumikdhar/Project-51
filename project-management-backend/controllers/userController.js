@@ -8,8 +8,8 @@ exports.addUser = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
   const role = req.body.role;
-  const projectId = req.body.projectId;
-  console.log(req.body)
+  const projectId = parseInt(req.body.projectId);
+  console.log("req.body: ", req.body)
   try {
     const user = await User.findOne({where: {email: email}});
     if (user) {
@@ -18,7 +18,7 @@ exports.addUser = async (req, res, next) => {
       throw error;
     }
     const hpw = await bcrypt.hash(password, 12);
-    const newUser = User.create({
+    const newUser = await User.create({
       firstName: firstName,
       surname: surname,
       email: email,
@@ -27,7 +27,7 @@ exports.addUser = async (req, res, next) => {
     });
 
     if (projectId) {
-      UserProject.create({
+      await UserProject.create({
         userId: newUser.id,
         projectId: projectId
       });
@@ -35,7 +35,7 @@ exports.addUser = async (req, res, next) => {
 
     res.status(200);
   } catch (error) {
-    console.log("ERROR: ", error)
+    console.log(error)
     if (!error.statusCode) {
       error.statusCode = 500;
     }
@@ -43,11 +43,11 @@ exports.addUser = async (req, res, next) => {
   }
 };
 
-exports.allUsers = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   const userId = req.body.userId;
   try {
     const userProject = await UserProject.findOne({where: {id: userId}});
-    const projectId = userProject.projectId;
+    const projectId = userProject.dataValues.projectId;
     const userProjects = await UserProject.findAll({where: {projectId: projectId}});
 
     let users = [];

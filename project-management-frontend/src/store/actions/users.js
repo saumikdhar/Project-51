@@ -112,7 +112,7 @@ export const getUsers = () => {
         return res.json();
       })
       .then(resData => {
-        dispatch(getUsersSuccess(resData.users, resData.projectId));
+        dispatch(getUsersSuccess(resData));
       })
       .catch(error => {
         dispatch(getUsersFail(error));
@@ -127,8 +127,6 @@ export const addUser = (values) => {
     const url = "http://localhost:8080/users/add";
     const method = "POST";
     const header = {"Content-Type": "application/json"};
-    console.log(values.firstName, values.surname, values.email, values.password, values.role, values.projectId);
-
 
     fetch(url, {
       method: method,
@@ -155,5 +153,6 @@ export const addUser = (values) => {
       .catch(error => {
         dispatch(addUserFail(error));
       });
+      dispatch(getUsers());
   };
 };

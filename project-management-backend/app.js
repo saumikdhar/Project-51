@@ -66,34 +66,34 @@ const server = app.listen(8080);
 //pre-population dummy data
 const populateDummyData = async() =>{
   const hpw = await bcrypt.hash("password", 12);
-  const user1 = User.create({
+  const user1 = await User.create({
     firstName: "foo",
     surname: "bar",
     email: "test@test.com",
     password: hpw,
     role: "employee"
   });
-  const user2 = User.create({
+  const user2 = await User.create({
     firstName: "fee",
     surname: "bor",
     email: "test1@test.com",
     password: hpw,
     role: "employee"
   });
-  const project1 = Project.create({
+  const project1 = await Project.create({
     name: "My Dummy Project",
     projectStatus: "Ongoing",
     quickWin: "Yes",
     projectType: "Dummy Project",
     questions: {},
   });
-  const userProject1 = UserProject.create({
-    userId: user1.id,
-    projectId: project1.id
+  const userProject1 = await UserProject.create({
+    userId: user1.dataValues.id,
+    projectId: project1.dataValues.id
   });
-  const userProject2 = UserProject.create({
-    userId: user2.id,
-    projectId: project1.id
+  const userProject2 = await UserProject.create({
+    userId: user2.dataValues.id,
+    projectId: project1.dataValues.id
   });
 };
 

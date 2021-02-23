@@ -8,8 +8,10 @@ import AddUserModal from './Modals/AddUserModal'
 
 class Users extends React.Component {
 
+  refreshUsers = () => this.props.dispatch(getUsers());
+
   componentDidMount() {
-    this.props.dispatch(getUsers())
+    this.refreshUsers()
   }
 
   state = {
@@ -51,6 +53,7 @@ class Users extends React.Component {
       {
         title: 'Action',
         key: 'action',
+        width: '20%',
         render: (text, record) => {
           const isYou = parseInt(localStorage.getItem("userId")) === record.id;
           return (
@@ -79,6 +82,7 @@ class Users extends React.Component {
 
   render() {
     const {users, projectId, loading} = this.props;
+    console.log("this.props: ", this.props)
     return (
       <>
         <div className={classes.Users}>
@@ -94,7 +98,7 @@ class Users extends React.Component {
             bordered
             dataSource={users}
             columns={this.columns}
-            scroll={{x: 'max-content'}}
+            scroll={{x: '100%'}}
             loading={loading}
           />
         </div>
@@ -102,7 +106,7 @@ class Users extends React.Component {
         <AddUserModal
           visible={this.state.addUserModalVisible}
           hideModal={this.hideAddUserModal}
-          handleSave={this.addUser}
+          refreshUsers={this.refreshUsers}
           projectId={projectId}
         />
       </>
