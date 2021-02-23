@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./Users.module.css";
-import {getUser, getUsers} from "../../store/actions/index";
+import {addUser, getUser, getUsers} from "../../store/actions/index";
 import {connect} from "react-redux";
 import {Button, Divider, Table, Tag} from 'antd';
 import {UserAddOutlined} from '@ant-design/icons';
@@ -21,6 +21,10 @@ class Users extends React.Component {
   showAddUserModal = () => this.setState({addUserModalVisible: true});
 
   hideAddUserModal = () => this.setState({addUserModalVisible: false});
+
+  submitUser = (values) => {
+    this.props.dispatch(addUser(values));
+  };
 
   constructor(props) {
     super(props);
@@ -82,7 +86,6 @@ class Users extends React.Component {
 
   render() {
     const {users, projectId, loading} = this.props;
-    console.log("this.props: ", this.props)
     return (
       <>
         <div className={classes.Users}>
@@ -108,6 +111,7 @@ class Users extends React.Component {
           hideModal={this.hideAddUserModal}
           refreshUsers={this.refreshUsers}
           projectId={projectId}
+          onSubmit={this.submitUser}
         />
       </>
     );

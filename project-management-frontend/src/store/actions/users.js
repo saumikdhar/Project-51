@@ -141,18 +141,17 @@ export const addUser = (values) => {
       })
     })
       .then(res => {
-        console.log("res: ", res)
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Could not add user!");
         }
         return res.json();
       })
       .then(resData => {
+        dispatch(getUsers());
         dispatch(addUserSuccess());
       })
       .catch(error => {
         dispatch(addUserFail(error));
       });
-      dispatch(getUsers());
   };
 };

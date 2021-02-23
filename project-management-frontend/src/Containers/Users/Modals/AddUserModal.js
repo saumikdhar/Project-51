@@ -13,7 +13,6 @@ class AddUserModal extends React.Component {
     values["projectId"] = this.props.projectId;
     this.props.onSubmit(values);
     this.props.hideModal();
-
   };
 
   refreshUsers = () => this.props.refreshUsers();
@@ -120,16 +119,4 @@ class AddUserModal extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {};
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onSubmit: (firstName, surname, email, password, role) => {
-      dispatch(addUser(firstName, surname, email, password, role));
-    }
-  }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddUserModal)
+export default (AddUserModal)

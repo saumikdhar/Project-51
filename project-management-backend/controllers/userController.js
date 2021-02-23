@@ -9,7 +9,6 @@ exports.addUser = async (req, res, next) => {
   const password = req.body.password;
   const role = req.body.role;
   const projectId = parseInt(req.body.projectId);
-  console.log("req.body: ", req.body)
   try {
     const user = await User.findOne({where: {email: email}});
     if (user) {
@@ -33,7 +32,7 @@ exports.addUser = async (req, res, next) => {
       });
     }
 
-    res.status(200);
+    res.status(200).json({success:true});
   } catch (error) {
     console.log(error)
     if (!error.statusCode) {
