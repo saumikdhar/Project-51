@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 export const NavItems = (props) => {
   return (
     <ul className={classes.NavigationItems}>
+      {props.isAuthorise ? <NavItem link="/users">Users</NavItem>: null}
       {props.isAuthorise ? <NavItem link="/logout">Logout</NavItem>: <NavItem link="/auth">Login</NavItem>}
 
       {/*follow the example below for employees, managers, Transformation Team and It Dep routes*/}

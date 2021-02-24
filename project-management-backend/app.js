@@ -19,6 +19,7 @@ const authRoutes = require("./routes/auth");
 const projectRoutes = require("./routes/projects")
 const scoreboardRoutes=require('./routes/scoreboard')
 const businessCaseRoutes=require('./routes/businessCase')
+const userRoutes = require("./routes/user");
 
 //bcrypt (remove this after and pre-populating data after functionality has been implmented)
 const bcrypt = require("bcryptjs");
@@ -43,6 +44,7 @@ app.use("/auth", authRoutes);
 app.use("/projects", projectRoutes)
 app.use('/scoreboards',scoreboardRoutes)
 app.use('/businessCase',businessCaseRoutes)
+app.use("/users", userRoutes);
 
 User.belongsToMany(Project, { through: UserProject, constraints: true, onDelete: "CASCADE" });
 Project.belongsToMany(User, { through: UserProject, constraints: true, onDelete: "CASCADE" });
@@ -72,14 +74,14 @@ const server = app.listen(8080);
 const populateDummyData = async() =>{
   console.log("Adding dummy data...");
   const hpw = await bcrypt.hash("password", 12);
-  const user1 = User.create({
+  const user1 = await User.create({
     firstName: "fn1",
     surname: "sur1",
     email: "test1@test.com",
     password: hpw,
     role: "employee"
   });
-  const user2 = User.create({
+  const user2 = await User.create({
     firstName: "fn2",
     surname: "sur2",
     email: "test2@test.com",
@@ -87,7 +89,7 @@ const populateDummyData = async() =>{
     role: "employee"
   });
 
-  const project1 = Project.create({
+  const project1 = await Project.create({
     name: "My Dummy Project",
     projectStatus: "Ongoing",
     quickWin: true,
@@ -95,16 +97,16 @@ const populateDummyData = async() =>{
     questions: {},
   });
 
-  const userProject1 = UserProject.create({
-    userId: user1.id,
-    projectId: project1.id
+  const userProject1 = await UserProject.create({
+    userId: user1.dataValues.id,
+    projectId: project1.dataValues.id
   });
-  const userProject2 = UserProject.create({
-    userId: user2.id,
-    projectId: project1.id
+  const userProject2 = await UserProject.create({
+    userId: user2.dataValues.id,
+    projectId: project1.dataValues.id
   });
 
-  const businessCase1 = BusinessCase.create({
+  const businessCase1 = await BusinessCase.create({
     benefit: "Big Benefit",
     estimatedCost: "20000",
     sponsor: "George Tester",
@@ -121,29 +123,29 @@ const populateDummyData = async() =>{
     projectId: "1"
   });
 
-  const scoreboard1 = Scoreboard.create({
+  const scoreboard1 = await Scoreboard.create({
     riskNarrative: "The Risk Narrative",
     objectiveNarrative: "The Objective Narrative",
     actionNarrative: "The Action Narrative",
     projectId: "1"
   });
 
-  const action1 = Action.create({
+  const action1 = await Action.create({
     type: "Big Action Type",
-    scoreboardId: scoreboard1.id
+    scoreboardId: scoreboard1.dataValues.id
   });
 
-  const objective1 = Objective.create({
+  const objective1 = await Objective.create({
     type: "Big Objective Type",
-    scoreboardId: scoreboard1.id
+    scoreboardId: scoreboard1.dataValues.id
   });
 
-  const risk1 = Risk.create({
+  const risk1 = await Risk.create({
     type: "Big Risk Type",
-    scoreboardId: scoreboard1.id
+    scoreboardId: scoreboard1.dataValues.id
   });
 
-  const updater1 = Updater.create({
+  const updater1 = await Updater.create({
     firstName: "fn3",
     surname: "sur3",
     email: "test3@test.com",
@@ -151,9 +153,9 @@ const populateDummyData = async() =>{
     keepMeUpdated: false
   });
 
-  const updaterProject1 = UpdaterProject.create({
-    projectId: project1.id,
-    updaterId: updater1.id
+  const updaterProject1 = await UpdaterProject.create({
+    projectId: project1.dataValues.id,
+    updaterId: updater1.dataValues.id
   });
 
   console.log("Adding dummy data complete!")
