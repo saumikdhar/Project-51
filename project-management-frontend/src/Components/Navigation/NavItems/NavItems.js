@@ -1,16 +1,23 @@
-import React from "react";
-import classes from "./NavItems.module.css";
-import NavItem from "./NavItem/NavItem";
-import { connect } from "react-redux";
+import React from 'react';
+import classes from './NavItems.module.css';
+import NavItem from './NavItem/NavItem';
+import { connect } from 'react-redux';
 
-export const NavItems = (props) => {
+export const NavItems = props => {
   return (
     <ul className={classes.NavigationItems}>
-      {props.isAuthorise ? <NavItem link="/users">Users</NavItem>: null}
-      {props.isAuthorise ? <NavItem link="/logout">Logout</NavItem>: <NavItem link="/auth">Login</NavItem>}
-
-      {/*follow the example below for employees, managers, Transformation Team and It Dep routes*/}
-      {/*{props.role === 'employee' ? 'Nav item all the employee links' :null}*/}
+      {props.isAuthorise && props.role !== 'employee' ? (
+        <NavItem link="/assign-projects">Assign Projects</NavItem>
+      ) : null}
+      {props.isAuthorise && props.role === 'employee' ? (
+        <NavItem link="/assign-projects">People on this project</NavItem>
+      ) : null}
+      {props.isAuthorise ? <NavItem link="/users">Users</NavItem> : null}
+      {props.isAuthorise ? (
+        <NavItem link="/logout">Logout</NavItem>
+      ) : (
+        <NavItem link="/auth">Login</NavItem>
+      )}
     </ul>
   );
 };
@@ -21,6 +28,5 @@ const mapStateToProps = state => {
     role: state.auth.role
   };
 };
-
 
 export default connect(mapStateToProps)(NavItems);
