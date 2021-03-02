@@ -108,7 +108,7 @@ exports.getUserProjects = async (req, res, next) => {
   const projectId = req.body.projectId;
   try {
     const users = await User.findAll({
-      attributes: ['id', 'firstName', 'surname', 'role'],
+      attributes: [['id', 'key'], 'firstName', 'surname', 'role'],
       include: [{ model: UserProject, required: true, all: true, where: { id: projectId } }]
     });
     res.status(200).json({ users: users });
@@ -144,10 +144,10 @@ exports.addUserToProject = async (req, res, next) => {
   const projectId = req.body.projectId;
   const userIdArray = req.body.userId;
   try {
-    await userIdArray.map(userId => {
+    userIdArray.map(async userId => {
       const userProject = UserProject.findOne({ where: { userId: userId, projectId: projectId } });
       // if (!userProject) {
-      UserProject.create(
+      await UserProject.create(
         {
           userId: userId,
           projectId: projectId
