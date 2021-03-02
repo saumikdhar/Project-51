@@ -7,7 +7,7 @@ import Users from './Containers/Users/Users';
 import { connect } from 'react-redux';
 import React, { useEffect } from 'react';
 import * as actions from './store/actions';
-import AssignProjects from './Containers/AssignProjects/AssignProjects';
+import AssignProjects from './Containers/AssignUsers/AssignUsers';
 import Projects from './Containers/Projects/Projects';
 import ProjectInfo from './Containers/ProjectInfo/ProjectInfo';
 import ScoreBoard from './Containers/Scoreboard/Scoreboard';
@@ -17,7 +17,6 @@ import 'antd/dist/antd.less';
 
 const App = props => {
   const { onTryAutoSignUp } = props;
-  console.log('props', props);
   useEffect(() => {
     onTryAutoSignUp();
   }, [onTryAutoSignUp]);
