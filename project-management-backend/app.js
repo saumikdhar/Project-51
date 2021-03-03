@@ -1,7 +1,10 @@
+//----------------------------------------------------------------------------------------------------------------------
+// Import express and body parser
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// Sequelise
+//----------------------------------------------------------------------------------------------------------------------
+// Import sequelise and data models
 const sequelize = require('./util/database');
 const User = require('./models/user');
 const UserProject = require('./models/user-project');
@@ -14,27 +17,34 @@ const Updater = require('./models/updater');
 const UpdaterProject = require('./models/updater-project');
 const Scoreboard = require('./models/scoreboard');
 
-//routes
+//----------------------------------------------------------------------------------------------------------------------
+// Import routes
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const scoreboardRoutes = require('./routes/scoreboard');
 const businessCaseRoutes = require('./routes/businessCase');
 const userRoutes = require('./routes/user');
 
-//bcrypt (remove this after and pre-populating data after functionality has been implmented)
+//----------------------------------------------------------------------------------------------------------------------
+// bcrypt (remove this after and pre-populating data after functionality has been implmented)
 const bcrypt = require('bcryptjs');
 
+//----------------------------------------------------------------------------------------------------------------------
+// Set app to use express, body parserand the defult port
 const app = express();
-
 app.use(bodyParser.json());
+const port = 8080
 
+//----------------------------------------------------------------------------------------------------------------------
+// Set access allowances
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE, UPDATE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
+//----------------------------------------------------------------------------------------------------------------------
 // Set up routes to DB
 app.use('/auth', authRoutes);
 app.use('/projects', projectRoutes);
@@ -42,6 +52,8 @@ app.use('/scoreboards', scoreboardRoutes);
 app.use('/businessCase', businessCaseRoutes);
 app.use('/users', userRoutes);
 
+//----------------------------------------------------------------------------------------------------------------------
+// Set database relations
 User.belongsToMany(Project, { through: UserProject });
 Project.belongsToMany(User, { through: UserProject });
 
@@ -56,6 +68,8 @@ Scoreboard.hasMany(Objective);
 Scoreboard.hasMany(Risk);
 Scoreboard.hasMany(Action);
 
+//----------------------------------------------------------------------------------------------------------------------
+// Set possible error
 app.use((error, req, res, next) => {
   console.log(error);
   const status = error.statusCode || 500;
@@ -64,11 +78,19 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-const server = app.listen(8080);
+//----------------------------------------------------------------------------------------------------------------------
+// Start server
+console.log('\n-------------------------------------------------------------------------------------------------------')
+console.log('Server started on port ' + port)
+const server = app.listen(port);
 
-//pre-population dummy data
+//----------------------------------------------------------------------------------------------------------------------
+// Pre-population dummy data
 const populateDummyData = async () => {
   console.log('Adding dummy data...');
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy user to the database
   const hpw = await bcrypt.hash('password', 12);
   const user1 = await User.create({
     firstName: 'fn1',
@@ -77,6 +99,9 @@ const populateDummyData = async () => {
     password: hpw,
     role: 'employee'
   });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy user to the database
   const user2 = await User.create({
     firstName: 'fn2',
     surname: 'sur2',
@@ -85,23 +110,77 @@ const populateDummyData = async () => {
     role: 'manager'
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy user to the database
+  const user3 = await User.create({
+    firstName: 'fn3',
+    surname: 'sur3',
+    email: 'test3@test.com',
+    password: hpw,
+    role: 'transformationTeam'
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy project to the database
   const project1 = await Project.create({
     name: 'My Dummy Project',
-    projectStatus: 'Ongoing',
+    managerName: "Peter Parker",
+    transformationLead: "Matt Murdock",
+    projectScore: "15",
+    projectStatus: 'Active',
+    projectSize: "Large",
     quickWin: true,
     projectType: 'Dummy Project',
     questions: {}
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy project to the database
+  const project2 = await Project.create({
+    name: 'My Dummy Project 2',
+    projectScore: "10",
+    projectStatus: 'Pending',
+    projectSize: "Large",
+    quickWin: true,
+    projectType: 'Dummy Project',
+    questions: {}
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy project to the database
+  const project3 = await Project.create({
+    name: 'My Dummy Project 3',
+    projectScore: "8",
+    projectStatus: 'Pending',
+    projectSize: "Large",
+    quickWin: true,
+    projectType: 'Dummy Project',
+    questions: {}
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy userProject to the database
   const userProject1 = await UserProject.create({
     userId: user1.id,
     projectId: project1.id
   });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy userProject to the database
   const userProject2 = await UserProject.create({
     userId: user2.id,
     projectId: project1.id
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy userProject to the database
+  const userProject3 = await UserProject.create({
+    userId: user3.id,
+    projectId: project1.id
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy business case to the database
   const businessCase1 = await BusinessCase.create({
     benefit: 'Big Benefit',
     estimatedCost: '20000',
@@ -119,6 +198,46 @@ const populateDummyData = async () => {
     projectId: '1'
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy business case to the database
+  const businessCase2 = await BusinessCase.create({
+    benefit: 'Big Benefit',
+    estimatedCost: '20000',
+    sponsor: 'George Tester',
+    executiveSummary: 'Big and Good Summary',
+    reason: 'Important Reason',
+    businessOption: 'The Option',
+    duration: '2021-05-06T12:00:00.000Z',
+    benefitTimescale: 'Long',
+    negativeImpact: 'Low',
+    customerImpactAndEngagement: 'High',
+    majorRisks: null,
+    diversityAndInclusionConsiderations: 'Yes',
+    investmentAppraisal: '30000',
+    projectId: '2'
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy business case to the database
+  const businessCase3 = await BusinessCase.create({
+    benefit: 'Big Benefit',
+    estimatedCost: '20000',
+    sponsor: 'George Tester',
+    executiveSummary: 'Big and Good Summary',
+    reason: 'Important Reason',
+    businessOption: 'The Option',
+    duration: '2021-05-06T12:00:00.000Z',
+    benefitTimescale: 'Long',
+    negativeImpact: 'Low',
+    customerImpactAndEngagement: 'High',
+    majorRisks: null,
+    diversityAndInclusionConsiderations: 'Yes',
+    investmentAppraisal: '30000',
+    projectId: '3'
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy scoreboard to the database
   const scoreboard1 = await Scoreboard.create({
     riskNarrative: 'The Risk Narrative',
     objectiveNarrative: 'The Objective Narrative',
@@ -126,21 +245,29 @@ const populateDummyData = async () => {
     projectId: '1'
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy action to the database
   const action1 = await Action.create({
     type: 'Big Action Type',
     scoreboardId: scoreboard1.id
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy objective to the database
   const objective1 = await Objective.create({
     type: 'Big Objective Type',
     scoreboardId: scoreboard1.id
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy risk to the database
   const risk1 = await Risk.create({
     type: 'Big Risk Type',
     scoreboardId: scoreboard1.id
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy updater to the database
   const updater1 = await Updater.create({
     firstName: 'fn3',
     surname: 'sur3',
@@ -149,6 +276,8 @@ const populateDummyData = async () => {
     keepMeUpdated: false
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy userProject to the database
   const updaterProject1 = await UpdaterProject.create({
     projectId: project1.id,
     updaterId: updater1.id
@@ -156,6 +285,9 @@ const populateDummyData = async () => {
 
   console.log('Adding dummy data complete!');
 };
+
+//----------------------------------------------------------------------------------------------------------------------
+// Add users to the database
 const createUser = async () => {
   const hpw = await bcrypt.hash('password', 12);
   for (let i = 0; i < 100; i++) {
@@ -169,10 +301,15 @@ const createUser = async () => {
   }
 };
 
-// sequelize
-//   .sync({ force: true }) //Only use this when changing tables or fields
-//   // .sync()
-//   .then(dummyData => {
-//     return populateDummyData();
-//   })
-//   .catch(err => console.log(err));
+//--------------------------------------------------------------------------------------------------------------------
+// Set the database to repopulate (Uncomment and run to set database)
+
+/*
+ sequelize
+   .sync({ force: true }) //Only use this when changing tables or fields
+   // .sync()
+   .then(dummyData => {
+     return populateDummyData();
+   })
+   .catch(err => console.log(err));
+ */
