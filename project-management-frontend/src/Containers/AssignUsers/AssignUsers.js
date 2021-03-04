@@ -58,6 +58,8 @@ const AssignUsers = props => {
     }
   ];
 
+  const projectId = props.location.pathname.split('/').pop(-1);
+
   useEffect(() => {
     const fetchTableData = async () => {
       setLoadingTable(true);
@@ -90,14 +92,14 @@ const AssignUsers = props => {
     if (props.role !== 'employee') {
       fetchTableData();
     }
-    getProjectUsers(1);
+    getProjectUsers(projectId);
   }, [getProjectUsers, props.role]);
 
   let listOfUsers;
   listOfUsers = props.users;
 
   const removeUserFromProjectHandler = userId => {
-    removeUserFromProject(userId, 1);
+    removeUserFromProject(userId, projectId);
     listOfUsers.map((oldUserId, index) => {
       if (userId === oldUserId.key) {
         return listOfUsers.splice(index, 1);
@@ -126,7 +128,7 @@ const AssignUsers = props => {
       oldUsers.push(...updatedUsers);
     }
 
-    addUserToProject(selectedRowKeys, 1);
+    addUserToProject(selectedRowKeys, projectId);
     setProjectUsers(oldUsers);
     setSelectedRowKeys([]);
     setLoadingButton(false);
@@ -167,7 +169,10 @@ const AssignUsers = props => {
           <Tag
             onClose={() => removeUserFromProjectHandler(user.key)}
             // color={colours[Math.round(Math.random() * colours.length) + 1]}
-            closable={props.role !== 'employee'}
+            closable={
+              props.role === 'transformationTeam' ||
+              (props.role === 'manager' && user.role !== 'transformationTeam')
+            }
             key={user.key}
           >{`${user.firstName} ${user.surname}`}</Tag>
         ))}

@@ -1,6 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 // Import project model
 const Project = require('../models/project');
+const User = require('../models/user');
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // Controller to retrieve all projects
@@ -8,7 +10,7 @@ exports.getAllProjects = async (req,res,next) => {
 
     // Tries to pull project information from the database returning as a JSON
     try {
-        const projects = await Project.findAll()
+        const projects = await Project.findAll({include: [User]})
         res.status(200).json({
             success : true,
             data : projects

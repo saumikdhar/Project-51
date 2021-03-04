@@ -81,13 +81,12 @@ exports.getUsers = async (req, res, next) => {
       users = await User.findAll({
         attributes: [['id', 'key'], 'firstName', 'surname', 'role', 'email'],
         where: {
-          role: { [Op.notIn]: ['Transformationteam', 'manager', 'projectManager'] }
+          role: { [Op.notIn]: ['transformationTeam', 'manager'] }
         }
       });
     } else if (role === 'transformationTeam') {
       users = await User.findAll({
-        attributes: [['id', 'key'], 'firstName', 'surname', 'role', 'email'],
-        where: { role: { [Op.not]: 'transformationTeam' } }
+        attributes: [['id', 'key'], 'firstName', 'surname', 'role', 'email']
       });
     }
     if (!users) {

@@ -115,7 +115,7 @@ class AddUserModal extends React.Component {
             ]}
           >
             <Select>
-              <Option key={'ProjectManager'} value={'projectManager'}>
+              <Option key={'ProjectManager'} value={'manager'}>
                 {'Project Manager'}
               </Option>
               <Option key={'employee'} value={'employee'}>
