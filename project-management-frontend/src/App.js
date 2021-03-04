@@ -29,7 +29,6 @@ import 'antd/dist/antd.less';
 //----------------------------------------------------------------------------------------------------------------------
 // Primary application
 const App = props => {
-
   //--------------------------------------------------------------------------------------------------------------------
   // Tries automatic sign in on application load
   const { onTryAutoSignUp } = props;
@@ -53,15 +52,14 @@ const App = props => {
     routes = (
       <Switch>
         <Route path="/logout" component={Logout} />
-        {/*  all other possible ROUTES HERE*/}
         <Route path="/projects" component={Projects} />
         <Route path="/assign-projects" component={AssignProjects} />
-        <Route exact path="/projectinfo/:id" component={ProjectInfo} />
-        <Route exact path="/scoreboard/:id" component={ScoreBoard} />
-        <Route exact path="/businessCase/:id" component={BusinessCase} />
-        <Route path="/adminPendingDash" component={AdminPendingDash}/>
-        <Route path="/adminActiveDash" component={AdminActiveDash}/>
-        <Route path="/adminReviewProject/:id" component={AdminPendingReview}/>
+        <Route path="/projectinfo/:id" component={ProjectInfo} />
+        <Route path="/scoreboard/:id" component={ScoreBoard} />
+        <Route path="/businessCase/:id" component={BusinessCase} />
+        <Route path="/adminPendingDash" component={AdminPendingDash} />
+        <Route path="/adminActiveDash" component={AdminActiveDash} />
+        <Route path="/adminReviewProject/:id" component={AdminPendingReview} />
         <Route path="/users" component={Users} />
         <Redirect to="/projects" />
       </Switch>
