@@ -1,1 +1,63 @@
+image: node:12-alpine
 
+stages:
+   - build
+   - test
+   - dockerise
+   - deploy
+
+cache:
+  paths:
+    - ./project-management-frontend/node_modules
+    - ./project-management-backend/node_modules
+
+build-react:
+  stage: build
+  tags:
+    - comsc-ci
+  script:
+   - cd project-management-frontend
+   - npm install
+   - echo "Finished installing node_modules"
+   - echo "Building..."
+   - CI=false npm run build
+   - cd ..
+  artifacts:
+    paths: 
+      - ./project-management-frontend/node_modules
+      - ./project-management-frontend/build
+
+build-node:
+  stage: build
+  tags:
+    - comsc-ci
+  script:
+    - echo "Installing dependencies for Node" 
+    - echo "Running npm install..."
+    - cd project-management-backend
+    - npm install
+    - cd ..
+  artifacts:
+    paths: 
+      - ./project-management-backend/node_modules
+
+# test-react:
+#   stage: test
+#   tags:
+#     - comsc-ci  
+#   script:
+#     - echo "Running React test..."
+#     - cd project-management-frontend
+#     - npm i react-scripts
+#     - npm test
+#     - echo "Test successful!"
+
+# test-node:
+#   stage: test
+#   tags:
+#     - comsc-ci
+#   script:
+#     - cd project-management-backend
+#     - echo "Running Node test..."
+#     - npm test
+#     - echo "Test successful!"
