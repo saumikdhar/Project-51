@@ -1,4 +1,5 @@
-import * as actionTypes from "../actions/actionTypes";
+import * as actionTypes from '../actions/actionTypes';
+import { backendUrl } from '../utility';
 
 export const getUserStart = () => {
   return {
@@ -6,7 +7,7 @@ export const getUserStart = () => {
   };
 };
 
-export const getUserSuccess = (users) => {
+export const getUserSuccess = users => {
   return {
     type: actionTypes.GET_USER_SUCCESS,
     users: users
@@ -26,7 +27,7 @@ export const getUsersStart = () => {
   };
 };
 
-export const getUsersSuccess = (users) => {
+export const getUsersSuccess = users => {
   return {
     type: actionTypes.GET_USERS_SUCCESS,
     users: users
@@ -46,7 +47,7 @@ export const addUserStart = () => {
   };
 };
 
-export const addUserSuccess = (users) => {
+export const addUserSuccess = users => {
   return {
     type: actionTypes.GET_USERS_SUCCESS
   };
@@ -63,10 +64,9 @@ export const getUser = () => {
   return dispatch => {
     dispatch(getUserStart());
 
-    const url = "http://localhost:8080/users/get";
-    const method = "POST";
-    const header = {"Content-Type": "application/json"};
-
+    const url = `${backendUrl()}/users/get`;
+    const method = 'POST';
+    const header = { 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -77,7 +77,7 @@ export const getUser = () => {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not retrieve user!");
+          throw new Error('Could not retrieve user!');
         }
         return res.json();
       })
@@ -94,9 +94,9 @@ export const getUsers = () => {
   return dispatch => {
     dispatch(getUsersStart());
 
-    const url = "http://localhost:8080/users/getAll";
-    const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const url = `${backendUrl()}/users/getAll`;
+    const method = 'POST';
+    const header = { 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -107,7 +107,7 @@ export const getUsers = () => {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not retrieve users!");
+          throw new Error('Could not retrieve users!');
         }
         return res.json();
       })
@@ -120,13 +120,13 @@ export const getUsers = () => {
   };
 };
 
-export const addUser = (values) => {
+export const addUser = values => {
   return dispatch => {
     dispatch(addUserStart());
 
-    const url = "http://localhost:8080/users/add";
-    const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const url = `${backendUrl()}/users/add`;
+    const method = 'POST';
+    const header = { 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -142,7 +142,7 @@ export const addUser = (values) => {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not add user!");
+          throw new Error('Could not add user!');
         }
         return res.json();
       })

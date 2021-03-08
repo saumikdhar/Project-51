@@ -1,4 +1,5 @@
-import * as actionTypes from "../actions/actionTypes";
+import * as actionTypes from '../actions/actionTypes';
+import { backendUrl } from '../utility';
 
 export const authStart = () => {
   return {
@@ -22,10 +23,10 @@ export const authFail = error => {
   };
 };
 export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("expirationDate");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("role");
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('role');
   return {
     type: actionTypes.AUTH_LOGOUT
   };
@@ -43,10 +44,9 @@ export const auth = (email, password) => {
   return dispatch => {
     dispatch(authStart());
 
-    const url = "http://localhost:8080/auth/login";
-    const method = "POST";
-    const header = { "Content-Type": "application/json" };
-
+    const url = `${backendUrl()}/auth/login`;
+    const method = 'POST';
+    const header = { 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -58,22 +58,20 @@ export const auth = (email, password) => {
     })
       .then(res => {
         if (res.status === 422) {
-          throw new Error("Validation failed.");
+          throw new Error('Validation failed.');
         } else if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Email or password was incorrect!");
+          throw new Error('Email or password was incorrect!');
         }
         return res.json();
       })
       .then(resData => {
         dispatch(authSuccess(resData.token, resData.userId, resData.role));
-        localStorage.setItem("token", resData.token);
-        localStorage.setItem("userId", resData.userId);
-        localStorage.setItem("role", resData.role);
+        localStorage.setItem('token', resData.token);
+        localStorage.setItem('userId', resData.userId);
+        localStorage.setItem('role', resData.role);
         const remainingMilliseconds = 60 * 60 * 1000;
-        const expiryDate = new Date(
-          new Date().getTime() + remainingMilliseconds
-        );
-        localStorage.setItem("expiryDate", expiryDate.toISOString());
+        const expiryDate = new Date(new Date().getTime() + remainingMilliseconds);
+        localStorage.setItem('expiryDate', expiryDate.toISOString());
         dispatch(checkAuthTimeout(remainingMilliseconds));
       })
       .catch(error => {
@@ -91,21 +89,20 @@ export const setAuthRedirectPath = path => {
 
 export const authCheckState = () => {
   return dispatch => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       dispatch(logout());
     } else {
-      const expirationDate = new Date(localStorage.getItem("expiryDate"));
+      const expirationDate = new Date(localStorage.getItem('expiryDate'));
       if (expirationDate <= new Date()) {
         dispatch(logout());
       } else {
-
-        const url = "http://localhost:8080/auth/userDetails";
-        const method = "GET";
+        const url = `${backendUrl()}/auth/userDetails`;
+        const method = 'GET';
         const header = {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json"
+          Authorization: 'Bearer ' + token,
+          'Content-Type': 'application/json'
         };
 
         fetch(url, {
@@ -114,7 +111,7 @@ export const authCheckState = () => {
         })
           .then(res => {
             if (res.status !== 200 && res.status !== 201) {
-              throw new Error("User not found");
+              throw new Error('User not found');
             }
             return res.json();
           })
@@ -124,11 +121,7 @@ export const authCheckState = () => {
           .catch(error => {
             dispatch(authFail(error));
           });
-        dispatch(
-          checkAuthTimeout(
-            (expirationDate.getTime() - new Date().getTime())
-          )
-        );
+        dispatch(checkAuthTimeout(expirationDate.getTime() - new Date().getTime()));
       }
     }
   };

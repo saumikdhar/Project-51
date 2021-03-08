@@ -9,6 +9,7 @@ import classes from './AssignUsers.module.css';
 import './index-2.css';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
+import { backendUrl } from '../../store/utility';
 
 const AssignUsers = props => {
   const { addUserToProject, getProjectUsers, removeUserFromProject, setProjectUsers } = props;
@@ -64,7 +65,7 @@ const AssignUsers = props => {
     const fetchTableData = async () => {
       setLoadingTable(true);
       try {
-        const url = 'http://localhost:8080/users/employees';
+        const url = `${backendUrl()}/users/employees`;
         const method = 'POST';
         const token = localStorage.getItem('token');
         const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
