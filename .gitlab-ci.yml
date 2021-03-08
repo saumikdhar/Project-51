@@ -61,3 +61,22 @@ build-node:
 #     - echo "Running Node test..."
 #     - npm test
 #     - echo "Test successful!"
+
+docker-image:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: dockerise
+  tags: 
+    - comsc-ci
+  variables:
+#     # Tell docker CLI how to talk to Docker daemon; see
+#     # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor
+    DOCKER_HOST: tcp://docker:2375/
+#     # Use the overlayfs driver for improved performance:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""  
+  script:
+    - echo "login to GitLab"
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.git.cf.ac.uk
+ 
