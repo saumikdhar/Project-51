@@ -67,8 +67,6 @@ export const auth = (email, password) => {
       .then(resData => {
         dispatch(authSuccess(resData.token, resData.userId, resData.role));
         localStorage.setItem("token", resData.token);
-        localStorage.setItem("userId", resData.userId);
-        localStorage.setItem("role", resData.role);
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds

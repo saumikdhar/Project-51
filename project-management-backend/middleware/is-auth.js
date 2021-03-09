@@ -46,6 +46,7 @@ module.exports = (req, res, next) => {
     throw error;
   }
   req.userEmail = decodedToken.email;
+  req.userId = decodedToken.userId;
   console.log(decodedToken);
   next();
 };

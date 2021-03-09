@@ -65,7 +65,8 @@ export const getUser = () => {
 
     const url = "http://localhost:8080/users/get";
     const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
 
     fetch(url, {
@@ -96,7 +97,8 @@ export const getUsers = () => {
 
     const url = "http://localhost:8080/users/getAll";
     const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -126,7 +128,8 @@ export const addUser = (values) => {
 
     const url = "http://localhost:8080/users/add";
     const method = "POST";
-    const header = {"Content-Type": "application/json"};
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
