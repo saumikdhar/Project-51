@@ -2,9 +2,11 @@ import React from "react";
 import classes from "./Users.module.css";
 import {addUser, getUser, getUsers} from "../../store/actions/index";
 import {connect} from "react-redux";
-import {Button, Divider, Table, Tag} from 'antd';
+import {Button, Divider, Select, Table} from 'antd';
 import {UserAddOutlined} from '@ant-design/icons';
 import AddUserModal from './Modals/AddUserModal'
+
+const {Option} = Select;
 
 class Users extends React.Component {
 
@@ -15,7 +17,8 @@ class Users extends React.Component {
   }
 
   state = {
-    addUserModalVisible: false
+    addUserModalVisible: false,
+    projectId: null
   };
 
   showAddUserModal = () => this.setState({addUserModalVisible: true});
@@ -24,6 +27,10 @@ class Users extends React.Component {
 
   submitUser = (values) => {
     this.props.dispatch(addUser(values));
+  };
+
+  onSwitchChange = (value) => {
+    this.setState({projectId: value});
   };
 
   constructor(props) {
@@ -59,11 +66,9 @@ class Users extends React.Component {
         key: 'action',
         width: '20%',
         render: (text, record) => {
-          const isYou = parseInt(localStorage.getItem("userId")) === record.id;
           return (
             <>
-              {isYou ? <Tag color={'green'}>You</Tag> :
-                <span>
+              <span>
                 <Button type="link"
                   //onClick={() => this.showEditUserModal(record)}
                 >
@@ -75,7 +80,7 @@ class Users extends React.Component {
                 >
                   Delete
                 </Button>
-              </span>}
+              </span>
             </>
           )
         }
@@ -85,25 +90,63 @@ class Users extends React.Component {
   }
 
   render() {
-    const {users, projectId, loading} = this.props;
+    const {users, loading} = this.props;
+    const projectId = this.state.projectId;
+
+    let switchItems = [];
+    let displayUsers = null;
+    let noProjects = null;
+    if (users.length !== 1) {
+      switchItems = [];
+      for (let [key, value] of Object.entries(users)) {
+        switchItems.push(<Option value={key}>{value?.project.name}</Option>)
+      }
+      displayUsers = users[projectId]?.users;
+      if (projectId == null && users.length !== 0) {
+        this.setState({projectId: Object.keys(users)[0]})
+      }
+    } else {
+      displayUsers = users;
+      noProjects = (<h3>You are not assigned to any projects.</h3>)
+    }
+
     return (
       <>
         <div className={classes.Users}>
           <h1>Project Users</h1>
-          <div style={{textAlign: "right"}}>
+          {noProjects}
+          <div style={{textAlign: "left", width: "50%", display: "inline-block"}}>
+
+            <Select
+              showSearch
+              style={{width: 200}}
+              optionFilterProp="children"
+              onChange={this.onSwitchChange}
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              value={projectId}
+            >
+              {switchItems}
+            </Select>
+          </div>
+
+          <div style={{textAlign: "right", width: "50%", display: "inline-block"}}>
             <Button style={{marginBottom: "10px"}} type="primary"
                     icon={<UserAddOutlined/>}
                     onClick={this.showAddUserModal}>
               Add User
             </Button>
           </div>
+
           <Table
             bordered
-            dataSource={users}
+            dataSource={displayUsers}
             columns={this.columns}
             scroll={{x: '100%'}}
             loading={loading}
           />
+
         </div>
 
         <AddUserModal
@@ -121,7 +164,6 @@ class Users extends React.Component {
 const mapStateToProps = state => {
   return {
     users: state.users.users,
-    projectId: state.users.projectId,
     loading: state.users.loading
   };
 };
