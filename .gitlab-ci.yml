@@ -79,4 +79,20 @@ docker-image:
   script:
     - echo "login to GitLab"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.git.cf.ac.uk
- 
+
+    - docker login -u gitlab-ci-token -p $CI_CD_OLD_GIT_TOKEN registry.cs.cf.ac.uk
+    - cd ./project-management-frontend
+
+    - echo "building docker image for React"
+    - docker build -t docker.prod build -t registry.git.cf.ac.uk/c1824227/project-51/frontend .
+
+    - echo "pushing docker-React image to Git"
+    - docker push docker build -t registry.git.cf.ac.uk/c1824227/project-51/frontend .
+
+    - cd ..
+    - cd ./project-management-backend
+    - echo "building docker image for Node"
+    - docker build -t docker build -t registry.git.cf.ac.uk/c1824227/project-51/backend .
+
+    - echo "pushing docker-React image to Git"
+    - docker push docker build -t registry.git.cf.ac.uk/c1824227/project-51/backend .
