@@ -96,3 +96,33 @@ docker-image:
 
     - echo "pushing docker-React image to Git"
     - docker push docker build -t registry.git.cf.ac.uk/c1824227/project-51/backend .
+
+deploy-prod:
+  tags:
+    - comsc-ci
+  stage: deploy
+  image: openshift/origin-cli
+  script:
+    - ls -a
+    - echo "Openshift login"
+    - oc login https://$OPENSHIFT_SERVER:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN
+
+    # run the code below only once to create the secret
+    -  oc create secret docker-registry gitlab-container-auth --docker-server=https://registry.git.cf.ac.uk --docker-username=c1824227 --docker-password=$DOCKER_PASSWORD --docker-email=dhars@cardiff.ac.uk
+
+    # The same code must be run twice as there is a 2-factor authentication one from gitlab and the other from registry
+    - oc create secret docker-registry gitlab-auth --docker-server=https://git.cardiff.ac.uk --docker-username=c1824227 --docker-password=$DOCKER_PASSWORD --docker-email=dhars@cardiff.ac.uk
+
+    - oc secrets link default gitlab-container-auth --for=pull
+    - oc secrets link default gitlab-auth --for=pull
+    
+    - oc new-app --docker-image registry.git.cf.ac.uk/c1824227/project-51/frontend:latest --name=sbos
+    - oc start-build sbos --from-dir=.
+    - oc expose service sbos
+
+    - oc import-image registry.git.cf.ac.uk/c1824227/project-51/frontend --confirm
+    - oc get service sbos || oc new-app project-51-test --name sbos
+    - oc get service sbos || oc expose service sbos-1 --port 3000
+  only:
+    - master
+
