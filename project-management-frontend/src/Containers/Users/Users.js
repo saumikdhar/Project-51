@@ -79,7 +79,7 @@ class Users extends React.Component {
       {
         title: 'Role',
         key: 'Role',
-        width: '5%',
+        width: '15%',
         render: (text, record) => (<p>{record.role}</p>),
 
       },
