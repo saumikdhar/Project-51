@@ -86,15 +86,15 @@ docker-image:
     - docker build -f Dockerfile.prod --pull -t registry.git.cf.ac.uk/c1824227/project-51/frontend .
 
     - echo "pushing docker-React image to Git"
-    - docker push registry.git.cf.ac.uk/c1824227/project-51/frontend .
+    - docker push registry.git.cf.ac.uk/c1824227/project-51/frontend
 
     - cd ..
     - cd ./project-management-backend
     - echo "building docker image for Node"
     - docker build -t registry.git.cf.ac.uk/c1824227/project-51/backend .
 
-    - echo "pushing docker-React image to Git"
-    - docker push registry.git.cf.ac.uk/c1824227/project-51/backend .
+    - echo "pushing docker-Node image to Git"
+    - docker push registry.git.cf.ac.uk/c1824227/project-51/backend
 
 deploy-prod:
   tags:
