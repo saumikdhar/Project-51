@@ -80,7 +80,6 @@ docker-image:
     - echo "login to GitLab"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.git.cf.ac.uk
 
-    - docker login -u gitlab-ci-token -p $CI_CD_OLD_GIT_TOKEN registry.cs.cf.ac.uk
     - cd ./project-management-frontend
 
     - echo "building docker image for React"
@@ -123,6 +122,4 @@ deploy-prod:
     - oc import-image registry.git.cf.ac.uk/c1824227/project-51/frontend --confirm
     - oc get service sbos || oc new-app project-51-test --name sbos
     - oc get service sbos || oc expose service sbos-1 --port 3000
-  only:
-    - master
 
