@@ -91,12 +91,13 @@ const populateDummyData = async () => {
 
   //--------------------------------------------------------------------------------------------------------------------
   // Add dummy user to the database
-  const hpw = await bcrypt.hash('password', 12);
+  const hpw1 = await bcrypt.hash('password', 12);
+  const hpw2 = await bcrypt.hash('123', 12);
   const user1 = await User.create({
     firstName: 'fn1',
     surname: 'sur1',
     email: 'test1@test.com',
-    password: hpw,
+    password: hpw1,
     role: 'employee'
   });
 
@@ -106,7 +107,7 @@ const populateDummyData = async () => {
     firstName: 'fn2',
     surname: 'sur2',
     email: 'test2@test.com',
-    password: hpw,
+    password: hpw1,
     role: 'manager'
   });
 
@@ -115,8 +116,8 @@ const populateDummyData = async () => {
   const user3 = await User.create({
     firstName: 'fn3',
     surname: 'sur3',
-    email: 'test3@test.com',
-    password: hpw,
+    email: 'aa@aa.com',
+    password: hpw2,
     role: 'transformationTeam'
   });
 
@@ -312,4 +313,4 @@ const createUser = async () => {
      return populateDummyData();
    })
    .catch(err => console.log(err));
- */
+*/

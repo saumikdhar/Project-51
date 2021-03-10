@@ -3,8 +3,8 @@ const userController = require('../controllers/user');
 const router = express.Router();
 const isAuth = require('../middleware/is-auth');
 
-router.post('/getAll', userController.getAllUsers);
-router.post('/add', userController.addUser);
+router.post('/getAll', isAuth, userController.getAllProjectUsersByUserId);
+router.post('/add', isAuth, userController.addUser);
 router.post('/employees', isAuth, userController.getUsers);
 router.post('/projectUsers', isAuth, userController.getUserProjects);
 router.patch('/removeUserFromProject', isAuth, userController.removeUserFromProject);
