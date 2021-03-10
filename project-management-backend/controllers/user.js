@@ -44,6 +44,61 @@ exports.addUser = async (req, res, next) => {
   }
 };
 
+exports.editUser = async (req, res, next) => {
+  const userId = req.body.userId;
+  const firstName = req.body.firstName;
+  const surname = req.body.surname;
+  const email = req.body.email;
+  const role = req.body.role;
+
+  try {
+    const user = await User.findOne({where: {id: userId}});
+    if (user == null) {
+      const error = new Error('This user does not exist.');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    User.update({
+      firstName:firstName,
+      surname:surname,
+      email:email,
+      role:role
+    }, {where: {id: userId}});
+
+    res.status(200).json({success: true});
+  } catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  const userId = req.body.userId;
+
+  try {
+    const user = await User.findOne({where: {id: userId}});
+    if (user == null) {
+      const error = new Error('This user does not exist.');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    User.destroy({where: {id: userId}});
+
+    res.status(200).json({success: true});
+  } catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
 exports.getAllProjectUsersByUserId = async (req, res) => {
   const userId = req.userId;
   try {

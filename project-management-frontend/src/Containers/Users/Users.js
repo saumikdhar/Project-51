@@ -1,10 +1,13 @@
 import React from "react";
 import classes from "./Users.module.css";
-import {addUser, getUser, getUsers} from "../../store/actions/index";
+import {addUser, editUser, deleteUser, getUser, getUsers} from "../../store/actions/index";
 import {connect} from "react-redux";
 import {Button, Divider, Select, Table} from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {UserAddOutlined} from '@ant-design/icons';
 import AddUserModal from './Modals/AddUserModal'
+import EditUserModal from './Modals/EditUserModal'
+import DeleteUserModal from './Modals/DeleteUserModal'
 
 const {Option} = Select;
 
@@ -18,6 +21,9 @@ class Users extends React.Component {
 
   state = {
     addUserModalVisible: false,
+    editUserModalVisible: false,
+    deleteUserModalVisible: false,
+    userToEdit: null,
     projectId: null
   };
 
@@ -25,8 +31,24 @@ class Users extends React.Component {
 
   hideAddUserModal = () => this.setState({addUserModalVisible: false});
 
+  showEditUserModal = (user) => this.setState({editUserModalVisible: true, userToEdit: user});
+
+  hideEditUserModal = () => this.setState({editUserModalVisible: false, userToEdit: null});
+
+  showDeleteUserModal = (user) => this.setState({deleteUserModalVisible: true, userToEdit: user});
+
+  hideDeleteUserModal = () => this.setState({deleteUserModalVisible: false, userToEdit: null});
+
   submitUser = (values) => {
     this.props.dispatch(addUser(values));
+  };
+
+  editUser = (values) => {
+    this.props.dispatch(editUser(values));
+  };
+
+  deleteUser = (values) => {
+    this.props.dispatch(deleteUser(values));//this.deleteUser(record.id)
   };
 
   onSwitchChange = (value) => {
@@ -70,15 +92,17 @@ class Users extends React.Component {
             <>
               <span>
                 <Button type="link"
-                  //onClick={() => this.showEditUserModal(record)}
+                  onClick={() => this.showEditUserModal(record)}
                 >
-                                    Edit
+                  <EditOutlined/> Edit
                 </Button>
+
                 <Divider type="vertical"/>
+
                 <Button type="link"
-                  //onClick={() => { this.deleteUser(record.user.ID) }}
+                  onClick={() => this.showDeleteUserModal(record)}
                 >
-                  Delete
+                  <DeleteOutlined/> Delete
                 </Button>
               </span>
             </>
@@ -152,9 +176,22 @@ class Users extends React.Component {
         <AddUserModal
           visible={this.state.addUserModalVisible}
           hideModal={this.hideAddUserModal}
-          refreshUsers={this.refreshUsers}
           projectId={projectId}
           onSubmit={this.submitUser}
+        />
+
+        <EditUserModal
+          visible={this.state.editUserModalVisible}
+          hideModal={this.hideEditUserModal}
+          record={this.state.userToEdit}
+          onSubmit={this.editUser}
+        />
+
+        <DeleteUserModal
+          visible={this.state.deleteUserModalVisible}
+          hideModal={this.hideDeleteUserModal}
+          record={this.state.userToEdit}
+          onSubmit={this.deleteUser}
         />
       </>
     );
