@@ -80,6 +80,7 @@ automated-heroku-deployment:
     - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     - cd ./project-management-backend
+    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
     - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/project-management-001-api .
     - docker push registry.heroku.com/project-management-001-api
     - apk add --no-cache curl
@@ -103,7 +104,6 @@ automated-heroku-deployment:
 
     - cd ..
     - cd ./project-management-frontend
-    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
     - docker build -f Dockerfile.prod --iidfile imageid.txt -t registry.heroku.com/project-management-001 .
     - docker push registry.heroku.com/project-management-001
     - apk add --no-cache curl
