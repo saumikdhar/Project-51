@@ -62,47 +62,7 @@ build-node:
 #     - npm test
 #     - echo "Test successful!"
 
-react-deployment:
-  image: docker:latest
-  services:
-    - docker:dind
-  stage: deploy
-  tags:
-    - comsc-ci
-  variables:
-    # Tell docker CLI how to talk to Docker daemon; see
-    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
-    - apk add curl nodejs bash
-    - curl https://cli-assets.heroku.com/install.sh | sh
-  script:
-    - cd ./project-management-frontend
-    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
-    - docker build -f Dockerfile.prod --iidfile imageid.txt -t registry.heroku.com/project-management-001 .
-    - docker push registry.heroku.com/project-management-001
-    - apk add --no-cache curl
-    - |
-      curl -X PATCH https://api.heroku.com/apps/project-management-001/formation \
-      -d '{
-         "updates": [
-        {
-         "type": "web",
-         "docker_image": "'$(cat imageid.txt)'"
-        },
-        {
-          "type": "worker",
-          "docker_image": "'$(cat imageid.txt)'"
-        }
-        ]
-      }' \
-      -H "Authorization: Bearer ${HEROKU_TOKEN}" \
-      -H "Content-Type: application/json" \
-      -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
-
-node-deployment:
+automated-heroku-deployment:
   image: docker:latest
   services:
     - docker:dind
@@ -120,12 +80,35 @@ node-deployment:
     - curl https://cli-assets.heroku.com/install.sh | sh
   script:
     - cd ./project-management-backend
-    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
     - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/project-management-001-api .
     - docker push registry.heroku.com/project-management-001-api
     - apk add --no-cache curl
     - |
       curl -X PATCH https://api.heroku.com/apps/project-management-001-api/formation \
+      -d '{
+         "updates": [
+        {
+         "type": "web",
+         "docker_image": "'$(cat imageid.txt)'"
+        },
+        {
+          "type": "worker",
+          "docker_image": "'$(cat imageid.txt)'"
+        }
+        ]
+      }' \
+      -H "Authorization: Bearer ${HEROKU_TOKEN}" \
+      -H "Content-Type: application/json" \
+      -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
+
+    - cd ..
+    - cd ./project-management-frontend
+    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+    - docker build -f Dockerfile.prod --iidfile imageid.txt -t registry.heroku.com/project-management-001 .
+    - docker push registry.heroku.com/project-management-001
+    - apk add --no-cache curl
+    - |
+      curl -X PATCH https://api.heroku.com/apps/project-management-001/formation \
       -d '{
          "updates": [
         {
