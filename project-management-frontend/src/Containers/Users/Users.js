@@ -58,8 +58,6 @@ class Users extends React.Component {
 
   constructor(props) {
     super(props);
-    this.currentUserRole = localStorage.getItem('role');
-    this.currentUser = getUser();
     this.columns = [
       {
         title: 'First name',
