@@ -10,6 +10,7 @@ import EditUserModal from './Modals/EditUserModal'
 import DeleteUserModal from './Modals/DeleteUserModal'
 
 const {Option} = Select;
+const roles = {"transformationTeam": "Transformation Team", "manager": "Manager", "employee": "Employee"};
 
 class Users extends React.Component {
 
@@ -80,7 +81,7 @@ class Users extends React.Component {
         title: 'Role',
         key: 'Role',
         width: '15%',
-        render: (text, record) => (<p>{record.role}</p>),
+        render: (text, record) => (<p>{roles[record.role]}</p>),
 
       },
       {
