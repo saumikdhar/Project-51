@@ -131,5 +131,5 @@ automated-heroku-deployment:
       -H "Authorization: Bearer ${HEROKU_TOKEN}" \
       -H "Content-Type: application/json" \
       -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
-  # only:
-    # - master
+  only:
+    - master
