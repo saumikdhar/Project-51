@@ -33,7 +33,7 @@ const bcrypt = require('bcryptjs');
 // Set app to use express, body parserand the defult port
 const app = express();
 app.use(bodyParser.json());
-const port = 8080
+const port = 8080;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Set access allowances
@@ -80,8 +80,10 @@ app.use((error, req, res, next) => {
 
 //----------------------------------------------------------------------------------------------------------------------
 // Start server
-console.log('\n-------------------------------------------------------------------------------------------------------')
-console.log('Server started on port ' + port)
+console.log(
+  '\n-------------------------------------------------------------------------------------------------------'
+);
+console.log('Server started on port ' + port);
 const server = app.listen(port);
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,11 +126,11 @@ const populateDummyData = async () => {
   // Add dummy project to the database
   const project1 = await Project.create({
     name: 'My Dummy Project',
-    managerName: "Peter Parker",
-    transformationLead: "Matt Murdock",
-    projectScore: "15",
+    managerName: 'Peter Parker',
+    transformationLead: 'Matt Murdock',
+    projectScore: '15',
     projectStatus: 'Active',
-    projectSize: "Large",
+    projectSize: 'Large',
     quickWin: true,
     projectType: 'Dummy Project',
     questions: {}
@@ -138,9 +140,9 @@ const populateDummyData = async () => {
   // Add dummy project to the database
   const project2 = await Project.create({
     name: 'My Dummy Project 2',
-    projectScore: "10",
+    projectScore: '10',
     projectStatus: 'Pending',
-    projectSize: "Large",
+    projectSize: 'Large',
     quickWin: true,
     projectType: 'Dummy Project',
     questions: {}
@@ -150,9 +152,9 @@ const populateDummyData = async () => {
   // Add dummy project to the database
   const project3 = await Project.create({
     name: 'My Dummy Project 3',
-    projectScore: "8",
+    projectScore: '8',
     projectStatus: 'Pending',
-    projectSize: "Large",
+    projectSize: 'Large',
     quickWin: true,
     projectType: 'Dummy Project',
     questions: {}
@@ -304,10 +306,10 @@ const createUser = async () => {
 //--------------------------------------------------------------------------------------------------------------------
 // Set the database to repopulate (Uncomment and run to set database)
 
- // sequelize
- //   .sync({ force: true }) //Only use this when changing tables or fields
- //   // .sync()
- //   .then(dummyData => {
- //     return populateDummyData();
- //   })
- //   .catch(err => console.log(err));
+sequelize
+  .sync({ force: true }) //Only use this when changing tables or fields
+  // .sync()
+  .then(dummyData => {
+    return populateDummyData();
+  })
+  .catch(err => console.log(err));
