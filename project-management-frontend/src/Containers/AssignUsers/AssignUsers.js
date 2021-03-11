@@ -125,9 +125,7 @@ const AssignUsers = props => {
       return users;
     });
 
-    if (oldUsers.length !== 0) {
-      oldUsers.push(...updatedUsers);
-    }
+    oldUsers.push(...updatedUsers);
 
     addUserToProject(selectedRowKeys, projectId);
     setProjectUsers(oldUsers);
