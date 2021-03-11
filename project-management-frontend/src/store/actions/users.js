@@ -65,8 +65,9 @@ export const getUser = () => {
     dispatch(getUserStart());
 
     const url = `${backendUrl()}/users/get`;
+    const token = localStorage.getItem('token');
     const method = 'POST';
-    const header = { 'Content-Type': 'application/json' };
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -96,7 +97,8 @@ export const getUsers = () => {
 
     const url = `${backendUrl()}/users/getAll`;
     const method = 'POST';
-    const header = { 'Content-Type': 'application/json' };
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,
@@ -126,7 +128,8 @@ export const addUser = values => {
 
     const url = `${backendUrl()}/users/add`;
     const method = 'POST';
-    const header = { 'Content-Type': 'application/json' };
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
     fetch(url, {
       method: method,

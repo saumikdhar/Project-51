@@ -36,7 +36,6 @@ const getUsersStart = (state, action) => {
 const getUsersSuccess = (state, action) => {
   return updateObject(state, {
     users: action.users.users,
-    projectId: action.users.projectId,
     loading: false
   });
 };

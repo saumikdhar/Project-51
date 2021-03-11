@@ -63,14 +63,14 @@ app.use((error, req, res, next) => {
 
 app.listen(process.env.PORT || 8080);
 
-// Pre-population dummy data
 const populateDummyData = async () => {
-  const hpw = await bcrypt.hash('password', 12);
+  const hpw1 = await bcrypt.hash('password', 12);
+  const hpw2 = await bcrypt.hash('123', 12);
   const user1 = await User.create({
     firstName: 'fn1',
     surname: 'sur1',
     email: 'test1@test.com',
-    password: hpw,
+    password: hpw1,
     role: 'employee'
   });
 
@@ -78,15 +78,15 @@ const populateDummyData = async () => {
     firstName: 'fn2',
     surname: 'sur2',
     email: 'test2@test.com',
-    password: hpw,
+    password: hpw1,
     role: 'manager'
   });
 
   const user3 = await User.create({
     firstName: 'fn3',
     surname: 'sur3',
-    email: 'test3@test.com',
-    password: hpw,
+    email: 'aa@aa.com',
+    password: hpw2,
     role: 'transformationTeam'
   });
 
@@ -237,10 +237,12 @@ const createUser = async () => {
   }
 };
 
-sequelize
-  .sync({ force: true }) // Only use this when changing tables or fields.
-  // .sync()
-  .then(dummyData => {
-    return populateDummyData();
-  })
-  .catch(err => console.log(err));
+/*
+ sequelize
+   .sync({ force: true }) //Only use this when changing tables or fields
+   // .sync()
+   .then(dummyData => {
+     return populateDummyData();
+   })
+   .catch(err => console.log(err));
+*/
