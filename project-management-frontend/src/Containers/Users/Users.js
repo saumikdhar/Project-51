@@ -158,7 +158,7 @@ class Users extends React.Component {
             <Button style={{marginBottom: "10px"}} type="primary"
                     icon={<UserAddOutlined/>}
                     onClick={this.showAddUserModal}>
-              Add User
+              <b> Add User</b>
             </Button>
           </div>
 
