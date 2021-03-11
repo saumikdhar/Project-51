@@ -1,10 +1,10 @@
 image: node:12-alpine
 
 stages:
-   - build
-   - test
-   - dockerise
-   - deploy
+  - build
+  - test
+  - dockerise
+  - deploy
 
 cache:
   paths:
@@ -16,14 +16,14 @@ build-react:
   tags:
     - comsc-ci
   script:
-   - cd project-management-frontend
-   - npm install
-   - echo "Finished installing node_modules"
-   - echo "Building..."
-   - CI=false npm run build
-   - cd ..
+    - cd project-management-frontend
+    - npm install
+    - echo "Finished installing node_modules"
+    - echo "Building..."
+    - CI=false npm run build
+    - cd ..
   artifacts:
-    paths: 
+    paths:
       - ./project-management-frontend/node_modules
       - ./project-management-frontend/build
 
@@ -32,13 +32,13 @@ build-node:
   tags:
     - comsc-ci
   script:
-    - echo "Installing dependencies for Node" 
+    - echo "Installing dependencies for Node"
     - echo "Running npm install..."
     - cd project-management-backend
     - npm install
     - cd ..
   artifacts:
-    paths: 
+    paths:
       - ./project-management-backend/node_modules
 
 # test-react:
@@ -62,64 +62,82 @@ build-node:
 #     - npm test
 #     - echo "Test successful!"
 
-docker-image:
+react-deployment:
   image: docker:latest
   services:
     - docker:dind
-  stage: dockerise
-  tags: 
-    - comsc-ci
-  variables:
-#     # Tell docker CLI how to talk to Docker daemon; see
-#     # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor
-    DOCKER_HOST: tcp://docker:2375/
-#     # Use the overlayfs driver for improved performance:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""  
-  script:
-    - echo "login to GitLab"
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.git.cf.ac.uk
-
-    - cd ./project-management-frontend
-
-    - echo "building docker image for React"
-    - docker build -f Dockerfile.prod --pull -t registry.git.cf.ac.uk/c1824227/project-51/frontend .
-
-    - echo "pushing docker-React image to Git"
-    - docker push registry.git.cf.ac.uk/c1824227/project-51/frontend
-
-    - cd ..
-    - cd ./project-management-backend
-    - echo "building docker image for Node"
-    - docker build -t registry.git.cf.ac.uk/c1824227/project-51/backend .
-
-    - echo "pushing docker-Node image to Git"
-    - docker push registry.git.cf.ac.uk/c1824227/project-51/backend
-
-deploy-prod:
+  stage: deploy
   tags:
     - comsc-ci
-  stage: deploy
-  image: openshift/origin-cli
+  variables:
+    # Tell docker CLI how to talk to Docker daemon; see
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add curl nodejs bash
+    - curl https://cli-assets.heroku.com/install.sh | sh
   script:
-    - ls -a
-    - echo "Openshift login"
-    - oc login https://$OPENSHIFT_SERVER:$OPENSHIFT_PORT --token=$OPENSHIFT_TOKEN
+    - cd ./project-management-frontend
+    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+    - docker build -f Dockerfile.prod --iidfile imageid.txt -t registry.heroku.com/project-management-001 .
+    - docker push registry.heroku.com/project-management-001
+    - apk add --no-cache curl
+    - |
+      curl -X PATCH https://api.heroku.com/apps/project-management-001/formation \
+      -d '{
+         "updates": [
+        {
+         "type": "web",
+         "docker_image": "'$(cat imageid.txt)'"
+        },
+        {
+          "type": "worker",
+          "docker_image": "'$(cat imageid.txt)'"
+        }
+        ]
+      }' \
+      -H "Authorization: Bearer ${HEROKU_TOKEN}" \
+      -H "Content-Type: application/json" \
+      -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
 
-    # run the code below only once to create the secret
-    -  oc create secret docker-registry gitlab-container-auth --docker-server=https://registry.git.cf.ac.uk --docker-username=c1824227 --docker-password=$DOCKER_PASSWORD --docker-email=dhars@cardiff.ac.uk
-
-    # The same code must be run twice as there is a 2-factor authentication one from gitlab and the other from registry
-    - oc create secret docker-registry gitlab-auth --docker-server=https://git.cardiff.ac.uk --docker-username=c1824227 --docker-password=$DOCKER_PASSWORD --docker-email=dhars@cardiff.ac.uk
-
-    - oc secrets link default gitlab-container-auth --for=pull
-    - oc secrets link default gitlab-auth --for=pull
-    
-    - oc new-app --docker-image registry.git.cf.ac.uk/c1824227/project-51/frontend:latest --name=sbos
-    - oc start-build sbos --from-dir=.
-    - oc expose service sbos
-
-    - oc import-image registry.git.cf.ac.uk/c1824227/project-51/frontend --confirm
-    - oc get service sbos || oc new-app project-51-test --name sbos
-    - oc get service sbos || oc expose service sbos-1 --port 3000
-
+node-deployment:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: deploy
+  tags:
+    - comsc-ci
+  variables:
+    # Tell docker CLI how to talk to Docker daemon; see
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-docker-in-docker-executor
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apk add curl nodejs bash
+    - curl https://cli-assets.heroku.com/install.sh | sh
+  script:
+    - cd ./project-management-backend
+    - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
+    - docker build -f Dockerfile --iidfile imageid.txt -t registry.heroku.com/project-management-001-api .
+    - docker push registry.heroku.com/project-management-001-api
+    - apk add --no-cache curl
+    - |
+      curl -X PATCH https://api.heroku.com/apps/project-management-001-api/formation \
+      -d '{
+         "updates": [
+        {
+         "type": "web",
+         "docker_image": "'$(cat imageid.txt)'"
+        },
+        {
+          "type": "worker",
+          "docker_image": "'$(cat imageid.txt)'"
+        }
+        ]
+      }' \
+      -H "Authorization: Bearer ${HEROKU_TOKEN}" \
+      -H "Content-Type: application/json" \
+      -H "Accept: application/vnd.heroku+json; version=3.docker-releases"
