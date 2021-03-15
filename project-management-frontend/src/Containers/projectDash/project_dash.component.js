@@ -2,9 +2,10 @@
 // Imports; for webservices, styling and database access
 import React, { Component } from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, Layout } from 'antd';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.css';
+import { backendUrl } from '../../store/utility';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Function component (no state/ lifecycle used) for Active Projects
@@ -21,64 +22,70 @@ const ProjectCard = props => (
     <td>{props.project.projectSize}</td>
     <td>{props.project.projectType}</td>
     <td>
-      <Link  to={"/projectinfo/" + props.project.id}><Button>View</Button></Link>
+      <Link to={'/projectinfo/' + props.project.id}>
+        <Button>View</Button>
+      </Link>
     </td>
   </tr>
-)
+);
 
 //----------------------------------------------------------------------------------------------------------------------
 // Admin project dashboard for active projects
 export default class project_dash_active_Component extends Component {
-
   //--------------------------------------------------------------------------------------------------------------------
   // Constructor; initialises the state
   constructor(props) {
     super(props);
 
     // Initialises state for active and pending project arrays
-    this.state = {activeProjects: [], pendingProjects: []};
+    this.state = { activeProjects: [], pendingProjects: [] };
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   // On page load; retrieve the project data from database
   componentDidMount() {
-
     // Retrieves all active projects from the database
-    axios.get('http://localhost:8080/projects/getAllActiveProjects')
+    axios
+      .get(`${backendUrl()}/projects/getAllActiveProjects`)
       .then(response => {
-        this.setState({ activeProjects:response.data.data })
+        this.setState({ activeProjects: response.data.data });
       })
 
       // Log error if unsuccessful
-      .catch((error) => {
-        console.log(error)
-      })
+      .catch(error => {
+        console.log(error);
+      });
 
     // Retrieves all pending projects from the database
-    axios.get('http://localhost:8080/projects/getAllPendingProjects')
+    axios
+      .get(`${backendUrl()}/projects/getAllPendingProjects`)
       .then(response => {
-        this.setState({ pendingProjects:response.data.data })
+        this.setState({ pendingProjects: response.data.data });
       })
 
       // Log error if unsuccessful
-      .catch((error) => {
-        console.log(error)
-      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   // Maps projects to table; sorting by priority score
-  projectList(){
-    return this.state.activeProjects.sort(function (a, b){return b.priorityScore - a.priorityScore})
-      .map(currentproject => { return <ProjectCard project = {currentproject}  key={currentproject.id}/>;
+  projectList() {
+    return this.state.activeProjects
+      .sort(function (a, b) {
+        return b.priorityScore - a.priorityScore;
       })
+      .map(currentproject => {
+        return <ProjectCard project={currentproject} key={currentproject.id} />;
+      });
   }
 
   //------------------------------------------------------------------------------------------------------------------
   // Render; Projects dashboard with filters
   render() {
     return (
-      <div className={"container"}>
+      <div className={'container'}>
         {/*----------------------------------------------------------------------------------------------------------*/}
         {/* Page title with drop down filter options */}
         <h3>&nbsp; Project Dash &nbsp;</h3>
@@ -96,48 +103,50 @@ export default class project_dash_active_Component extends Component {
         <div className="float-right">
           <div className="input-group">
             <div className="form-outline">
-              <input type="search" id="form1" placeholder={"Search"} className="form-control"/>
+              <input type="search" id="form1" placeholder={'Search'} className="form-control" />
             </div>
-            <button type="button" onClick={() => this.setState({action: true})} className="btn btn-primary">Search
+            <button
+              type="button"
+              onClick={() => this.setState({ action: true })}
+              className="btn btn-primary"
+            >
+              Search
             </button>
-          </div></div><br></br>
-
+          </div>
+        </div>
+        <br></br>
 
         {/*----------------------------------------------------------------------------------------------------------*/}
         {/* Buttons to switch between project statuses */}
         <Button type="primary">Active Projects</Button>
-        <Link  to={"/adminPendingDash"}><Button>Pending Projects
-          &ensp;{this.state.pendingProjects.length}&ensp;</Button>
+        <Link to={'/adminPendingDash'}>
+          <Button>Pending Projects &ensp;{this.state.pendingProjects.length}&ensp;</Button>
         </Link>
-
 
         {/*----------------------------------------------------------------------------------------------------------*/}
         {/* Table for active projects, mapping the data from the database */}
         <Layout>
-          <table className={"table"}>
-
+          <table className={'table'}>
             {/*--------------------------------------------------------------------------------------------------------*/}
             {/* Table headers */}
-            <thead className={"thead-light"}>
-            <tr>
-              <th>Project ID</th>
-              <th>Project name</th>
-              <th>Priority Score</th>
-              <th>Description</th>
-              <th>Date started</th>
-              <th>Manager</th>
-              <th>Transformation Lead</th>
-              <th>Size</th>
-              <th>Project Type</th>
-              <th>Action</th>
-            </tr>
+            <thead className={'thead-light'}>
+              <tr>
+                <th>Project ID</th>
+                <th>Project name</th>
+                <th>Priority Score</th>
+                <th>Description</th>
+                <th>Date started</th>
+                <th>Manager</th>
+                <th>Transformation Lead</th>
+                <th>Size</th>
+                <th>Project Type</th>
+                <th>Action</th>
+              </tr>
             </thead>
 
             {/*--------------------------------------------------------------------------------------------------------*/}
             {/* Populates table rows from the state activeProjects array */}
-            <tbody>
-            { this.projectList() }
-            </tbody>
+            <tbody>{this.projectList()}</tbody>
           </table>
         </Layout>
       </div>
