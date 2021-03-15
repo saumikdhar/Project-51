@@ -8,13 +8,14 @@ import 'antd/lib/button/style';
 import { PlusOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
+import { backendUrl } from '../../store/utility';
 
 const Projects = props => {
   const [projects, setProjects] = useState([]);
   const { removeUserFromProject } = props;
 
   useEffect(() => {
-    const url = 'http://localhost:8080/projects/getAllProjects';
+    const url = `${backendUrl()}/projects/getAllProjects`;
     const method = 'GET';
     const header = { 'Content-Type': 'application/json' };
 

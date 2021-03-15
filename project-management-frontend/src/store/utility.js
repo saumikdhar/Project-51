@@ -4,3 +4,9 @@ export const updateObject = (oldObject, updatedProperties) => {
     ...updatedProperties
   };
 };
+
+export const backendUrl = () => {
+  return process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://project-management-001-api.herokuapp.com';
+};

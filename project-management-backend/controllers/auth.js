@@ -66,6 +66,7 @@ exports.userDetails = async (req, res, next) => {
   const userEmail = req.userEmail;
   try {
     const user = await User.findOne({where: { email: userEmail} });
+    console.log("ksadka")
     if (!user) {
       const error = new Error('User not found!');
       error.statusCode = 401;
