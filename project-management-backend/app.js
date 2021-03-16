@@ -61,6 +61,9 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
+//----------------------------------------------------------------------------------------------------------------------
+// Start server
+
 app.listen(process.env.PORT || 8080);
 
 const populateDummyData = async () => {
@@ -237,12 +240,12 @@ const createUser = async () => {
   }
 };
 
-/*
- sequelize
-   .sync({ force: true }) //Only use this when changing tables or fields
-   // .sync()
-   .then(dummyData => {
-     return populateDummyData();
-   })
-   .catch(err => console.log(err));
-*/
+
+//  sequelize
+//    .sync({ force: true }) //Only use this when changing tables or fields
+//    // .sync()
+//    .then(dummyData => {
+//      return populateDummyData();
+//    })
+//    .catch(err => console.log(err));
+

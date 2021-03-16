@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { backendUrl } from '../../store/utility';
-
+import classes from './../Projects/Projects.module.css';
 const BusinessCase = props => {
   const [id, setId] = useState('');
   const [businessCases, setBusinessCase] = useState(null);
@@ -37,9 +37,9 @@ const BusinessCase = props => {
   console.log(businessCases);
 
   return (
-    <div>
+    <div className={classes.Projects}>
       <h1>All Business Case </h1>
-      <table>
+      <table className={classes.Table}>
         <thead>
           <tr>
             <th>Benefit</th>

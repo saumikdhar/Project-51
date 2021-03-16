@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import classes from './Projects.module.css';
 import { Tag, Tooltip, Button } from 'antd';
 import 'antd/lib/tag/style';
 import 'antd/lib/tooltip/style';
 import 'antd/lib/button/style';
 import { PlusOutlined } from '@ant-design/icons';
-import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { backendUrl } from '../../store/utility';
 
@@ -15,13 +15,16 @@ const Projects = props => {
   const { removeUserFromProject } = props;
 
   useEffect(() => {
-    const url = `${backendUrl()}/projects/getAllProjects`;
-    const method = 'GET';
-    const header = { 'Content-Type': 'application/json' };
+    const userId = props.userId;
+    const role = props.role;
 
+    const url = `${backendUrl()}/projects/getMyProjects`;
+    const method = 'post';
+    const header = { 'Content-Type': 'application/json' };
     fetch(url, {
       method: method,
-      headers: header
+      headers: header,
+      body: JSON.stringify({ userId: userId, role: role })
     })
       .then(res => {
         if (res.status === 422) {
@@ -32,8 +35,9 @@ const Projects = props => {
         return res.json();
       })
       .then(resData => {
-        console.log('res data', resData);
-        setProjects(resData.data);
+        console.log('projects consoled',resData)
+        const data = resData.projects.flatMap(projects => projects);
+        setProjects(data);
       })
       .catch(error => {
         console.log('error occur', error);
@@ -42,7 +46,7 @@ const Projects = props => {
 
   return (
     <div className={classes.Projects}>
-      <h1>All Projects</h1>
+      <h1>All Projects1</h1>
       <table className={classes.Table}>
         <thead>
           <tr>
@@ -58,21 +62,20 @@ const Projects = props => {
         </thead>
         <tbody>
           {projects.map(project => {
-            console.log(project);
             return (
-              <tr key={project.id}>
+              <tr>
                 <td>
                   <Link to={`/projectinfo/${project.id}`}> {project.name}</Link>
                 </td>
-                <td>{project.managerName}</td>
+                <td>{!project.managerName ? 'No Manager Assigned' : `${project.managerName}`}</td>
                 <td>{project.projectStatus}</td>
                 <td>{project.projectSize}</td>
-                <td>{project.quickWin}</td>
+                <td>{project.quickWin ? 'True' : 'False'}</td>
                 <td>{project.projectType}</td>
                 <td>
                   {project.users.map(user => (
                     <>
-                      <Tooltip placement="top" title={user.role}>
+                      <Tooltip key={Math.random(1,39393393)} placement="top" title={user.role}>
                         <Tag
                           onClose={() => removeUserFromProject(user.id, project.id)}
                           closable={
@@ -101,7 +104,8 @@ const Projects = props => {
 
 const mapStateToProps = state => {
   return {
-    role: state.auth.role
+    role: state.auth.role,
+    userId: state.auth.userId
   };
 };
 

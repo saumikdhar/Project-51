@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { backendUrl } from '../../store/utility';
-
+import classes from './../Projects/Projects.module.css';
 const ScoreBoard = props => {
   const [id, setId] = useState('');
   const [scoreboards, setScoreBoards] = useState(null);
@@ -34,11 +34,11 @@ const ScoreBoard = props => {
       });
   }, []);
   return (
-    <div>
+    <div className={classes.Projects}>
       <h1>All ScoreBoards </h1>
-      <table>
+      <table className={classes.Table}>
         <thead>
-          <tr>
+          <tr> 
             <th>Action Narrative </th>
             <th>Objective Narrative</th>
             <th>Risk Narrative</th>
