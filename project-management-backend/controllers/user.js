@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const UserProject = require('../models/user-project');
 const Project = require('../models/project');
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
 
 exports.addUser = async (req, res, next) => {
   const firstName = req.body.firstName;
@@ -12,7 +12,7 @@ exports.addUser = async (req, res, next) => {
   const role = req.body.role;
   const projectId = parseInt(req.body.projectId);
   try {
-    const user = await User.findOne({where: {email: email}});
+    const user = await User.findOne({ where: { email: email } });
     if (user) {
       const error = new Error('A user with this email already exists.');
       error.statusCode = 400;
@@ -34,13 +34,13 @@ exports.addUser = async (req, res, next) => {
       });
     }
 
-    res.status(200).json({success: true});
+    res.status(200).json({ success: true });
   } catch (error) {
     console.log(error);
     if (!error.statusCode) {
       error.statusCode = 500;
     }
-    res.status(error.statusCode).json({error: error});
+    res.status(error.statusCode).json({ error: error });
   }
 };
 
@@ -102,14 +102,18 @@ exports.deleteUser = async (req, res, next) => {
 exports.getAllProjectUsersByUserId = async (req, res) => {
   const userId = req.userId;
   try {
-    const userProjects = await UserProject.findAll({where: {userId: userId}});
+    const userProjects = await UserProject.findAll({ where: { userId: userId } });
     if (userProjects.length === 0) {
-      const user = [(await User.findOne({
-        where: {id: userId},
-        attributes: ['id', 'firstName', 'surname', 'email', 'role']
-      })).dataValues];
+      const user = [
+        (
+          await User.findOne({
+            where: { id: userId },
+            attributes: ['id', 'firstName', 'surname', 'email', 'role']
+          })
+        ).dataValues
+      ];
 
-      res.status(200).json({users: user});
+      res.status(200).json({ users: user });
       return;
     }
 
@@ -119,42 +123,43 @@ exports.getAllProjectUsersByUserId = async (req, res) => {
 
     for (let userPs of userProjects) {
       projectUsers = [];
-      userProject = await UserProject.findAll({where: {projectId: userPs.projectId}});
+      userProject = await UserProject.findAll({ where: { projectId: userPs.projectId } });
       for (let userP of userProject) {
         projectUsers.push(
           (
             await User.findOne({
-              where: {id: userP.id},
+              where: { id: userP.id },
               attributes: ['id', 'firstName', 'surname', 'email', 'role']
             })
           ).dataValues
         );
       }
       users[userPs.projectId] = {
-        "project": (await Project.findOne({where: {id: userPs.projectId}})).dataValues,
-        "users": projectUsers
-      }
+        project: (await Project.findOne({ where: { id: userPs.projectId } })).dataValues,
+        users: projectUsers
+      };
     }
 
-    res.status(200).json({users: users});
+    res.status(200).json({ users: users });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
     console.log(error);
-    res.status(error.statusCode).json({error: error});
+    res.status(error.statusCode).json({ error: error });
   }
 };
 
 exports.getUsers = async (req, res, next) => {
   const role = req.body.role;
   let users;
+  console.log('here');
   try {
-    if (role === 'manager' || 'projectManager') {
+    if (role === 'manager') {
       users = await User.findAll({
         attributes: [['id', 'key'], 'firstName', 'surname', 'role', 'email'],
         where: {
-          role: {[Op.notIn]: ['transformationTeam', 'manager']}
+          role: { [Op.notIn]: ['transformationTeam', 'manager'] }
         }
       });
     } else if (role === 'transformationTeam') {
@@ -167,7 +172,7 @@ exports.getUsers = async (req, res, next) => {
       error.statusCode = 404;
       throw error;
     }
-    res.status(200).json({users: users});
+    res.status(200).json({ users: users });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -181,9 +186,9 @@ exports.getUserProjects = async (req, res, next) => {
   try {
     const users = await User.findAll({
       attributes: [['id', 'key'], 'firstName', 'surname', 'role'],
-      include: [{model: UserProject, required: true, all: true, where: {id: projectId}}]
+      include: [{ model: UserProject, required: true, all: true, where: { id: projectId } }]
     });
-    res.status(200).json({users: users});
+    res.status(200).json({ users: users });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -203,7 +208,7 @@ exports.removeUserFromProject = async (req, res, next) => {
         userId: userId
       }
     });
-    res.status(200).json({response: 'User removed from project'});
+    res.status(200).json({ response: 'User removed from project' });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -217,18 +222,18 @@ exports.addUserToProject = async (req, res, next) => {
   const userIdArray = req.body.userId;
   try {
     userIdArray.map(async userId => {
-      const userProject = UserProject.findOne({where: {userId: userId, projectId: projectId}});
+      const userProject = UserProject.findOne({ where: { userId: userId, projectId: projectId } });
       // if (!userProject) {
       await UserProject.create(
         {
           userId: userId,
           projectId: projectId
         },
-        {through: [User, Project]}
+        { through: [User, Project] }
       );
       // }
     });
-    res.status(200).json({response: 'User removed from project'});
+    res.status(200).json({ response: 'User removed from project' });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
