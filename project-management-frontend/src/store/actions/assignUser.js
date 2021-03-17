@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes';
-import { Tag } from 'antd';
 
 export const addProjectUserStart = () => {
   return {
