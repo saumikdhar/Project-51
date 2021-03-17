@@ -48,9 +48,15 @@ Updater.belongsToMany(Project, { through: UpdaterProject, constraints: true, onD
 Project.belongsToMany(Updater, { through: UpdaterProject, constraints: true, onDelete: 'CASCADE' });
 
 Project.hasOne(Scoreboard);
+
 Scoreboard.hasMany(Objective);
+Objective.belongsTo(Scoreboard);
+
 Scoreboard.hasMany(Risk);
+Risk.belongsTo(Scoreboard);
+
 Scoreboard.hasMany(Action);
+Action.belongsTo(Scoreboard);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
@@ -196,17 +202,51 @@ const populateDummyData = async () => {
   });
 
   const action1 = await Action.create({
-    type: 'Big Action Type',
+    type: 'Late',
+    scoreboardId: scoreboard1.id
+  });
+  const action2 = await Action.create({
+    type: 'Late',
+    scoreboardId: scoreboard1.id
+  });
+
+  const action3 = await Action.create({
+    type: 'In Progress',
+    scoreboardId: scoreboard1.id
+  });
+  const action4 = await Action.create({
+    type: 'Not started',
+    scoreboardId: scoreboard1.id
+  });
+
+  const action5 = await Action.create({
+    type: 'Completed',
     scoreboardId: scoreboard1.id
   });
 
   const objective1 = await Objective.create({
-    type: 'Big Objective Type',
+    type: 'Not Met',
+    scoreboardId: scoreboard1.id
+  });
+  const objective2 = await Objective.create({
+    type: 'Met',
+    scoreboardId: scoreboard1.id
+  });
+  const objective3 = await Objective.create({
+    type: 'In Progress',
     scoreboardId: scoreboard1.id
   });
 
   const risk1 = await Risk.create({
-    type: 'Big Risk Type',
+    type: 'Critical',
+    scoreboardId: scoreboard1.id
+  });
+  const risk2 = await Risk.create({
+    type: 'Out Of Control',
+    scoreboardId: scoreboard1.id
+  });
+  const risk3 = await Risk.create({
+    type: 'In Control',
     scoreboardId: scoreboard1.id
   });
 
@@ -237,12 +277,10 @@ const createUser = async () => {
   }
 };
 
-/*
- sequelize
-   .sync({ force: true }) //Only use this when changing tables or fields
-   // .sync()
-   .then(dummyData => {
-     return populateDummyData();
-   })
-   .catch(err => console.log(err));
-*/
+// sequelize
+//   .sync({ force: true }) // Only use this when changing tables or fields
+//   // .sync()
+//   .then(dummyData => {
+//     return populateDummyData();
+//   })
+//   .catch(err => console.log(err));

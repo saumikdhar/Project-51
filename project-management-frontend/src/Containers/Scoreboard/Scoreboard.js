@@ -9,21 +9,6 @@ const ScoreBoard = props => {
   const [scoreboards, setScoreBoards] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const data = [
-    // {
-    //   country: 'AD',
-    //   'hot dog': 164,
-    //   'hot dogColor': 'hsl(123, 70%, 50%)',
-    //   outOfContrl: 119,
-    //   burgerColor: 'hsl(335, 70%, 50%)',
-    //   sandwich: 167,
-    //   sandwichColor: 'hsl(116, 70%, 50%)',
-    //   kebab: 144,
-    //   kebabColor: 'hsl(29, 70%, 50%)',
-    //   fries: 100,
-    //   friesColor: 'hsl(117, 70%, 50%)',
-    //   donut: 197,
-    //   donutColor: 'hsl(178, 70%, 50%)'
-    // },
     {
       tasks: 'Tasks',
       'hot dog': 38,
@@ -55,6 +40,7 @@ const ScoreBoard = props => {
           return res.json();
         })
         .then(resData => {
+          console.log(...resData.data);
           setScoreBoards(resData.data);
           setIsLoaded(true);
         })
