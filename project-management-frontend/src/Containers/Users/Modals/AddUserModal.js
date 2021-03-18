@@ -7,7 +7,6 @@ const Option = Select.Option;
 
 class AddUserModal extends React.Component {
   onSubmit = values => {
-    values['projectId'] = this.props.projectId;
     this.props.onSubmit(values);
     this.props.hideModal();
   };
@@ -122,6 +121,26 @@ class AddUserModal extends React.Component {
               </Option>
             </Select>
           </FormItem>
+
+          <FormItem
+            label="Initial Project"
+            extra="You can add and change projects they are assigned to afterwards from the Projects dashboard"
+            name="initialProject"
+          >
+            <Select
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              <Option key={'None'} value={null}>
+                {'None'}
+              </Option>
+              {this.props.switchItems}
+            </Select>
+          </FormItem>
+
         </Form>
       </Modal>
     );

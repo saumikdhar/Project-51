@@ -136,14 +136,11 @@ export const getUsers = () => {
     const url = `${backendUrl()}/users/getAll`;
     const method = 'POST';
     const token = localStorage.getItem('token');
-    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+    const header = { Authorization: 'Bearer ' + token};
 
     fetch(url, {
       method: method,
-      headers: header,
-      body: JSON.stringify({
-        userId: localStorage.getItem('userId')
-      })
+      headers: header
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -172,14 +169,7 @@ export const addUser = values => {
     fetch(url, {
       method: method,
       headers: header,
-      body: JSON.stringify({
-        firstName: values.firstName,
-        surname: values.surname,
-        email: values.email,
-        password: values.password,
-        role: values.role,
-        projectId: values.projectId
-      })
+      body: JSON.stringify(values)
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -209,13 +199,7 @@ export const editUser = (values) => {
     fetch(url, {
       method: method,
       headers: header,
-      body: JSON.stringify({
-        firstName: values.firstName,
-        surname: values.surname,
-        email: values.email,
-        role: values.role,
-        userId: values.userId
-      })
+      body: JSON.stringify(values)
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -241,13 +225,10 @@ export const deleteUser = (values) => {
     const method = "POST";
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
-
     fetch(url, {
       method: method,
       headers: header,
-      body: JSON.stringify({
-        userId: values.userId
-      })
+      body: JSON.stringify(values)
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {

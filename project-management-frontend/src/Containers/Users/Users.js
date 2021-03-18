@@ -17,7 +17,7 @@ class Users extends React.Component {
   refreshUsers = () => this.props.dispatch(getUsers());
 
   componentDidMount() {
-    this.refreshUsers()
+    this.refreshUsers();
   }
 
   state = {
@@ -62,24 +62,24 @@ class Users extends React.Component {
       {
         title: 'First name',
         key: 'Firstname',
-        render: (text, record) => (<p>{record.firstName}</p>),
+        render: (text, record) => (<p key={record.firstName}>{record.firstName}</p>),
 
       },
       {
         title: 'Surname',
         key: 'Surname',
-        render: (text, record) => (<p>{record.surname}</p>),
+        render: (text, record) => (<p key={record.surname}>{record.surname}</p>),
       },
       {
         title: 'Email',
         key: 'Email',
-        render: (text, record) => (<p>{record.email}</p>),
+        render: (text, record) => (<p key={record.email}>{record.email}</p>),
       },
       {
         title: 'Role',
         key: 'Role',
         width: '15%',
-        render: (text, record) => (<p>{roles[record.role]}</p>),
+        render: (text, record) => (<p key={record.role}>{roles[record.role]}</p>),
 
       },
       {
@@ -122,7 +122,7 @@ class Users extends React.Component {
     if (users.length !== 1) {
       switchItems = [];
       for (let [key, value] of Object.entries(users)) {
-        switchItems.push(<Option value={key}>{value?.project.name}</Option>)
+        switchItems.push(<Option value={key} key={key}>{value?.project.name}</Option>)
       }
       displayUsers = users[projectId]?.users;
       if (projectId == null && users.length !== 0) {
@@ -130,7 +130,7 @@ class Users extends React.Component {
       }
     } else {
       displayUsers = users;
-      noProjects = (<h3>You are not assigned to any projects.</h3>)
+      noProjects = (<h3>There are no active projects for which to display users.</h3>)
     }
 
     return (
@@ -176,6 +176,7 @@ class Users extends React.Component {
           visible={this.state.addUserModalVisible}
           hideModal={this.hideAddUserModal}
           projectId={projectId}
+          switchItems={switchItems}
           onSubmit={this.submitUser}
         />
 

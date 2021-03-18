@@ -3,7 +3,8 @@ const userController = require('../controllers/user');
 const router = express.Router();
 const isAuth = require('../middleware/is-auth');
 
-router.post('/getAll', isAuth, userController.getAllProjectUsersByUserId);
+router.post('/getAllbyUserId', isAuth, userController.getAllProjectUsersByUserId);
+router.post('/getAll', isAuth, userController.getAllProjectUsers);
 router.post('/add', isAuth, userController.addUser);
 router.post('/edit', isAuth, userController.editUser);
 router.post('/delete', isAuth, userController.deleteUser);
