@@ -10,7 +10,7 @@ import EditUserModal from './Modals/EditUserModal'
 import DeleteUserModal from './Modals/DeleteUserModal'
 
 const {Option} = Select;
-const roles = {"transformationTeam": "Transformation Team", "manager": "Manager", "employee": "Employee"};
+const roles = {"transformationTeam": "Transformation Team", "manager": "Project Manager", "employee": "Employee"};
 
 class Users extends React.Component {
 
