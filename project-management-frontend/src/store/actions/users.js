@@ -43,19 +43,57 @@ export const getUsersFail = error => {
 
 export const addUserStart = () => {
   return {
-    type: actionTypes.GET_USERS_START
+    type: actionTypes.ADD_USER_START
   };
 };
 
 export const addUserSuccess = users => {
   return {
-    type: actionTypes.GET_USERS_SUCCESS
+    type: actionTypes.ADD_USER_SUCCESS
   };
 };
 
 export const addUserFail = error => {
   return {
-    type: actionTypes.GET_USERS_FAIL,
+    type: actionTypes.ADD_USER_FAIL,
+    error: error
+  };
+};
+
+export const editUserStart = () => {
+  return {
+    type: actionTypes.EDIT_USER_START
+  };
+};
+
+export const editUserSuccess = (users) => {
+  return {
+    type: actionTypes.EDIT_USER_SUCCESS
+  };
+};
+
+export const editUserFail = error => {
+  return {
+    type: actionTypes.EDIT_USER_FAIL,
+    error: error
+  };
+};
+
+export const deleteUserStart = () => {
+  return {
+    type: actionTypes.DELETE_USER_START
+  };
+};
+
+export const deleteUserSuccess = (users) => {
+  return {
+    type: actionTypes.DELETE_USER_SUCCESS
+  };
+};
+
+export const deleteUserFail = error => {
+  return {
+    type: actionTypes.DELETE_USER_FAIL,
     error: error
   };
 };
@@ -98,14 +136,11 @@ export const getUsers = () => {
     const url = `${backendUrl()}/users/getAll`;
     const method = 'POST';
     const token = localStorage.getItem('token');
-    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+    const header = { Authorization: 'Bearer ' + token};
 
     fetch(url, {
       method: method,
-      headers: header,
-      body: JSON.stringify({
-        userId: localStorage.getItem('userId')
-      })
+      headers: header
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -134,14 +169,7 @@ export const addUser = values => {
     fetch(url, {
       method: method,
       headers: header,
-      body: JSON.stringify({
-        firstName: values.firstName,
-        surname: values.surname,
-        email: values.email,
-        password: values.password,
-        role: values.role,
-        projectId: values.projectId
-      })
+      body: JSON.stringify(values)
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
@@ -155,6 +183,65 @@ export const addUser = values => {
       })
       .catch(error => {
         dispatch(addUserFail(error));
+      });
+  };
+};
+
+export const editUser = (values) => {
+  return dispatch => {
+    dispatch(editUserStart());
+
+    const url = "http://localhost:8080/users/edit";
+    const method = "POST";
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+    fetch(url, {
+      method: method,
+      headers: header,
+      body: JSON.stringify(values)
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Could not edit user!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        dispatch(getUsers());
+        dispatch(editUserSuccess());
+      })
+      .catch(error => {
+        dispatch(editUserFail(error));
+      });
+  };
+};
+
+export const deleteUser = (values) => {
+  return dispatch => {
+    dispatch(deleteUserStart());
+
+    const url = "http://localhost:8080/users/delete";
+    const method = "POST";
+    const token = localStorage.getItem('token');
+    const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+    fetch(url, {
+      method: method,
+      headers: header,
+      body: JSON.stringify(values)
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Could not edit user!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        dispatch(getUsers());
+        dispatch(deleteUserSuccess());
+      })
+      .catch(error => {
+        dispatch(deleteUserFail(error));
       });
   };
 };

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button, Form, Input, Modal, Select } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { MailOutlined } from '@ant-design/icons';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class AddUserModal extends React.Component {
+class EditUserModal extends React.Component {
   onSubmit = values => {
+    values['userId'] = this.props.record?.id;
     this.props.onSubmit(values);
     this.props.hideModal();
   };
@@ -17,7 +18,7 @@ class AddUserModal extends React.Component {
     return (
       <Modal
         width={500}
-        title="Add New User"
+        title="Edit User"
         onCancel={hideModal}
         destroyOnClose={true}
         visible={visible}
@@ -25,15 +26,16 @@ class AddUserModal extends React.Component {
           <Button key="Cancel" onClick={hideModal}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" form="AddUserForm" htmlType="submit">
-            {'Add'}
+          <Button key="submit" type="primary" form="EditUserForm" htmlType="submit">
+            {'Submit'}
           </Button>
         ]}
       >
-        <Form id="AddUserForm" layout="vertical" onFinish={this.onSubmit}>
+        <Form id="EditUserForm" layout="vertical" onFinish={this.onSubmit}>
           <FormItem
             label="First Name"
             name="firstName"
+            initialValue={this.props.record?.firstName}
             rules={[
               {
                 whitespace: true,
@@ -48,6 +50,7 @@ class AddUserModal extends React.Component {
           <FormItem
             label="Surname"
             name="surname"
+            initialValue={this.props.record?.surname}
             rules={[
               {
                 whitespace: true,
@@ -62,6 +65,7 @@ class AddUserModal extends React.Component {
           <FormItem
             label="Email"
             name="email"
+            initialValue={this.props.record?.email}
             rules={[
               { required: true, message: "Please enter the new user's email" },
               {
@@ -74,34 +78,10 @@ class AddUserModal extends React.Component {
           </FormItem>
 
           <FormItem
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please enter the new user's password" }]}
-          >
-            <Input prefix={<LockOutlined />} placeholder="The User's Password" />
-          </FormItem>
-
-          {/*<FormItem*/}
-          {/*label="Phone Number"*/}
-          {/*name="phone"*/}
-          {/*rules={[{*/}
-          {/*whitespace: true,*/}
-          {/*required: false,*/}
-          {/*message: "Please enter a valid email"*/}
-          {/*},*/}
-          {/*{*/}
-          {/*pattern: /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,3})|(\(?\d{2,3}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/,*/}
-          {/*message: 'Invalid phone number'*/}
-          {/*}*/}
-          {/*]}*/}
-          {/*>*/}
-          {/*<Input prefix={<PhoneOutlined/>} placeholder="Ex. +44 7502719493"/>*/}
-          {/*</FormItem>*/}
-
-          <FormItem
             label="Role"
             extra="The role defines what permissions the user will have"
             name="role"
+            initialValue={this.props.record?.role}
             rules={[
               {
                 required: true,
@@ -121,30 +101,10 @@ class AddUserModal extends React.Component {
               </Option>
             </Select>
           </FormItem>
-
-          <FormItem
-            label="Initial Project"
-            extra="You can add and change projects they are assigned to afterwards from the Projects dashboard"
-            name="initialProject"
-          >
-            <Select
-              showSearch
-              optionFilterProp="children"
-              filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              <Option key={'None'} value={null}>
-                {'None'}
-              </Option>
-              {this.props.switchItems}
-            </Select>
-          </FormItem>
-
         </Form>
       </Modal>
     );
   }
 }
 
-export default AddUserModal;
+export default EditUserModal;

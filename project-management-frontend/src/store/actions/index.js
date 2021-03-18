@@ -1,5 +1,5 @@
-export { auth, logout, setAuthRedirectPath, authCheckState } from './auth';
-export { getUser, getUsers, addUser } from './users';
+export {auth, logout, setAuthRedirectPath, authCheckState} from './auth';
+export {getUser, getUsers, addUser, editUser, deleteUser} from './users';
 export {
   addUserToProject,
   getProjectUsers,
