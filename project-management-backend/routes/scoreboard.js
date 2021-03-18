@@ -1,5 +1,5 @@
-const express=require('express')
+const express = require('express');
 const router = express.Router();
-const {getScoreboard}=require('./../controllers/scoreboards')
-router.get('/getScoreBoard/:id',getScoreboard)
+const scoreboard = require('./../controllers/scoreboards');
+router.post('/getScoreBoard', scoreboard.getScoreboard);
 module.exports = router;

@@ -16,7 +16,7 @@ build-react:
     - comsc-ci
   script:
     - cd project-management-frontend
-    - npm install
+    - npm install --legacy-peer-deps
     - echo "Finished installing node_modules"
     - echo "Building..."
     - CI=false npm run build

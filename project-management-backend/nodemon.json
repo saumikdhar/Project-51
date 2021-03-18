@@ -1,0 +1,9 @@
+{
+  "env": {
+    "RDS_DB_NAME": "project_management",
+    "RDS_USERNAME": "root",
+    "RDS_PASSWORD": "comsc",
+    "RDS_URL": "localhost",
+    "RDS_PORT": 3306
+  }
+}

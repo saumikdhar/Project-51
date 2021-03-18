@@ -17,6 +17,7 @@ export const NavItems = props => {
       ) : (
         <NavItem link="/auth">Login</NavItem>
       )}
+      <NavItem link="/create-project">Add Project </NavItem>
     </ul>
   );
 };
