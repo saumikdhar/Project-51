@@ -6,7 +6,6 @@ const sequelize = require('../util/database');
 //----------------------------------------------------------------------------------------------------------------------
 // Model for projects
 const Project = sequelize.define('project', {
-
   //--------------------------------------------------------------------------------------------------------------------
   // Project Id; primary key
   id: {
@@ -58,7 +57,7 @@ const Project = sequelize.define('project', {
   // Project quick win
   quickWin: {
     type: Sequelize.BOOLEAN,
-    allowNull: false
+    allowNull: true
   },
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -71,7 +70,11 @@ const Project = sequelize.define('project', {
   //--------------------------------------------------------------------------------------------------------------------
   // Project questions / notes
   questions: {
-    type: Sequelize.JSON
+    type: Sequelize.JSON,
+    allowNull: false,
+    get: function () {
+      return JSON.parse(this.getDataValue('questions'));
+    }
   }
 });
 

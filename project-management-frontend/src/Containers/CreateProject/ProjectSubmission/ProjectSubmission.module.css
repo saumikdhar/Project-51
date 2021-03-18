@@ -1,0 +1,76 @@
+.ProjectSubmission{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.ProjectSubmission .box h1{
+    font-family: cursive;
+    font-size: 3em;
+}
+
+@media only screen and (max-width: 600px) {
+    .ProjectSubmission {
+        padding: 20px 0 20px 20px;
+    }
+}
+.ProjectSubmission .box {
+    background-color: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: saturate(180%);
+    backdrop-filter: saturate(180%) blur(10px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+    margin: 20px 14px 0 0;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0.85;
+    transition: opacity 0.5s;
+    border-radius: 30px;
+}
+.ProjectSubmission .box:hover {
+    opacity: 1;
+}
+.ProjectSubmission .box .image {
+    background: #69d570;
+    background: linear-gradient(326deg, rgb(143 230 174) 0%, rgba(52, 141, 235, 1) 100%);
+    width: 100%;
+    padding-top: 20.25%;
+    cursor: pointer;
+    border-radius: 30px 30px 0 0;
+}
+.ProjectSubmission .box .contentWrapper {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    border-radius: 30pc 30px 30pc 0;
+}
+.ProjectSubmission .box .contentWrapper h3 {
+    font-weight: 100;
+    font-size: 26px;
+    margin-top: 0;
+    cursor: pointer;
+}
+.ProjectSubmission .box .contentWrapper p {
+    flex-grow: 1;
+    font-size: 19px;
+    line-height: 24px;
+    margin-top: 0;
+}
+.ProjectSubmission .box .contentWrapper a {
+    font-weight: 800;
+    color: #000;
+    font-size: 19px;
+    transition: color 0.5s;
+    text-decoration: none;
+}
+.ProjectSubmission .box .contentWrapper a:hover {
+    color: #888;
+}
+.homeButton{
+    font-size: 12px;
+
+
+}

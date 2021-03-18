@@ -1,5 +1,3 @@
-//----------------------------------------------------------------------------------------------------------------------
-// Import project model
 const Project = require('../models/project');
 const User = require('../models/user');
 const UserProject = require('../models/user-project');
@@ -7,6 +5,24 @@ const sequelize = require('../util/database');
 const { QueryTypes } = require('sequelize');
 //----------------------------------------------------------------------------------------------------------------------
 // Controller to retrieve a project by id
+
+exports.getAllProjects = async (req, res, next) => {
+  try {
+    const projects = await Project.findAll({ include: [User] });
+    res.status(200).json({
+      success: true,
+      data: projects
+    });
+  } catch (error) {
+    // On error return error message
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({ error: error });
+  }
+};
+
 exports.projectDetails = async (req, res, next) => {
   // Tries to pull project information from the database with passed id returning as a JSON
   try {
@@ -17,7 +33,6 @@ exports.projectDetails = async (req, res, next) => {
       data: projects
     });
   } catch (error) {
-    // On error return error message
     console.log(error);
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -26,8 +41,6 @@ exports.projectDetails = async (req, res, next) => {
   }
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controller to retrieve all active projects
 exports.getAllActiveProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status active returning as a JSON
   try {
@@ -37,7 +50,6 @@ exports.getAllActiveProjects = async (req, res, next) => {
       data: projects
     });
   } catch (error) {
-    // On error return error message
     console.log(error);
     if (!error.statusCode) {
       error.statusCode = 500;
@@ -46,8 +58,6 @@ exports.getAllActiveProjects = async (req, res, next) => {
   }
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controller to retrieve all pending projects
 exports.getAllPendingProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status pending returning as a JSON
   try {
@@ -66,8 +76,6 @@ exports.getAllPendingProjects = async (req, res, next) => {
   }
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controller to retrieve a project by id
 exports.projectAcceptUpdate = async (req, res, next) => {
   // Tries to update project manager and transformation lead field based on id and change status to active
   try {
@@ -99,36 +107,6 @@ exports.projectAcceptUpdate = async (req, res, next) => {
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-// Controller to retrieve a project by id
-exports.projectRejectUpdate = async (req, res, next) => {
-  // Tries to update questions field based on id and set status to rejected
-  try {
-    const id = req.params.id;
-    const questions = req.body.questions;
-    const projectStatus = 'Rejected';
-
-    const projects = await Project.update(
-      {
-        questions: questions,
-        projectStatus: projectStatus
-      },
-      { where: { id: id } }
-    );
-
-    res.status(200).json({
-      success: true
-    });
-  } catch (error) {
-    // On error return error message
-    console.log(error);
-    if (!error.statusCode) {
-      error.statusCode = 500;
-    }
-    res.status(error.statusCode).json({ error: error });
-  }
-};
-
-//----------------------------------------------------------------------------------------------------------------------
 // Controller to retrieve a assigned to a user
 
 exports.getMyProjects = async (req, res, next) => {
@@ -140,8 +118,7 @@ exports.getMyProjects = async (req, res, next) => {
     if (role !== 'transformationTeam') {
       projects = await UserProject.findAll({
         where: {
-          userId: userId,
-          
+          userId: userId
         }
       });
       let projectToDeliver = [];
@@ -150,7 +127,7 @@ exports.getMyProjects = async (req, res, next) => {
         let project = await Project.findAll({
           where: {
             id: projects[i].projectId,
-            projectStatus: "Active"
+            projectStatus: 'Active'
           },
           include: [User]
         });
@@ -161,7 +138,7 @@ exports.getMyProjects = async (req, res, next) => {
     } else {
       projects = await Project.findAll({
         where: {
-          projectStatus: "Active"
+          projectStatus: 'Active'
         },
         through: { UserProject },
         include: [User]
@@ -196,8 +173,36 @@ exports.archiveProject = async (req, res, next) => {
   const id = req.params.id;
   await Project.update(
     {
-      projectStatus: "Archive"
+      projectStatus: 'Archive'
     },
     { where: { id: id } }
   );
+};
+
+exports.projectRejectUpdate = async (req, res, next) => {
+  // Tries to update questions field based on id and set status to rejected
+  try {
+    const id = req.params.id;
+    const questions = req.body.questions;
+    const projectStatus = 'Rejected';
+
+    const projects = await Project.update(
+      {
+        questions: questions,
+        projectStatus: projectStatus
+      },
+      { where: { id: id } }
+    );
+
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    // On error return error message
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({ error: error });
+  }
 };
