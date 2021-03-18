@@ -174,6 +174,11 @@ exports.getAllProjectUsers = async (req, res) => {
       };
     }
 
+    users[0] = {
+      project: {id: 0, name: "All Users"},
+      users: await User.findAll()
+    };
+
     res.status(200).json({users: users});
   } catch (error) {
     if (!error.statusCode) {
