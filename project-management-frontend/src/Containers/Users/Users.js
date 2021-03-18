@@ -1,23 +1,30 @@
 import React from "react";
 import classes from "./Users.module.css";
-import {addUser, getUser, getUsers} from "../../store/actions/index";
+import {addUser, editUser, deleteUser, getUser, getUsers} from "../../store/actions/index";
 import {connect} from "react-redux";
 import {Button, Divider, Select, Table} from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import {UserAddOutlined} from '@ant-design/icons';
 import AddUserModal from './Modals/AddUserModal'
+import EditUserModal from './Modals/EditUserModal'
+import DeleteUserModal from './Modals/DeleteUserModal'
 
 const {Option} = Select;
+const roles = {"transformationTeam": "Transformation Team", "manager": "Project Manager", "employee": "Employee"};
 
 class Users extends React.Component {
 
   refreshUsers = () => this.props.dispatch(getUsers());
 
   componentDidMount() {
-    this.refreshUsers()
+    this.refreshUsers();
   }
 
   state = {
     addUserModalVisible: false,
+    editUserModalVisible: false,
+    deleteUserModalVisible: false,
+    userToEdit: null,
     projectId: null
   };
 
@@ -25,8 +32,24 @@ class Users extends React.Component {
 
   hideAddUserModal = () => this.setState({addUserModalVisible: false});
 
+  showEditUserModal = (user) => this.setState({editUserModalVisible: true, userToEdit: user});
+
+  hideEditUserModal = () => this.setState({editUserModalVisible: false, userToEdit: null});
+
+  showDeleteUserModal = (user) => this.setState({deleteUserModalVisible: true, userToEdit: user});
+
+  hideDeleteUserModal = () => this.setState({deleteUserModalVisible: false, userToEdit: null});
+
   submitUser = (values) => {
     this.props.dispatch(addUser(values));
+  };
+
+  editUser = (values) => {
+    this.props.dispatch(editUser(values));
+  };
+
+  deleteUser = (values) => {
+    this.props.dispatch(deleteUser(values));//this.deleteUser(record.id)
   };
 
   onSwitchChange = (value) => {
@@ -35,30 +58,28 @@ class Users extends React.Component {
 
   constructor(props) {
     super(props);
-    this.currentUserRole = localStorage.getItem('role');
-    this.currentUser = getUser();
     this.columns = [
       {
         title: 'First name',
         key: 'Firstname',
-        render: (text, record) => (<p>{record.firstName}</p>),
+        render: (text, record) => (<p key={record.firstName}>{record.firstName}</p>),
 
       },
       {
         title: 'Surname',
         key: 'Surname',
-        render: (text, record) => (<p>{record.surname}</p>),
+        render: (text, record) => (<p key={record.surname}>{record.surname}</p>),
       },
       {
         title: 'Email',
         key: 'Email',
-        render: (text, record) => (<p>{record.email}</p>),
+        render: (text, record) => (<p key={record.email}>{record.email}</p>),
       },
       {
         title: 'Role',
         key: 'Role',
-        width: '5%',
-        render: (text, record) => (<p>{record.role}</p>),
+        width: '15%',
+        render: (text, record) => (<p key={record.role}>{roles[record.role]}</p>),
 
       },
       {
@@ -70,15 +91,17 @@ class Users extends React.Component {
             <>
               <span>
                 <Button type="link"
-                  //onClick={() => this.showEditUserModal(record)}
+                  onClick={() => this.showEditUserModal(record)}
                 >
-                                    Edit
+                  <EditOutlined/> Edit
                 </Button>
+
                 <Divider type="vertical"/>
+
                 <Button type="link"
-                  //onClick={() => { this.deleteUser(record.user.ID) }}
+                  onClick={() => this.showDeleteUserModal(record)}
                 >
-                  Delete
+                  <DeleteOutlined/> Delete
                 </Button>
               </span>
             </>
@@ -99,7 +122,7 @@ class Users extends React.Component {
     if (users.length !== 1) {
       switchItems = [];
       for (let [key, value] of Object.entries(users)) {
-        switchItems.push(<Option value={key}>{value?.project.name}</Option>)
+        switchItems.push(<Option value={key} key={key}>{value?.project.name}</Option>)
       }
       displayUsers = users[projectId]?.users;
       if (projectId == null && users.length !== 0) {
@@ -107,7 +130,7 @@ class Users extends React.Component {
       }
     } else {
       displayUsers = users;
-      noProjects = (<h3>You are not assigned to any projects.</h3>)
+      noProjects = (<h3>There are no active projects for which to display users.</h3>)
     }
 
     return (
@@ -135,7 +158,7 @@ class Users extends React.Component {
             <Button style={{marginBottom: "10px"}} type="primary"
                     icon={<UserAddOutlined/>}
                     onClick={this.showAddUserModal}>
-              Add User
+              <b> Add User</b>
             </Button>
           </div>
 
@@ -152,9 +175,23 @@ class Users extends React.Component {
         <AddUserModal
           visible={this.state.addUserModalVisible}
           hideModal={this.hideAddUserModal}
-          refreshUsers={this.refreshUsers}
           projectId={projectId}
+          switchItems={switchItems}
           onSubmit={this.submitUser}
+        />
+
+        <EditUserModal
+          visible={this.state.editUserModalVisible}
+          hideModal={this.hideEditUserModal}
+          record={this.state.userToEdit}
+          onSubmit={this.editUser}
+        />
+
+        <DeleteUserModal
+          visible={this.state.deleteUserModalVisible}
+          hideModal={this.hideDeleteUserModal}
+          record={this.state.userToEdit}
+          onSubmit={this.deleteUser}
         />
       </>
     );

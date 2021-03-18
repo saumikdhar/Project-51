@@ -225,6 +225,10 @@ const populateDummyData = async () => {
     projectId: project1.id,
     updaterId: updater1.id
   });
+
+  console.log("=========================================================");
+  console.log("ADDITION OF DUMMY DATA COMPLETE!");
+  console.log("=========================================================");
 };
 
 const createUser = async () => {
@@ -241,11 +245,11 @@ const createUser = async () => {
 };
 
 
-//  sequelize
-//    .sync({ force: true }) //Only use this when changing tables or fields
-//    // .sync()
-//    .then(dummyData => {
-//      return populateDummyData();
-//    })
-//    .catch(err => console.log(err));
+ // sequelize
+ //   .sync({ force: true }) //Only use this when changing tables or fields
+ //   // .sync()
+ //   .then(dummyData => {
+ //     return populateDummyData();
+ //   })
+ //   .catch(err => console.log(err));
 
