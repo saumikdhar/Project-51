@@ -17,22 +17,6 @@ const AssignUsers = props => {
   const [loadingTable, setLoadingTable] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [tableFiltered, setTableFiltered] = useState(false);
-  // const [colours] = useState([
-  //   '#ffc0cb',
-  //   '#ff00ff',
-  //   '#ff0000',
-  //   '#108ee9',
-  //   '#f50',
-  //   '#999999',
-  //   '#333399',
-  //   '#407294',
-  //   '#87d068',
-  //   '#0000ff',
-  //   '#912CEE',
-  //   '#5ac18e',
-  //   '#800000',
-  //   '#81d8d0'
-  // ]);
   const [dataSource, setDataSource] = useState(null);
   const [filterTable, setFilterTable] = useState([]);
   const { Search } = Input;

@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { backendUrl } from '../../store/utility';
 import classes from './Scoreboard.module.css';
 import Button from '../../Components/UI/Button/Button';
 import { Helmet } from 'react-helmet';
 import { ResponsiveBar } from '@nivo/bar';
 import useOnClickOutside from '../../Components/UI/OnClickOutside/OnClickOutside';
+import { connect } from 'react-redux';
+import Spinner from '../../Components/UI/Spinner/Spinner';
+import * as actions from '../../store/actions/index';
+import {
+  updateActionNarrative,
+  updateObjectiveNarrative,
+  updateRiskNarrative
+} from '../../store/actions/index';
 
 const ScoreBoard = props => {
   const [scoreboard, setScoreBoard] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [riskData, setRiskData] = useState([]);
   const [objectiveData, setObjectiveData] = useState([]);
   const [actionData, setActionData] = useState([]);
@@ -23,6 +29,12 @@ const ScoreBoard = props => {
   useOnClickOutside(ref, () => saveObjectiveNarrativeHandler());
   useOnClickOutside(ref, () => saveRiskNarrativeHandler());
 
+  const {
+    getScoreboard,
+    updateObjectiveNarrative,
+    updateRiskNarrative,
+    updateActionNarrative
+  } = props;
   const projectId = props.location.pathname.split('/').pop(-1);
 
   const countHandler = (scoreboardData, processType, narrativeType) => {
@@ -114,94 +126,24 @@ const ScoreBoard = props => {
   };
 
   useEffect(() => {
-    const getScoreboardData = async () => {
-      const url = `${backendUrl()}/scoreboards/getScoreBoard`;
-      const method = 'POST';
-      const header = { 'Content-Type': 'application/json' };
-
-      try {
-        const response = await fetch(url, {
-          method: method,
-          headers: header,
-          body: JSON.stringify({ projectId: projectId })
-        });
-
-        const resData = await response.json();
-        if (!response.ok) {
-          throw new Error('No scoreboard data found');
-        }
-
-        setScoreBoard(resData.data);
-        setIsLoaded(true);
-        setUpScoreboardData(resData.data);
-      } catch (error) {
-        console.log('error occur', error);
-      }
-    };
-    getScoreboardData();
+    getScoreboard(projectId);
+    setScoreBoard(props.scoreboard);
+    setUpScoreboardData(props.scoreboard);
   }, []);
 
   const saveActionNarrativeHandler = async () => {
     setEditActionNarrative(false);
-    const url = `${backendUrl()}/scoreboards/saveActionNarrative`;
-    const method = 'PATCH';
-    const header = { 'Content-Type': 'application/json' };
-
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: header,
-        body: JSON.stringify({ actionNarrative: actionNarrative, projectId: projectId })
-      });
-
-      if (!response.ok) {
-        throw new Error(response.message || 'Failed to update action narrative');
-      }
-    } catch (error) {
-      console.log('error occur', error);
-    }
+    updateActionNarrative(projectId, actionNarrative);
   };
 
-  const saveObjectiveNarrativeHandler = async () => {
+  const saveObjectiveNarrativeHandler = () => {
     setEditObjectiveNarrative(false);
-    const url = `${backendUrl()}/scoreboards/saveObjectiveNarrative`;
-    const method = 'PATCH';
-    const header = { 'Content-Type': 'application/json' };
-
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: header,
-        body: JSON.stringify({ objectiveNarrative: objectiveNarrative, projectId: projectId })
-      });
-
-      if (!response.ok) {
-        throw new Error(response.message || 'Failed to update objective');
-      }
-    } catch (error) {
-      console.log('error occur', error);
-    }
+    updateObjectiveNarrative(projectId, objectiveNarrative);
   };
 
-  const saveRiskNarrativeHandler = async () => {
+  const saveRiskNarrativeHandler = () => {
     setEditRiskNarrative(false);
-    const url = `${backendUrl()}/scoreboards/saveRiskNarrative`;
-    const method = 'PATCH';
-    const header = { 'Content-Type': 'application/json' };
-
-    try {
-      const response = await fetch(url, {
-        method: method,
-        headers: header,
-        body: JSON.stringify({ objectiveNarrative: riskNarrative, projectId: projectId })
-      });
-
-      if (!response.ok) {
-        throw new Error(response.message || 'Failed to update risk');
-      }
-    } catch (error) {
-      console.log('error occur', error);
-    }
+    updateRiskNarrative(projectId, riskNarrative);
   };
 
   return (
@@ -477,12 +419,12 @@ const ScoreBoard = props => {
           className={classes.TextArea}
           spellCheck={true}
           onChange={e => setActionNarrative(e.target.value)}
-          defaultValue={scoreboard.map(scoreboard => scoreboard.actionNarrative)}
+          defaultValue={props.actionNarrative}
         />
       ) : (
         <div onClick={() => setEditActionNarrative(true)} className={classes.Narrative}>
           <h3>Action Narrative</h3>
-          {scoreboard.map(scoreboard => scoreboard.actionNarrative)}
+          {props.actionNarrative}
         </div>
       )}
       {editObjectiveNarrative ? (
@@ -491,12 +433,12 @@ const ScoreBoard = props => {
           className={classes.TextArea}
           spellCheck={true}
           onChange={e => setObjectiveNarrative(e.target.value)}
-          defaultValue={scoreboard.map(scoreboard => scoreboard.objectiveNarrative)}
+          defaultValue={props.objectiveNarrative}
         />
       ) : (
         <div onClick={() => setEditObjectiveNarrative(true)} className={classes.Narrative}>
           <h3>Objective Narrative</h3>
-          {scoreboard.map(scoreboard => scoreboard.objectiveNarrative)}
+          {props.objectiveNarrative}
         </div>
       )}
       {editRiskNarrative ? (
@@ -505,16 +447,40 @@ const ScoreBoard = props => {
           className={classes.TextArea}
           spellCheck={true}
           onChange={e => setRiskNarrative(e.target.value)}
-          defaultValue={scoreboard.map(scoreboard => scoreboard.riskNarrative)}
+          defaultValue={props.riskNarrative}
         />
       ) : (
         <div onClick={() => setEditRiskNarrative(true)} className={classes.Narrative}>
           <h3>Risk Narrative</h3>
-          {scoreboard.map(scoreboard => scoreboard.riskNarrative)}
+          {props.riskNarrative}
         </div>
       )}
       <br />
     </div>
   );
 };
-export default ScoreBoard;
+
+const mapStateToProps = state => {
+  return {
+    loading: state.scoreboard.loading,
+    error: state.scoreboard.error,
+    scoreboard: state.scoreboard.scoreboard,
+    actionNarrative: state.scoreboard.actionNarrative,
+    riskNarrative: state.scoreboard.riskNarrative,
+    objectiveNarrative: state.scoreboard.objectiveNarrative
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getScoreboard: projectId => dispatch(actions.getScoreboard(projectId)),
+    updateActionNarrative: (projectId, actionNarrative) =>
+      dispatch(actions.updateActionNarrative(projectId, actionNarrative)),
+    updateRiskNarrative: (projectId, riskNarrative) =>
+      dispatch(actions.updateRiskNarrative(projectId, riskNarrative)),
+    updateObjectiveNarrative: (projectId, objectiveNarrative) =>
+      dispatch(actions.updateObjectiveNarrative(projectId, objectiveNarrative))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScoreBoard);
