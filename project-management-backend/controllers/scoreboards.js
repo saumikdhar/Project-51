@@ -55,3 +55,78 @@ exports.getScoreboard = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.saveObjectiveNarrative = async (req, res, next) => {
+  const projectId = req.body.projectId;
+  const objectiveNarrative = req.body.riskNarrative;
+  try {
+    const updatedObjectiveNarrative = await Scoreboard.update(
+      { objectiveNarrative: objectiveNarrative },
+      { where: { projectId: projectId } }
+    );
+
+    if (!updatedObjectiveNarrative) {
+      const error = new Error('Failed to save changes to objective narrative');
+      error.statusCode = 409;
+      throw error;
+    }
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.saveRiskNarrative = async (req, res, next) => {
+  const projectId = req.body.projectId;
+  const riskNarrative = req.body.riskNarrative;
+  try {
+    const updatedObjectiveNarrative = await Scoreboard.update(
+      { riskNarrative: riskNarrative },
+      { where: { projectId: projectId } }
+    );
+
+    if (!updatedObjectiveNarrative) {
+      const error = new Error('Failed to save changes to risk narrative');
+      error.statusCode = 409;
+      throw error;
+    }
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.saveActionNarrative = async (req, res, next) => {
+  const projectId = req.body.projectId;
+  const actionNarrative = req.body.actionNarrative;
+  try {
+    const updatedActionNarrative = await Scoreboard.update(
+      { actionNarrative: actionNarrative },
+      { where: { projectId: projectId } }
+    );
+
+    if (!updatedActionNarrative) {
+      const error = new Error('Failed to save changes to action narrative');
+      error.statusCode = 409;
+      throw error;
+    }
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
