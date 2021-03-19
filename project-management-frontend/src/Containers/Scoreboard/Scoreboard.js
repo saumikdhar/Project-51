@@ -12,12 +12,10 @@ import {
   updateObjectiveNarrative,
   updateRiskNarrative
 } from '../../store/actions/index';
+import SavedMessage from '../../Components/UI/SavedMessage/SavedMessage';
 
 const ScoreBoard = props => {
   const [scoreboard, setScoreBoard] = useState([]);
-  const [riskData, setRiskData] = useState([]);
-  const [objectiveData, setObjectiveData] = useState([]);
-  const [actionData, setActionData] = useState([]);
   const [editRiskNarrative, setEditRiskNarrative] = useState(false);
   const [editObjectiveNarrative, setEditObjectiveNarrative] = useState(false);
   const [editActionNarrative, setEditActionNarrative] = useState(false);
@@ -75,63 +73,66 @@ const ScoreBoard = props => {
     return count;
   };
 
-  const setUpScoreboardData = scoreboardData => {
-    const riskData = {
-      tasks: 'Tasks',
-      'In Control': scoreboardData.map(scoreboard =>
-        scoreboard.risks.map(risk => risk.type === 'In Control' && risk.count)
-      ),
-      'In ControlColor': 'hsl(42, 70%, 50%)',
-      'Out of control': scoreboardData.map(scoreboard =>
-        scoreboard.risks.map(risk => risk.type === 'Out of control' && risk.count)
-      ),
-      'Out of controlColor': 'hsl(85, 70%, 50%)',
-      Critical: scoreboardData.map(scoreboard =>
-        scoreboard.risks.map(risk => risk.type === 'Critical' && risk.count)
-      ),
-      CriticalColor: 'hsl(164, 70%, 50%)'
-    };
+  let riskData;
+  let objectiveData;
+  let actionData;
+  const loading = <Spinner />;
 
-    const objectiveData = {
-      tasks: 'Tasks',
-      'In Progress': countHandler(scoreboardData, 'In Progress', 'objectives'),
-      'In ProgressColor': 'hsl(42, 70%, 50%)',
-      Met: countHandler(scoreboardData, 'Met', 'objectives'),
-      MetColor: 'hsl(85, 70%, 50%)',
-      'Not Met': countHandler(scoreboardData, 'Not Met', 'objectives'),
-      'Not MetColor': 'hsl(85, 70%, 50%)'
-    };
+  if (props.scoreboard) {
+    riskData = [
+      {
+        tasks: 'Tasks',
+        'In Control': props.scoreboard.map(scoreboard =>
+          scoreboard.risks.map(risk => risk.type === 'In Control' && risk.count)
+        ),
+        'In ControlColor': 'hsl(42, 70%, 50%)',
+        'Out of control': props.scoreboard.map(scoreboard =>
+          scoreboard.risks.map(risk => risk.type === 'Out of control' && risk.count)
+        ),
+        'Out of controlColor': 'hsl(85, 70%, 50%)',
+        Critical: props.scoreboard.map(scoreboard =>
+          scoreboard.risks.map(risk => risk.type === 'Critical' && risk.count)
+        ),
+        CriticalColor: 'hsl(164, 70%, 50%)'
+      }
+    ];
 
-    const actionData = {
-      tasks: 'Tasks',
-      'In Progress': countHandler(scoreboardData, 'In Progress', 'actions'),
-      'In ProgressColor': 'hsl(42, 70%, 50%)',
-      Completed: countHandler(scoreboardData, 'Completed', 'actions'),
-      CompletedColor: 'hsl(85, 70%, 50%)',
-      Late: countHandler(scoreboardData, 'Late', 'actions'),
-      LateColor: 'hsl(32,70%,50%)',
-      'Not Started': countHandler(scoreboardData, 'Not Started', 'actions'),
-      'Not StartedColor': 'hsl(85, 70%, 50%)'
-    };
+    objectiveData = [
+      {
+        tasks: 'Tasks',
+        'In Progress': countHandler(props.scoreboard, 'In Progress', 'objectives'),
+        'In ProgressColor': 'hsl(42, 70%, 50%)',
+        Met: countHandler(props.scoreboard, 'Met', 'objectives'),
+        MetColor: 'hsl(85, 70%, 50%)',
+        'Not Met': countHandler(props.scoreboard, 'Not Met', 'objectives'),
+        'Not MetColor': 'hsl(85, 70%, 50%)'
+      }
+    ];
 
-    setObjectiveData([objectiveData]);
-    setRiskData([riskData]);
-    setActionData([actionData]);
-
-    setActionNarrative(scoreboardData.map(scoreboard => scoreboard.actionNarrative));
-    setRiskNarrative(scoreboardData.map(scoreboard => scoreboard.riskNarrative));
-    setObjectiveNarrative(scoreboardData.map(scoreboard => scoreboard.objectiveNarrative));
-
-    scoreboardData.map(scoreboard => console.log(scoreboard.objectiveNarrative));
-  };
+    actionData = [
+      {
+        tasks: 'Tasks',
+        'In Progress': countHandler(props.scoreboard, 'In Progress', 'actions'),
+        'In ProgressColor': 'hsl(42, 70%, 50%)',
+        Completed: countHandler(props.scoreboard, 'Completed', 'actions'),
+        CompletedColor: 'hsl(85, 70%, 50%)',
+        Late: countHandler(props.scoreboard, 'Late', 'actions'),
+        LateColor: 'hsl(32,70%,50%)',
+        'Not Started': countHandler(props.scoreboard, 'Not Started', 'actions'),
+        'Not StartedColor': 'hsl(85, 70%, 50%)'
+      }
+    ];
+  }
 
   useEffect(() => {
     getScoreboard(projectId);
     setScoreBoard(props.scoreboard);
-    setUpScoreboardData(props.scoreboard);
+    setActionNarrative(props.actionNarrative);
+    setRiskNarrative(props.riskNarrative);
+    setObjectiveNarrative(props.objectiveNarrative);
   }, []);
 
-  const saveActionNarrativeHandler = async () => {
+  const saveActionNarrativeHandler = () => {
     setEditActionNarrative(false);
     updateActionNarrative(projectId, actionNarrative);
   };
