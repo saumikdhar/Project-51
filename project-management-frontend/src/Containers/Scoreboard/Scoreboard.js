@@ -15,10 +15,15 @@ const ScoreBoard = props => {
   const [editRiskNarrative, setEditRiskNarrative] = useState(false);
   const [editObjectiveNarrative, setEditObjectiveNarrative] = useState(false);
   const [editActionNarrative, setEditActionNarrative] = useState(false);
+  const [actionNarrative, setActionNarrative] = useState(null);
+  const [objectiveNarrative, setObjectiveNarrative] = useState(null);
+  const [riskNarrative, setRiskNarrative] = useState(null);
   const ref = useRef(null);
   useOnClickOutside(ref, () => saveActionNarrativeHandler());
   useOnClickOutside(ref, () => saveObjectiveNarrativeHandler());
   useOnClickOutside(ref, () => saveRiskNarrativeHandler());
+
+  const projectId = props.location.pathname.split('/').pop(-1);
 
   const countHandler = (scoreboardData, processType, narrativeType) => {
     let count;
@@ -101,12 +106,15 @@ const ScoreBoard = props => {
     setRiskData([riskData]);
     setActionData([actionData]);
 
-    scoreboardData.map(scoreboard => scoreboard.actions.map(action => console.log(action)));
+    setActionNarrative(scoreboardData.map(scoreboard => scoreboard.actionNarrative));
+    setRiskNarrative(scoreboardData.map(scoreboard => scoreboard.riskNarrative));
+    setObjectiveNarrative(scoreboardData.map(scoreboard => scoreboard.objectiveNarrative));
+
+    scoreboardData.map(scoreboard => console.log(scoreboard.objectiveNarrative));
   };
 
   useEffect(() => {
     const getScoreboardData = async () => {
-      const projectId = props.location.pathname.split('/').pop(-1);
       const url = `${backendUrl()}/scoreboards/getScoreBoard`;
       const method = 'POST';
       const header = { 'Content-Type': 'application/json' };
@@ -133,16 +141,67 @@ const ScoreBoard = props => {
     getScoreboardData();
   }, []);
 
-  const saveActionNarrativeHandler = () => {
+  const saveActionNarrativeHandler = async () => {
     setEditActionNarrative(false);
+    const url = `${backendUrl()}/scoreboards/saveActionNarrative`;
+    const method = 'PATCH';
+    const header = { 'Content-Type': 'application/json' };
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: header,
+        body: JSON.stringify({ actionNarrative: actionNarrative, projectId: projectId })
+      });
+
+      if (!response.ok) {
+        throw new Error(response.message || 'Failed to update action narrative');
+      }
+    } catch (error) {
+      console.log('error occur', error);
+    }
   };
 
-  const saveObjectiveNarrativeHandler = () => {
+  const saveObjectiveNarrativeHandler = async () => {
     setEditObjectiveNarrative(false);
+    const url = `${backendUrl()}/scoreboards/saveObjectiveNarrative`;
+    const method = 'PATCH';
+    const header = { 'Content-Type': 'application/json' };
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: header,
+        body: JSON.stringify({ objectiveNarrative: objectiveNarrative, projectId: projectId })
+      });
+
+      if (!response.ok) {
+        throw new Error(response.message || 'Failed to update objective');
+      }
+    } catch (error) {
+      console.log('error occur', error);
+    }
   };
 
-  const saveRiskNarrativeHandler = () => {
+  const saveRiskNarrativeHandler = async () => {
     setEditRiskNarrative(false);
+    const url = `${backendUrl()}/scoreboards/saveRiskNarrative`;
+    const method = 'PATCH';
+    const header = { 'Content-Type': 'application/json' };
+
+    try {
+      const response = await fetch(url, {
+        method: method,
+        headers: header,
+        body: JSON.stringify({ objectiveNarrative: riskNarrative, projectId: projectId })
+      });
+
+      if (!response.ok) {
+        throw new Error(response.message || 'Failed to update risk');
+      }
+    } catch (error) {
+      console.log('error occur', error);
+    }
   };
 
   return (
@@ -417,6 +476,7 @@ const ScoreBoard = props => {
           ref={ref}
           className={classes.TextArea}
           spellCheck={true}
+          onChange={e => setActionNarrative(e.target.value)}
           defaultValue={scoreboard.map(scoreboard => scoreboard.actionNarrative)}
         />
       ) : (
@@ -430,6 +490,7 @@ const ScoreBoard = props => {
           ref={ref}
           className={classes.TextArea}
           spellCheck={true}
+          onChange={e => setObjectiveNarrative(e.target.value)}
           defaultValue={scoreboard.map(scoreboard => scoreboard.objectiveNarrative)}
         />
       ) : (
@@ -443,6 +504,7 @@ const ScoreBoard = props => {
           ref={ref}
           className={classes.TextArea}
           spellCheck={true}
+          onChange={e => setRiskNarrative(e.target.value)}
           defaultValue={scoreboard.map(scoreboard => scoreboard.riskNarrative)}
         />
       ) : (
