@@ -5,6 +5,7 @@
     "RDS_PASSWORD": "comsc",
     "RDS_URL": "localhost",
     "RDS_PORT": 3306,
-    "frontEndUrl": "http://localhost:3000"
+    "FRONT_END_URL": "http://localhost:3000",
+    "PORT": 8080
   }
 }
