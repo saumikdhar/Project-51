@@ -136,31 +136,40 @@ const ScoreBoard = props => {
     setObjectiveNarrative(props.objectiveNarrative);
   }, []);
 
+  const showSavedMessageHandler = () => {
+    setShowSavedMessage(true);
+    setTimeout(() => {
+      // After 6 seconds set the show value to false
+      setShowSavedMessage(false);
+    }, 3000);
+  };
+
   const saveActionNarrativeHandler = () => {
     setEditActionNarrative(false);
-    actionNarrative &&
-      actionNarrative.length !== 0 &&
+    if (actionNarrative && actionNarrative.length !== 0) {
       updateActionNarrative(projectId, actionNarrative);
+      showSavedMessageHandler();
+    }
   };
 
   const saveObjectiveNarrativeHandler = () => {
     setEditObjectiveNarrative(false);
-    objectiveNarrative &&
-      objectiveNarrative.length !== 0 &&
+    if (objectiveNarrative && objectiveNarrative.length !== 0) {
       updateObjectiveNarrative(projectId, objectiveNarrative);
+      showSavedMessageHandler();
+    }
   };
 
   const saveRiskNarrativeHandler = () => {
     setEditRiskNarrative(false);
-
     if (riskNarrative && riskNarrative.length !== 0) {
       updateRiskNarrative(projectId, riskNarrative);
+      showSavedMessageHandler();
     }
-    setShowSavedMessage(true);
   };
 
   const saveData = <SavedMessage />;
-  console.log(props.scoreboard);
+
   return (
     <div className={classes.Scoreboard}>
       <Helmet>

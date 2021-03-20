@@ -9,7 +9,7 @@ const SavedMessage = props => {
     const timeId = setTimeout(() => {
       // After 5 seconds set the show value to false
       setShow(false);
-    }, 3500);
+    }, 1000);
 
     return () => {
       clearTimeout(timeId);
@@ -34,8 +34,10 @@ const SavedMessage = props => {
   // If show is true this will be returned
   return (
     <>
-      {/*translateY(-100vh)*/}
-      <div style={{ transform: 'translateY(0)', opacity: '1' }} className={classes.SavedMessage}>
+      <div
+        style={{ transform: 'translateY(0)', opacity: '1', transition: 'all 2s ease-in-out' }}
+        className={classes.SavedMessage}
+      >
         <p>Your changes were saved</p>
         {props.children}
       </div>
