@@ -58,8 +58,14 @@ exports.getScoreboard = async (req, res, next) => {
 
 exports.saveObjectiveNarrative = async (req, res, next) => {
   const projectId = req.body.projectId;
-  const objectiveNarrative = req.body.riskNarrative;
+  const objectiveNarrative = req.body.objectiveNarrative;
   try {
+    const scoreboard = await Scoreboard.findOne({ where: { projectId: projectId } });
+
+    if (!scoreboard) {
+      await Scoreboard.create({ projectId: projectId });
+    }
+
     const updatedObjectiveNarrative = await Scoreboard.update(
       { objectiveNarrative: objectiveNarrative },
       { where: { projectId: projectId } }
@@ -84,17 +90,25 @@ exports.saveObjectiveNarrative = async (req, res, next) => {
 exports.saveRiskNarrative = async (req, res, next) => {
   const projectId = req.body.projectId;
   const riskNarrative = req.body.riskNarrative;
+
   try {
-    const updatedObjectiveNarrative = await Scoreboard.update(
+    const scoreboard = await Scoreboard.findOne({ where: { projectId: projectId } });
+
+    if (!scoreboard) {
+      await Scoreboard.create({ projectId: projectId });
+    }
+
+    const updatedRiskNarrative = await Scoreboard.update(
       { riskNarrative: riskNarrative },
       { where: { projectId: projectId } }
     );
 
-    if (!updatedObjectiveNarrative) {
+    if (!updatedRiskNarrative) {
       const error = new Error('Failed to save changes to risk narrative');
       error.statusCode = 409;
       throw error;
     }
+
     res.status(200).json({
       success: true
     });
@@ -110,6 +124,12 @@ exports.saveActionNarrative = async (req, res, next) => {
   const projectId = req.body.projectId;
   const actionNarrative = req.body.actionNarrative;
   try {
+    const scoreboard = await Scoreboard.findOne({ where: { projectId: projectId } });
+
+    if (!scoreboard) {
+      await Scoreboard.create({ projectId: projectId });
+    }
+
     const updatedActionNarrative = await Scoreboard.update(
       { actionNarrative: actionNarrative },
       { where: { projectId: projectId } }

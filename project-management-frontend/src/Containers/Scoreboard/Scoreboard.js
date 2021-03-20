@@ -22,10 +22,14 @@ const ScoreBoard = props => {
   const [actionNarrative, setActionNarrative] = useState(null);
   const [objectiveNarrative, setObjectiveNarrative] = useState(null);
   const [riskNarrative, setRiskNarrative] = useState(null);
-  const ref = useRef(null);
-  useOnClickOutside(ref, () => saveActionNarrativeHandler());
-  useOnClickOutside(ref, () => saveObjectiveNarrativeHandler());
-  useOnClickOutside(ref, () => saveRiskNarrativeHandler());
+  const [showSavedMessage, setShowSavedMessage] = useState(false);
+
+  const actionRef = useRef(null);
+  const objectiveRef = useRef(null);
+  const riskRef = useRef(null);
+  useOnClickOutside(actionRef, () => saveActionNarrativeHandler());
+  useOnClickOutside(objectiveRef, () => saveObjectiveNarrativeHandler());
+  useOnClickOutside(riskRef, () => saveRiskNarrativeHandler());
 
   const {
     getScoreboard,
@@ -134,19 +138,31 @@ const ScoreBoard = props => {
 
   const saveActionNarrativeHandler = () => {
     setEditActionNarrative(false);
-    updateActionNarrative(projectId, actionNarrative);
+    actionNarrative &&
+      actionNarrative.length !== 0 &&
+      updateActionNarrative(projectId, actionNarrative);
   };
 
   const saveObjectiveNarrativeHandler = () => {
     setEditObjectiveNarrative(false);
-    updateObjectiveNarrative(projectId, objectiveNarrative);
+    objectiveNarrative &&
+      objectiveNarrative.length !== 0 &&
+      updateObjectiveNarrative(projectId, objectiveNarrative);
   };
 
   const saveRiskNarrativeHandler = () => {
     setEditRiskNarrative(false);
-    updateRiskNarrative(projectId, riskNarrative);
+
+    if (riskNarrative && riskNarrative.length !== 0) {
+      updateRiskNarrative(projectId, riskNarrative);
+    }
+
+    console.log('kds', riskNarrative && riskNarrative.length !== 0);
+    setShowSavedMessage(true);
   };
 
+  const saveData = <SavedMessage />;
+  console.log(props.scoreboard);
   return (
     <div className={classes.Scoreboard}>
       <Helmet>
@@ -158,10 +174,12 @@ const ScoreBoard = props => {
       <br />
       <br />
       <h1>Project Scoreboard</h1>
+      {showSavedMessage && saveData}
       <div className={classes.Wrapper}>
         <div className={classes.RagChart}>
           <div style={{ height: '230px' }}>
             <h3>Risks</h3>
+            {/*{riskData.map(r => console.log('asdas', r))}*/}
             {riskData && (
               <ResponsiveBar
                 data={riskData}
@@ -416,43 +434,46 @@ const ScoreBoard = props => {
       </div>
       {editActionNarrative ? (
         <textarea
-          ref={ref}
+          ref={actionRef}
           className={classes.TextArea}
           spellCheck={true}
-          onChange={e => setActionNarrative(e.target.value)}
+          onChange={e => setActionNarrative(e.target.value.trim())}
           defaultValue={props.actionNarrative}
         />
       ) : (
         <div onClick={() => setEditActionNarrative(true)} className={classes.Narrative}>
           <h3>Action Narrative</h3>
+          {actionNarrative && actionNarrative.length === 0 && 'Add some text'}
           {props.actionNarrative}
         </div>
       )}
       {editObjectiveNarrative ? (
         <textarea
-          ref={ref}
+          ref={objectiveRef}
           className={classes.TextArea}
           spellCheck={true}
-          onChange={e => setObjectiveNarrative(e.target.value)}
+          onChange={e => setObjectiveNarrative(e.target.value.trim())}
           defaultValue={props.objectiveNarrative}
         />
       ) : (
         <div onClick={() => setEditObjectiveNarrative(true)} className={classes.Narrative}>
           <h3>Objective Narrative</h3>
+          {objectiveNarrative && objectiveNarrative.length !== 0 && 'Add some text'}
           {props.objectiveNarrative}
         </div>
       )}
       {editRiskNarrative ? (
         <textarea
-          ref={ref}
+          ref={riskRef}
           className={classes.TextArea}
           spellCheck={true}
-          onChange={e => setRiskNarrative(e.target.value)}
+          onChange={e => setRiskNarrative(e.target.value.trim())}
           defaultValue={props.riskNarrative}
         />
       ) : (
         <div onClick={() => setEditRiskNarrative(true)} className={classes.Narrative}>
           <h3>Risk Narrative</h3>
+          {riskNarrative && riskNarrative.length === 0 && 'Add some text'}
           {props.riskNarrative}
         </div>
       )}

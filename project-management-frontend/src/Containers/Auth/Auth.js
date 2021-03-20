@@ -14,7 +14,7 @@ const Auth = props => {
       elementType: 'input',
       elementConfig: {
         type: 'email',
-        placeholder: 'name@Hafod.com'
+        placeholder: 'Email Address'
       },
       label: 'Email Address',
       valid: false,
@@ -24,7 +24,7 @@ const Auth = props => {
       elementType: 'input',
       elementConfig: {
         type: 'password',
-        placeholder: 'password'
+        placeholder: 'Password'
       },
       label: 'Password',
       valid: false,
