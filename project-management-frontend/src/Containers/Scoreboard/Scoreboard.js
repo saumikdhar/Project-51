@@ -156,8 +156,6 @@ const ScoreBoard = props => {
     if (riskNarrative && riskNarrative.length !== 0) {
       updateRiskNarrative(projectId, riskNarrative);
     }
-
-    console.log('kds', riskNarrative && riskNarrative.length !== 0);
     setShowSavedMessage(true);
   };
 
@@ -443,7 +441,7 @@ const ScoreBoard = props => {
       ) : (
         <div onClick={() => setEditActionNarrative(true)} className={classes.Narrative}>
           <h3>Action Narrative</h3>
-          {actionNarrative && actionNarrative.length === 0 && 'Add some text'}
+          {!props.actionNarrative || (props.actionNarrative.length === 0 && 'Add some text')}
           {props.actionNarrative}
         </div>
       )}
@@ -458,7 +456,7 @@ const ScoreBoard = props => {
       ) : (
         <div onClick={() => setEditObjectiveNarrative(true)} className={classes.Narrative}>
           <h3>Objective Narrative</h3>
-          {objectiveNarrative && objectiveNarrative.length !== 0 && 'Add some text'}
+          {!props.objectiveNarrative || (props.objectiveNarrative.length === 0 && 'Add some text')}
           {props.objectiveNarrative}
         </div>
       )}
@@ -473,7 +471,7 @@ const ScoreBoard = props => {
       ) : (
         <div onClick={() => setEditRiskNarrative(true)} className={classes.Narrative}>
           <h3>Risk Narrative</h3>
-          {riskNarrative && riskNarrative.length === 0 && 'Add some text'}
+          {!props.riskNarrative || (props.riskNarrative.length === 0 && 'Add some text')}
           {props.riskNarrative}
         </div>
       )}
