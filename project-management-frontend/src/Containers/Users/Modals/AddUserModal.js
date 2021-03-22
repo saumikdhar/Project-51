@@ -13,6 +13,9 @@ class AddUserModal extends React.Component {
 
   render() {
     const { visible, hideModal } = this.props;
+    // removing "all users" as an option for initial projects
+    let switchItems = this.props.switchItems;
+    if (switchItems["0"] !== null) { delete switchItems["0"]}
 
     return (
       <Modal
@@ -137,7 +140,7 @@ class AddUserModal extends React.Component {
               <Option key={'None'} value={null}>
                 {'None'}
               </Option>
-              {this.props.switchItems}
+              {switchItems}
             </Select>
           </FormItem>
 

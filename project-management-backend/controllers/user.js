@@ -184,6 +184,49 @@ exports.getAllProjectUsers = async (req, res) => {
   }
 };
 
+exports.getAllProjectUsers = async (req, res) => {
+  try {
+    const projects = await Project.findAll();
+
+    let users = {};
+    let projectUsers = [];
+    let userProject = null;
+
+    for (let project of projects) {
+      projectUsers = [];
+      userProject = await UserProject.findAll({where: {projectId: project.id}});
+      for (let userP of userProject) {
+        projectUsers.push(
+          (
+            await User.findOne({
+              where: {id: userP.userId},
+              attributes: ['id', 'firstName', 'surname', 'email', 'role']
+            })
+          ).dataValues
+        );
+      }
+
+      users[project.id] = {
+        project: project.dataValues,
+        users: projectUsers
+      };
+    }
+
+    users[0] = {
+      project: {id: 0, name: "All Users"},
+      users: await User.findAll()
+    };
+
+    res.status(200).json({users: users});
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    console.log(error);
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
 exports.getUsers = async (req, res, next) => {
   const role = req.body.role;
   let users;
