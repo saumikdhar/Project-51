@@ -5,12 +5,8 @@ const Project = require('../models/project');
 const {Op} = require('sequelize');
 
 exports.addUser = async (req, res, next) => {
-  const firstName = req.body.firstName;
-  const surname = req.body.surname;
   const email = req.body.email;
-  const password = req.body.password;
-  const role = req.body.role;
-  const projectId = parseInt(req.body.projectId);
+  const initialProject = parseInt(req.body.initialProject);
   try {
     const user = await User.findOne({where: {email: email}});
     if (user) {
@@ -18,21 +14,76 @@ exports.addUser = async (req, res, next) => {
       error.statusCode = 400;
       throw error;
     }
-    const hpw = await bcrypt.hash(password, 12);
+    const hpw = await bcrypt.hash(req.body.password, 12);
     const newUser = await User.create({
+      firstName: req.body.firstName,
+      surname: req.body.surname,
+      email: email,
+      password: hpw,
+      role: req.body.role
+    });
+
+    if (initialProject) {
+      await UserProject.create({
+        userId: newUser.id,
+        projectId: initialProject
+      });
+    }
+
+    res.status(200).json({success: true});
+  } catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
+exports.editUser = async (req, res, next) => {
+  const userId = req.body.userId;
+  const firstName = req.body.firstName;
+  const surname = req.body.surname;
+  const email = req.body.email;
+  const role = req.body.role;
+
+  try {
+    const user = await User.findOne({where: {id: userId}});
+    if (user == null) {
+      const error = new Error('This user does not exist.');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    User.update({
       firstName: firstName,
       surname: surname,
       email: email,
-      password: hpw,
       role: role
-    });
+    }, {where: {id: userId}});
 
-    if (projectId) {
-      await UserProject.create({
-        userId: newUser.id,
-        projectId: projectId
-      });
+    res.status(200).json({success: true});
+  } catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
     }
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  const userId = req.body.userId;
+
+  try {
+    const user = await User.findOne({where: {id: userId}});
+    if (user == null) {
+      const error = new Error('This user does not exist.');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    User.destroy({where: {id: userId}});
 
     res.status(200).json({success: true});
   } catch (error) {
@@ -49,10 +100,14 @@ exports.getAllProjectUsersByUserId = async (req, res) => {
   try {
     const userProjects = await UserProject.findAll({where: {userId: userId}});
     if (userProjects.length === 0) {
-      const user = [(await User.findOne({
-        where: {id: userId},
-        attributes: ['id', 'firstName', 'surname', 'email', 'role']
-      })).dataValues];
+      const user = [
+        (
+          await User.findOne({
+            where: {id: userId},
+            attributes: ['id', 'firstName', 'surname', 'email', 'role']
+          })
+        ).dataValues
+      ];
 
       res.status(200).json({users: user});
       return;
@@ -69,16 +124,54 @@ exports.getAllProjectUsersByUserId = async (req, res) => {
         projectUsers.push(
           (
             await User.findOne({
-              where: {id: userP.id},
+              where: {id: userP.userId},
               attributes: ['id', 'firstName', 'surname', 'email', 'role']
             })
           ).dataValues
         );
       }
       users[userPs.projectId] = {
-        "project": (await Project.findOne({where: {id: userPs.projectId}})).dataValues,
-        "users": projectUsers
+        project: (await Project.findOne({where: {id: userPs.projectId}})).dataValues,
+        users: projectUsers
+      };
+    }
+
+    res.status(200).json({users: users});
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    console.log(error);
+    res.status(error.statusCode).json({error: error});
+  }
+};
+
+exports.getAllProjectUsers = async (req, res) => {
+  try {
+    const projects = await Project.findAll();
+
+    let users = {};
+    let projectUsers = [];
+    let userProject = null;
+
+    for (let project of projects) {
+      projectUsers = [];
+      userProject = await UserProject.findAll({where: {projectId: project.id}});
+      for (let userP of userProject) {
+        projectUsers.push(
+          (
+            await User.findOne({
+              where: {id: userP.userId},
+              attributes: ['id', 'firstName', 'surname', 'email', 'role']
+            })
+          ).dataValues
+        );
       }
+
+      users[project.id] = {
+        project: project.dataValues,
+        users: projectUsers
+      };
     }
 
     res.status(200).json({users: users});
@@ -94,8 +187,9 @@ exports.getAllProjectUsersByUserId = async (req, res) => {
 exports.getUsers = async (req, res, next) => {
   const role = req.body.role;
   let users;
+  console.log('here');
   try {
-    if (role === 'manager' || 'projectManager') {
+    if (role === 'manager') {
       users = await User.findAll({
         attributes: [['id', 'key'], 'firstName', 'surname', 'role', 'email'],
         where: {

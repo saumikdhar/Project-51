@@ -1,5 +1,10 @@
 const Project = require('../models/project');
 const User = require('../models/user');
+const UserProject = require('../models/user-project');
+const sequelize = require('../util/database');
+const { QueryTypes } = require('sequelize');
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to retrieve a project by id
 
 exports.getAllProjects = async (req, res, next) => {
   try {
@@ -99,6 +104,79 @@ exports.projectAcceptUpdate = async (req, res, next) => {
     }
     res.status(error.statusCode).json({ error: error });
   }
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to retrieve a assigned to a user
+
+exports.getMyProjects = async (req, res, next) => {
+  const userId = req.body.userId;
+  const role = req.body.role;
+  let projects;
+
+  try {
+    if (role !== 'transformationTeam') {
+      projects = await UserProject.findAll({
+        where: {
+          userId: userId
+        }
+      });
+      let projectToDeliver = [];
+
+      for (let i = 0; i < projects.length; i++) {
+        let project = await Project.findAll({
+          where: {
+            id: projects[i].projectId,
+            projectStatus: 'Active'
+          },
+          include: [User]
+        });
+        projectToDeliver.push(project);
+      }
+
+      projects = [...projectToDeliver];
+    } else {
+      projects = await Project.findAll({
+        where: {
+          projectStatus: 'Active'
+        },
+        through: { UserProject },
+        include: [User]
+      });
+    }
+    res.status(200).json({
+      success: true,
+      projects: projects
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to delete project
+exports.deleteProject = async (req, res, next) => {
+  const id = req.params.id;
+  await Project.destroy({
+    where: {
+      id: id
+    }
+  });
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to archive project
+exports.archiveProject = async (req, res, next) => {
+  const id = req.params.id;
+  await Project.update(
+    {
+      projectStatus: 'Archive'
+    },
+    { where: { id: id } }
+  );
 };
 
 exports.projectRejectUpdate = async (req, res, next) => {

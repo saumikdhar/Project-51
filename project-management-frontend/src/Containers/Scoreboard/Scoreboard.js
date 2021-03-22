@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { backendUrl } from '../../store/utility';
 import classes from './Scoreboard.module.css';
 import Button from '../../Components/UI/Button/Button';
 import { Helmet } from 'react-helmet';

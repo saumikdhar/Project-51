@@ -68,6 +68,46 @@ const addUserFail = (state, action) => {
 };
 
 
+const editUserStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const editUserSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const editUserFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error.message,
+    loading: false
+  });
+};
+
+
+const deleteUserStart = (state, action) => {
+  return updateObject(state, {
+    loading: true
+  });
+};
+
+const deleteUserSuccess = (state, action) => {
+  return updateObject(state, {
+    loading: false
+  });
+};
+
+const deleteUserFail = (state, action) => {
+  return updateObject(state, {
+    error: action.error.message,
+    loading: false
+  });
+};
+
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_USER_START:
@@ -90,6 +130,20 @@ const reducer = (state = initialState, action) => {
       return addUserSuccess(state, action);
     case actionTypes.ADD_USER_FAIL:
       return addUserFail(state, action);
+
+    case actionTypes.EDIT_USER_START:
+      return editUserStart(state, action);
+    case actionTypes.EDIT_USER_SUCCESS:
+      return editUserSuccess(state, action);
+    case actionTypes.EDIT_USER_FAIL:
+      return editUserFail(state, action);
+
+    case actionTypes.DELETE_USER_START:
+      return deleteUserStart(state, action);
+    case actionTypes.DELETE_USER_SUCCESS:
+      return deleteUserSuccess(state, action);
+    case actionTypes.DELETE_USER_FAIL:
+      return deleteUserFail(state, action);
 
     default:
       return state;
