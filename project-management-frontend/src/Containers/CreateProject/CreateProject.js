@@ -5,7 +5,7 @@ import { Radio, Form, Checkbox, Select, Button } from 'antd';
 import 'antd/lib/radio/style/css';
 import 'antd/lib/button/style/css';
 import 'antd/lib/date-picker/style/css';
-import Spinner from '../../Components/UI/Spinner/Spinner';
+import { backendUrl } from '../../shared/utility';
 
 const CreateProject = props => {
   const [questionnaireForm, setQuestionnaireForm] = useState([]);
@@ -84,7 +84,7 @@ const CreateProject = props => {
   };
 
   useEffect(() => {
-    const url = 'http://localhost:8080/projects/questionnaire';
+    const url = `${backendUrl()}/projects/questionnaire`;
     const method = 'GET';
     const header = { 'Content-Type': 'application/json' };
 
@@ -123,7 +123,7 @@ const CreateProject = props => {
       return;
     }
     setError(null);
-    const url = 'http://localhost:8080/projects/createProject';
+    const url = `${backendUrl()}/projects/createProject`;
     const method = 'POST';
     const header = { 'Content-Type': 'application/json' };
 

@@ -191,7 +191,7 @@ export const editUser = values => {
   return dispatch => {
     dispatch(editUserStart());
 
-    const url = 'http://localhost:8080/users/edit';
+    const url = `${backendUrl()}/users/edit`;
     const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
@@ -221,7 +221,7 @@ export const deleteUser = values => {
   return dispatch => {
     dispatch(deleteUserStart());
 
-    const url = 'http://localhost:8080/users/delete';
+    const url = `${backendUrl()}/users/delete`;
     const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };

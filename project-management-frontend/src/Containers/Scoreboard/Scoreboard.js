@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { ResponsiveBar } from '@nivo/bar';
 import useOnClickOutside from '../../Components/UI/OnClickOutside/OnClickOutside';
 import { connect } from 'react-redux';
-import Spinner from '../../Components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
 import SavedMessage from '../../Components/UI/SavedMessage/SavedMessage';
 
@@ -75,7 +74,6 @@ const ScoreBoard = props => {
   let objectiveData = [];
   let actionData = [];
   let nivoBarData = [];
-  const loading = <Spinner />;
 
   if (props.scoreboard) {
     riskData = [

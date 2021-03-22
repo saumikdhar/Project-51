@@ -8,13 +8,11 @@ import { backendUrl } from '../../shared/utility';
 import CustomButton from '../../Components/UI/Button/Button';
 
 const ProjectInfo = props => {
-  const [id, setId] = useState('');
   const [project, setProject] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     let infoId = props.match.params.id;
-    setId(infoId);
     const url = `${backendUrl()}/projects/projectDetails/` + infoId;
     const method = 'GET';
     const header = { 'Content-Type': 'application/json' };
@@ -43,8 +41,7 @@ const ProjectInfo = props => {
 
   const deleteProject = routeType => {
     let infoId = props.match.params.id;
-    setId(infoId);
-    const url = `http://localhost:8080/projects/${routeType}/ ` + infoId;
+    const url = `${backendUrl()}/projects/${routeType}/ ` + infoId;
     const method = 'GET';
     const header = { 'Content-Type': 'application/json' };
 

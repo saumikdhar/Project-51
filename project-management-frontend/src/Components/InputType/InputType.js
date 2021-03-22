@@ -96,9 +96,8 @@ const OptionType = props => {
             style={{ width: '200px', maxHeight: '30px' }}
             max={10000000}
             min={1000}
-            defaultValue={1000}
             formatter={value => `£ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={value => value.replace(/\£\s?|(,*)/g, '')}
+            parser={value => value.replace(/\s?|(,*)/g, '')}
             onChange={props.onChange}
             // value={''}
           >

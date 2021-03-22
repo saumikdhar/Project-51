@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { backendUrl } from '../../shared/utility';
 
 export const addProjectUserStart = () => {
   return {
@@ -70,7 +71,7 @@ export const removeProjectUserFail = error => {
 export const removeUserFromProject = (userId, projectId) => {
   return async dispatch => {
     dispatch(removeProjectUserStart());
-    const url = 'http://localhost:8080/users/removeUserFromProject';
+    const url = `${backendUrl()}/users/removeUserFromProject`;
     const method = 'PATCH';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
@@ -100,7 +101,7 @@ export const removeUserFromProject = (userId, projectId) => {
 export const getProjectUsers = projectId => {
   return async dispatch => {
     dispatch(getProjectUserStart());
-    const url = 'http://localhost:8080/users/projectUsers';
+    const url = `${backendUrl()}/users/projectUsers`;
     const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
@@ -130,7 +131,7 @@ export const getProjectUsers = projectId => {
 export const addUserToProject = (listOfUserId, projectId) => {
   return async dispatch => {
     dispatch(addProjectUserStart());
-    const url = 'http://localhost:8080/users/addUserToProject';
+    const url = `${backendUrl()}/users/addUserToProject`;
     const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
