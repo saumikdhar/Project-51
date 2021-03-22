@@ -7,7 +7,7 @@ const SavedMessage = props => {
   // On componentDidMount set the timer
   useEffect(() => {
     const timeId = setTimeout(() => {
-      // After 5 seconds set the show value to false
+      // After 1 seconds set the show value to false
       setShow(false);
     }, 1000);
 

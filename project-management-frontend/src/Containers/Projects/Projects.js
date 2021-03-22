@@ -8,7 +8,7 @@ import 'antd/lib/tooltip/style';
 import 'antd/lib/button/style';
 import { PlusOutlined } from '@ant-design/icons';
 import * as actions from '../../store/actions';
-import { backendUrl } from '../../store/utility';
+import { backendUrl } from '../../shared/utility';
 
 const Projects = props => {
   const [projects, setProjects] = useState([]);
@@ -35,7 +35,7 @@ const Projects = props => {
         return res.json();
       })
       .then(resData => {
-        console.log('projects consoled',resData)
+        console.log('projects consoled', resData);
         const data = resData.projects.flatMap(projects => projects);
         setProjects(data);
       })
@@ -75,7 +75,7 @@ const Projects = props => {
                 <td>
                   {project.users.map(user => (
                     <>
-                      <Tooltip key={Math.random(1,39393393)} placement="top" title={user.role}>
+                      <Tooltip key={Math.random(1, 39393393)} placement="top" title={user.role}>
                         <Tag
                           onClose={() => removeUserFromProject(user.id, project.id)}
                           closable={

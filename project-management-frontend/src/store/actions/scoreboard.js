@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import { backendUrl } from '../utility';
+import { backendUrl } from '../../shared/utility';
 
 export const scoreboardStart = () => {
   return {

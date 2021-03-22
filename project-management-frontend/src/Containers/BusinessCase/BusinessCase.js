@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { backendUrl } from '../../store/utility';
+import { backendUrl } from '../../shared/utility';
 import classes from './../Projects/Projects.module.css';
+import CustomButton from '../../Components/UI/Button/Button';
 const BusinessCase = props => {
   const [id, setId] = useState('');
   const [businessCases, setBusinessCase] = useState(null);
@@ -34,10 +35,13 @@ const BusinessCase = props => {
       });
   }, []);
 
-  console.log(businessCases);
-
   return (
     <div className={classes.Projects}>
+      <CustomButton clicked={props.history.goBack} btnType="Back">
+        &lt; Go back
+      </CustomButton>
+      <br />
+      <br />
       <h1>All Business Case </h1>
       <table className={classes.Table}>
         <thead>

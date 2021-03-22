@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { backendUrl } from '../../store/utility';
 import classes from './Scoreboard.module.css';
 import Button from '../../Components/UI/Button/Button';
 import { Helmet } from 'react-helmet';
@@ -8,11 +7,6 @@ import useOnClickOutside from '../../Components/UI/OnClickOutside/OnClickOutside
 import { connect } from 'react-redux';
 import Spinner from '../../Components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
-import {
-  updateActionNarrative,
-  updateObjectiveNarrative,
-  updateRiskNarrative
-} from '../../store/actions/index';
 import SavedMessage from '../../Components/UI/SavedMessage/SavedMessage';
 
 const ScoreBoard = props => {
@@ -155,17 +149,17 @@ const ScoreBoard = props => {
     nivoBarData = [
       {
         type: actionData,
-        Narrative: 'Action Narrative',
+        Narrative: 'Action',
         keys: ['In Progress', 'Completed', 'Late', 'Not Started']
       },
       {
         type: riskData,
-        Narrative: 'Risk Narrative',
+        Narrative: 'Risk',
         keys: ['In Control', 'Out of control', 'Critical']
       },
       {
         type: objectiveData,
-        Narrative: 'Objective Narrative',
+        Narrative: 'Objective',
         keys: ['In Progress', 'Met', 'Not Met']
       }
     ];
@@ -181,9 +175,9 @@ const ScoreBoard = props => {
   const showSavedMessageHandler = () => {
     setShowSavedMessage(true);
     setTimeout(() => {
-      // After 3 seconds set the show value to false
+      // After 2 seconds set the show value to false
       setShowSavedMessage(false);
-    }, 3000);
+    }, 2000);
   };
 
   const saveActionNarrativeHandler = () => {
@@ -217,19 +211,20 @@ const ScoreBoard = props => {
       <Helmet>
         <style>{'body { background-color: rgba(242, 242, 242, 1) }'}</style>
       </Helmet>
-      <Button clicked={props.history.goBack} style={{ marginLeft: '30px' }} btnType="Back">
-        &lt; Back
-      </Button>
+      <div style={{ marginLeft: '10px' }}>
+        <Button clicked={props.history.goBack} btnType="Back">
+          &lt; Go back
+        </Button>
+      </div>
       <br />
       <br />
-      <h1>Project Scoreboard</h1>
+      <h1>Project Scorecard</h1>
       {showSavedMessage && saveData}
       <div className={classes.Wrapper}>
         <div className={classes.RagChart}>
           {nivoBarData.map(data => (
             <div style={{ height: '230px' }}>
               <h3>{data.Narrative}</h3>
-              {console.log(data.type)}
               <ResponsiveBar
                 data={data.type}
                 keys={data.keys}
@@ -290,11 +285,12 @@ const ScoreBoard = props => {
               />
             </div>
           ))}
-        </div>
-      </div>
-      <div className={classes.RagChart}>
-        <div style={{ height: '230px' }}>
-          <h3>Something else</h3>
+          <div style={{ height: '230px' }}>
+            <h3>Project Information</h3>
+            <div>Project Stage: Implementation</div>
+            <div>Project Lead: Carl</div>
+            <div>Timescale: On Time</div>
+          </div>
         </div>
       </div>
       {editActionNarrative ? (

@@ -9,7 +9,7 @@ import classes from './AssignUsers.module.css';
 import './index-2.css';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import { backendUrl } from '../../store/utility';
+import { backendUrl } from '../../shared/utility';
 
 const AssignUsers = props => {
   const { addUserToProject, getProjectUsers, removeUserFromProject, setProjectUsers } = props;

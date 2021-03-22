@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classes from './Auth.module.css';
 import Button from '../../Components/UI/Button/Button';
 import Input from '../../Components/UI/Input/Input';
-import { updateObject } from '../../store/utility';
+import { updateObject } from '../../shared/utility';
 import * as actions from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
