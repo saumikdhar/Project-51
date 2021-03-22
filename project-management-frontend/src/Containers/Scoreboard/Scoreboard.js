@@ -224,8 +224,8 @@ const ScoreBoard = props => {
       <h1>Project Scoreboard</h1>
       {showSavedMessage && saveData}
       <div className={classes.Wrapper}>
-        {nivoBarData.map(data => (
-          <div className={classes.RagChart}>
+        <div className={classes.RagChart}>
+          {nivoBarData.map(data => (
             <div style={{ height: '230px' }}>
               <h3>{data.Narrative}</h3>
               {console.log(data.type)}
@@ -288,8 +288,8 @@ const ScoreBoard = props => {
                 motionDamping={15}
               />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       <div className={classes.RagChart}>
         <div style={{ height: '230px' }}>
