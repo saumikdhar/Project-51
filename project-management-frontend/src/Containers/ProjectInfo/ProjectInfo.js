@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button , Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import classes from './../Projects/Projects.module.css';
-import { backendUrl } from '../../store/utility';
+import { backendUrl } from '../../shared/utility';
+import CustomButton from '../../Components/UI/Button/Button';
 
 const ProjectInfo = props => {
   const [id, setId] = useState('');
@@ -40,10 +41,10 @@ const ProjectInfo = props => {
       });
   }, []);
 
-  const deleteProject = (routeType) => {
+  const deleteProject = routeType => {
     let infoId = props.match.params.id;
     setId(infoId);
-    const url = `http://localhost:8080/projects/${routeType}/ `+ infoId;
+    const url = `http://localhost:8080/projects/${routeType}/ ` + infoId;
     const method = 'GET';
     const header = { 'Content-Type': 'application/json' };
 
@@ -96,10 +97,13 @@ const ProjectInfo = props => {
     setIsModalVisible2(false);
   };
 
-
-
   return (
     <div className={classes.Projects}>
+      <CustomButton clicked={props.history.goBack} btnType="Back">
+        &lt; Go back
+      </CustomButton>
+      <br />
+      <br />
       <h1>Project Details</h1>
       <table className={classes.Table}>
         <thead>
@@ -140,30 +144,36 @@ const ProjectInfo = props => {
         </tbody>
       </table>
 
-      <div className={classes.ProjectInfo} style={{float:"right"}}>
-        {(props.role === 'transformationTeam') && (
+      <div className={classes.ProjectInfo} style={{ float: 'right' }}>
+        {props.role === 'transformationTeam' && (
           <>
-          <Modal title="Delete project " visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            <p>Are you sure you want to delete this project ?</p>
-          </Modal>
-
-          <Button type="primary" onClick={showModal} danger>
-        Delete
-      </Button>
-      <Modal title="Archive" visible={isModalVisible2} onOk={handleOk2} onCancel={handleCancel2}>
-            <p>Are you sure you want to archive this project ?</p>
-          </Modal>
-
-          &nbsp;&nbsp;&nbsp; <Button type="primary" onClick={showModal2}>
-        Archive
-      </Button>
+            <Modal
+              title="Delete project "
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>Are you sure you want to delete this project ?</p>
+            </Modal>
+            <Button type="primary" onClick={showModal} danger>
+              Delete
+            </Button>
+            <Modal
+              title="Archive"
+              visible={isModalVisible2}
+              onOk={handleOk2}
+              onCancel={handleCancel2}
+            >
+              <p>Are you sure you want to archive this project ?</p>
+            </Modal>
+            &nbsp;&nbsp;&nbsp;{' '}
+            <Button type="primary" onClick={showModal2}>
+              Archive
+            </Button>
           </>
         )}
       </div>
     </div>
-
-
-
   );
 };
 

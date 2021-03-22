@@ -7,3 +7,10 @@ export {
   setProjectUsers,
   getProjectUserSuccess
 } from './assignUser';
+
+export {
+  getScoreboard,
+  updateActionNarrative,
+  updateObjectiveNarrative,
+  updateRiskNarrative
+} from './scoreboard';

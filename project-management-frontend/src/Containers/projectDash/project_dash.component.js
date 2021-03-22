@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, Layout } from 'antd';
 import 'antd/dist/antd.css';
-import { backendUrl } from '../../store/utility';
+import { backendUrl } from '../../shared/utility';
 
 //----------------------------------------------------------------------------------------------------------------------
 // Function component (no state/ lifecycle used) for Active Projects

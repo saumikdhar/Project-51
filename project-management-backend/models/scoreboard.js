@@ -1,7 +1,7 @@
-const Sequelize = require("sequelize");
-const sequelize = require("../util/database");
+const Sequelize = require('sequelize');
+const sequelize = require('../util/database');
 
-const Scoreboard = sequelize.define("scoreboard", {
+const Scoreboard = sequelize.define('scoreboard', {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -9,13 +9,13 @@ const Scoreboard = sequelize.define("scoreboard", {
     primaryKey: true
   },
   riskNarrative: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING(10000)
   },
   objectiveNarrative: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING(10000)
   },
   actionNarrative: {
-    type: Sequelize.STRING
+    type: Sequelize.STRING(10000)
   }
 });
 

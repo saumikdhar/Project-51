@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import { backendUrl } from '../utility';
+import { backendUrl } from '../../shared/utility';
 
 export const getUserStart = () => {
   return {
@@ -66,7 +66,7 @@ export const editUserStart = () => {
   };
 };
 
-export const editUserSuccess = (users) => {
+export const editUserSuccess = users => {
   return {
     type: actionTypes.EDIT_USER_SUCCESS
   };
@@ -85,7 +85,7 @@ export const deleteUserStart = () => {
   };
 };
 
-export const deleteUserSuccess = (users) => {
+export const deleteUserSuccess = users => {
   return {
     type: actionTypes.DELETE_USER_SUCCESS
   };
@@ -136,7 +136,7 @@ export const getUsers = () => {
     const url = `${backendUrl()}/users/getAll`;
     const method = 'POST';
     const token = localStorage.getItem('token');
-    const header = { Authorization: 'Bearer ' + token};
+    const header = { Authorization: 'Bearer ' + token };
 
     fetch(url, {
       method: method,
@@ -187,12 +187,12 @@ export const addUser = values => {
   };
 };
 
-export const editUser = (values) => {
+export const editUser = values => {
   return dispatch => {
     dispatch(editUserStart());
 
-    const url = "http://localhost:8080/users/edit";
-    const method = "POST";
+    const url = 'http://localhost:8080/users/edit';
+    const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
 
@@ -203,7 +203,7 @@ export const editUser = (values) => {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not edit user!");
+          throw new Error('Could not edit user!');
         }
         return res.json();
       })
@@ -217,12 +217,12 @@ export const editUser = (values) => {
   };
 };
 
-export const deleteUser = (values) => {
+export const deleteUser = values => {
   return dispatch => {
     dispatch(deleteUserStart());
 
-    const url = "http://localhost:8080/users/delete";
-    const method = "POST";
+    const url = 'http://localhost:8080/users/delete';
+    const method = 'POST';
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
     fetch(url, {
@@ -232,7 +232,7 @@ export const deleteUser = (values) => {
     })
       .then(res => {
         if (res.status !== 200 && res.status !== 201) {
-          throw new Error("Could not edit user!");
+          throw new Error('Could not edit user!');
         }
         return res.json();
       })

@@ -1,5 +1,5 @@
-import * as actionTypes from "../actions/actionTypes";
-import {updateObject} from "../utility";
+import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../../shared/utility';
 
 const initialState = {
   user: null,
@@ -47,7 +47,6 @@ const getUsersFail = (state, action) => {
   });
 };
 
-
 const addUserStart = (state, action) => {
   return updateObject(state, {
     loading: true
@@ -66,7 +65,6 @@ const addUserFail = (state, action) => {
     loading: false
   });
 };
-
 
 const editUserStart = (state, action) => {
   return updateObject(state, {
@@ -87,7 +85,6 @@ const editUserFail = (state, action) => {
   });
 };
 
-
 const deleteUserStart = (state, action) => {
   return updateObject(state, {
     loading: true
@@ -106,7 +103,6 @@ const deleteUserFail = (state, action) => {
     loading: false
   });
 };
-
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

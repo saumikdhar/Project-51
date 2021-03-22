@@ -28,7 +28,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env.FRONT_END_URL);
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PUT, PATCH, DELETE, UPDATE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
@@ -606,9 +606,9 @@ const populateDummyData = async () => {
     updaterId: updater1.id
   });
 
-  console.log("=========================================================");
-  console.log("ADDITION OF DUMMY DATA COMPLETE!");
-  console.log("=========================================================");
+  console.log('=========================================================');
+  console.log('ADDITION OF DUMMY DATA COMPLETE!');
+  console.log('=========================================================');
 };
 
 const createUser = async () => {

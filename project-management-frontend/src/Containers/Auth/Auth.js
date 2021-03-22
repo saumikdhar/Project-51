@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classes from './Auth.module.css';
 import Button from '../../Components/UI/Button/Button';
 import Input from '../../Components/UI/Input/Input';
-import { updateObject } from '../../store/utility';
+import { updateObject } from '../../shared/utility';
 import * as actions from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ const Auth = props => {
       elementType: 'input',
       elementConfig: {
         type: 'email',
-        placeholder: 'name@Hafod.com'
+        placeholder: 'Email Address'
       },
       label: 'Email Address',
       valid: false,
@@ -24,7 +24,7 @@ const Auth = props => {
       elementType: 'input',
       elementConfig: {
         type: 'password',
-        placeholder: 'password'
+        placeholder: 'Password'
       },
       label: 'Password',
       valid: false,
@@ -114,7 +114,8 @@ const Auth = props => {
         <form onSubmit={submitHandler}>
           {errorMessage}
           {form}
-          <Button btnType="Submit">Sign In</Button>
+
+          {!props.loading && <Button btnType="Submit">Sign In</Button>}
         </form>
       </div>
     </>
@@ -130,11 +131,10 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (email, password) =>
-          dispatch(actions.auth(email, password)),
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
-    };
+  return {
+    onAuth: (email, password) => dispatch(actions.auth(email, password)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
