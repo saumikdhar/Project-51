@@ -4,7 +4,7 @@
   cursor: pointer;
   display: inline-block;
   font-size: 16px;
-  padding: 8px;
+  padding: 6px;
   transition-duration: 0.4s;
   font-weight: bold;
   border-radius: 18px;
@@ -13,10 +13,13 @@
 
 .Submit {
   color: white;
-  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
   background-color: #68a51a;
   font-weight: lighter;
   margin-top: 20px;
+  font-family: 'Roboto', Arial, serif;
+  border-radius: 25px;
 }
 
 .Create{
@@ -39,4 +42,11 @@
 
 .Button:focus{
   outline: none;
+}
+
+.Back{
+  padding-left: 15px;
+  padding-right: 15px;
+  float: left;
+  margin-left: 30px;
 }

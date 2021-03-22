@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import React, { useEffect } from 'react';
 import Auth from './Containers/Auth/Auth';
 import Logout from './Containers/Auth/Logout/Logout';
+import * as actions from './store/actions';
+import CreateProject from './Containers/CreateProject/CreateProject';
 import Users from './Containers/Users/Users';
 import AssignProjects from './Containers/AssignUsers/AssignUsers';
 import Projects from './Containers/Projects/Projects';
@@ -14,9 +16,8 @@ import AdminActiveDash from './Containers/projectDash/project_dash.component';
 import AdminPendingDash from './Containers/projectDash/project_dash_pending.component';
 import AdminPendingReview from './Containers/projectDash/project_review.component';
 import Layout from './hoc/Layout/Layout';
-import * as actions from './store/actions';
-import 'antd/dist/antd.css';
-import 'antd/dist/antd.less';
+import ProjectSubmission from './Containers/CreateProject/ProjectSubmission/ProjectSubmission';
+
 
 const App = props => {
   const { onTryAutoSignUp } = props;
@@ -27,6 +28,8 @@ const App = props => {
   let routes = (
     <Switch>
       <Route path="/auth" component={Auth} />
+      <Route path="/create-project/success" component={ProjectSubmission} />
+      <Route path="/create-project" component={CreateProject} />
       <Redirect to="/" />
     </Switch>
   );
@@ -35,6 +38,8 @@ const App = props => {
     routes = (
       <Switch>
         <Route path="/logout" component={Logout} />
+        <Route path="/create-project/success" component={ProjectSubmission} />
+        <Route path="/create-project" component={CreateProject} />
         <Route path="/projects" component={Projects} />
         <Route path="/assign-projects" component={AssignProjects} />
         <Route path="/projectinfo/:id" component={ProjectInfo} />

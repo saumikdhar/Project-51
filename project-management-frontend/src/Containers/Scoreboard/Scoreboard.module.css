@@ -1,0 +1,28 @@
+.Scoreboard{
+    margin: 80px auto auto;
+    text-align: center;
+}
+
+.RagCharts{
+    display: flex;
+    width: 100%;
+}
+.RagChart {
+    background-color: white;
+    width: 50%;
+    border-radius: 25px;
+    padding: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 0.3rem 0.9rem rgba(0, 0, 0, 0.3);
+}
+
+.RagChart svg{
+    width: inherit;
+    height: inherit;
+}
+
+.RagChart g{
+    transform: translate(50, 20);
+}

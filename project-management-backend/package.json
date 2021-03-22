@@ -1,6 +1,6 @@
 {
   "name": "project-management-backend",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,21 +9,20 @@
     "start:dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "Saumik, Pedro, Daniel, Amina, Evgeniy",
-  "license": "ISC",
+  "author": "Saumik Dhar, Pedro Gomes, Evgeniy Tonchev, Daniel Addis, Amina Nessa",
+  "license": "MIT",
   "devDependencies": {
     "nodemon": "^2.0.7",
     "prettier": "2.2.1"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.9.2",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
+    "node": "^15.8.0",
     "sequelize": "^6.5.0"
   }
 }
