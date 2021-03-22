@@ -90,12 +90,12 @@ const ScoreBoard = props => {
           countHandler(props.scoreboard, 'Out Of Control', 'risks') === undefined
             ? 0
             : countHandler(props.scoreboard, 'Out Of Control', 'risks'),
-        'Out of controlColor': 'hsl(85, 70%, 50%)',
+        'Out of controlColor': 'hsl(164, 70%, 50%)',
         Critical:
           countHandler(props.scoreboard, 'Critical', 'risks') === undefined
             ? 0
             : countHandler(props.scoreboard, 'Critical', 'risks'),
-        CriticalColor: 'hsl(164, 70%, 50%)'
+        CriticalColor: 'hsl(85, 70%, 50%)'
       }
     ];
 
@@ -233,11 +233,27 @@ const ScoreBoard = props => {
                 layout="horizontal"
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
-                colors={{ scheme: 'nivo' }}
+                colors={[
+                  'rgb(239,253,95)',
+                  'rgb(82,199,128)',
+                  'rgb(244, 117, 96)',
+                  'rgb(232, 193, 160)'
+                ]}
+                defs={[
+                  {
+                    id: 'lines',
+                    type: 'patternLines',
+                    background: 'rgb(232, 193, 160)',
+                    color: 'rgba(238,211,18,0)',
+                    rotation: -45,
+                    lineWidth: 6,
+                    spacing: 10
+                  }
+                ]}
                 fill={[
                   {
                     match: {
-                      id: 'In Control'
+                      id: 'Out of control'
                     },
                     id: 'lines'
                   }
