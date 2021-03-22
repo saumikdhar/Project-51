@@ -15,7 +15,6 @@ import {
 import SavedMessage from '../../Components/UI/SavedMessage/SavedMessage';
 
 const ScoreBoard = props => {
-  const [scoreboard, setScoreBoard] = useState([]);
   const [editRiskNarrative, setEditRiskNarrative] = useState(false);
   const [editObjectiveNarrative, setEditObjectiveNarrative] = useState(false);
   const [editActionNarrative, setEditActionNarrative] = useState(false);
@@ -77,26 +76,30 @@ const ScoreBoard = props => {
     return count;
   };
 
-  let riskData;
-  let objectiveData;
-  let actionData;
+  let riskData = [];
+  let objectiveData = [];
+  let actionData = [];
+  let nivoBarData = [];
   const loading = <Spinner />;
 
   if (props.scoreboard) {
     riskData = [
       {
         tasks: 'Tasks',
-        'In Control': props.scoreboard.map(scoreboard =>
-          scoreboard.risks.map(risk => risk.type === 'In Control' && risk.count)
-        ),
+        'In Control':
+          countHandler(props.scoreboard, 'In Control', 'risks') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'In Control', 'risks'),
         'In ControlColor': 'hsl(42, 70%, 50%)',
-        'Out of control': props.scoreboard.map(scoreboard =>
-          scoreboard.risks.map(risk => risk.type === 'Out of control' && risk.count)
-        ),
+        'Out of control':
+          countHandler(props.scoreboard, 'Out Of Control', 'risks') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Out Of Control', 'risks'),
         'Out of controlColor': 'hsl(85, 70%, 50%)',
-        Critical: props.scoreboard.map(scoreboard =>
-          scoreboard.risks.map(risk => risk.type === 'Critical' && risk.count)
-        ),
+        Critical:
+          countHandler(props.scoreboard, 'Critical', 'risks') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Critical', 'risks'),
         CriticalColor: 'hsl(164, 70%, 50%)'
       }
     ];
@@ -104,11 +107,20 @@ const ScoreBoard = props => {
     objectiveData = [
       {
         tasks: 'Tasks',
-        'In Progress': countHandler(props.scoreboard, 'In Progress', 'objectives'),
+        'In Progress':
+          countHandler(props.scoreboard, 'In Progress', 'objectives') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'In Progress', 'objectives'),
         'In ProgressColor': 'hsl(42, 70%, 50%)',
-        Met: countHandler(props.scoreboard, 'Met', 'objectives'),
+        Met:
+          countHandler(props.scoreboard, 'Met', 'objectives') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Met', 'objectives'),
         MetColor: 'hsl(85, 70%, 50%)',
-        'Not Met': countHandler(props.scoreboard, 'Not Met', 'objectives'),
+        'Not Met':
+          countHandler(props.scoreboard, 'Not Met', 'objectives') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Not Met', 'objectives'),
         'Not MetColor': 'hsl(85, 70%, 50%)'
       }
     ];
@@ -116,21 +128,50 @@ const ScoreBoard = props => {
     actionData = [
       {
         tasks: 'Tasks',
-        'In Progress': countHandler(props.scoreboard, 'In Progress', 'actions'),
+        'In Progress':
+          countHandler(props.scoreboard, 'In Progress', 'actions') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'In Progress', 'actions'),
         'In ProgressColor': 'hsl(42, 70%, 50%)',
-        Completed: countHandler(props.scoreboard, 'Completed', 'actions'),
+        Completed:
+          countHandler(props.scoreboard, 'Completed', 'actions') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Completed', 'actions'),
         CompletedColor: 'hsl(85, 70%, 50%)',
-        Late: countHandler(props.scoreboard, 'Late', 'actions'),
+        Late:
+          countHandler(props.scoreboard, 'Late', 'actions') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Late', 'actions'),
         LateColor: 'hsl(32,70%,50%)',
-        'Not Started': countHandler(props.scoreboard, 'Not Started', 'actions'),
+        'Not Started':
+          countHandler(props.scoreboard, 'Not Started', 'actions') === undefined
+            ? 0
+            : countHandler(props.scoreboard, 'Not Started', 'actions'),
         'Not StartedColor': 'hsl(85, 70%, 50%)'
+      }
+    ];
+
+    nivoBarData = [
+      {
+        type: actionData,
+        Narrative: 'Action Narrative',
+        keys: ['In Progress', 'Completed', 'Late', 'Not Started']
+      },
+      {
+        type: riskData,
+        Narrative: 'Risk Narrative',
+        keys: ['In Control', 'Out of control', 'Critical']
+      },
+      {
+        type: objectiveData,
+        Narrative: 'Objective Narrative',
+        keys: ['In Progress', 'Met', 'Not Met']
       }
     ];
   }
 
   useEffect(() => {
     getScoreboard(projectId);
-    setScoreBoard(props.scoreboard);
     setActionNarrative(props.actionNarrative);
     setRiskNarrative(props.riskNarrative);
     setObjectiveNarrative(props.objectiveNarrative);
@@ -139,7 +180,7 @@ const ScoreBoard = props => {
   const showSavedMessageHandler = () => {
     setShowSavedMessage(true);
     setTimeout(() => {
-      // After 6 seconds set the show value to false
+      // After 3 seconds set the show value to false
       setShowSavedMessage(false);
     }, 3000);
   };
@@ -183,40 +224,20 @@ const ScoreBoard = props => {
       <h1>Project Scoreboard</h1>
       {showSavedMessage && saveData}
       <div className={classes.Wrapper}>
-        <div className={classes.RagChart}>
-          <div style={{ height: '230px' }}>
-            <h3>Risks</h3>
-            {/*{riskData.map(r => console.log('asdas', r))}*/}
-            {riskData && (
+        {nivoBarData.map(data => (
+          <div className={classes.RagChart}>
+            <div style={{ height: '230px' }}>
+              <h3>{data.Narrative}</h3>
+              {console.log(data.type)}
               <ResponsiveBar
-                data={riskData}
-                keys={['In Progress', 'Completed', 'Late', 'Not Started']}
+                data={data.type}
+                keys={data.keys}
                 indexBy="tasks"
                 margin={{ top: 20, right: 10, bottom: 130, left: 10 }}
                 layout="horizontal"
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
                 colors={{ scheme: 'nivo' }}
-                defs={[
-                  {
-                    id: 'dots',
-                    type: 'patternDots',
-                    background: 'inherit',
-                    color: '#38bcb2',
-                    size: 4,
-                    padding: 1,
-                    stagger: true
-                  },
-                  {
-                    id: 'lines',
-                    type: 'patternLines',
-                    background: 'inherit',
-                    color: '#eed312',
-                    rotation: -45,
-                    lineWidth: 6,
-                    spacing: 10
-                  }
-                ]}
                 fill={[
                   {
                     match: {
@@ -262,181 +283,17 @@ const ScoreBoard = props => {
                     ]
                   }
                 ]}
-                animate={true}
+                animate={false}
                 motionStiffness={90}
                 motionDamping={15}
               />
-            )}
+            </div>
           </div>
-          <div style={{ height: '230px' }}>
-            <h3>Objectives</h3>
-            {objectiveData && (
-              <ResponsiveBar
-                data={objectiveData}
-                keys={['In Progress', 'Met', 'Not Met']}
-                indexBy="tasks"
-                margin={{ top: 20, right: 10, bottom: 130, left: 10 }}
-                layout="horizontal"
-                valueScale={{ type: 'linear' }}
-                indexScale={{ type: 'band', round: true }}
-                colors={{ scheme: 'nivo' }}
-                defs={[
-                  {
-                    id: 'dots',
-                    type: 'patternDots',
-                    background: 'inherit',
-                    color: '#38bcb2',
-                    size: 4,
-                    padding: 1,
-                    stagger: true
-                  },
-                  {
-                    id: 'lines',
-                    type: 'patternLines',
-                    background: 'inherit',
-                    color: '#eed312',
-                    rotation: -45,
-                    lineWidth: 6,
-                    spacing: 10
-                  }
-                ]}
-                fill={[
-                  {
-                    match: {
-                      id: 'In Control'
-                    },
-                    id: 'lines'
-                  }
-                ]}
-                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-                axisTop={null}
-                axisRight={null}
-                axisBottom={{
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  legend: 'Tasks',
-                  legendPosition: 'middle',
-                  legendOffset: 32
-                }}
-                axisLeft={null}
-                labelTextColor={{ from: 'color', modifiers: [['darker', '1.6']] }}
-                legends={[
-                  {
-                    dataFrom: 'keys',
-                    anchor: 'bottom',
-                    direction: 'row',
-                    justify: false,
-                    translateX: 45,
-                    translateY: 75,
-                    itemsSpacing: 10,
-                    itemWidth: 130,
-                    itemHeight: 27,
-                    itemDirection: 'left-to-right',
-                    itemOpacity: 0.85,
-                    symbolSize: 20,
-                    effects: [
-                      {
-                        on: 'hover',
-                        style: {
-                          itemOpacity: 1
-                        }
-                      }
-                    ]
-                  }
-                ]}
-                animate={true}
-                motionStiffness={90}
-                motionDamping={15}
-              />
-            )}
-          </div>
-          <div style={{ height: '230px' }}>
-            <h3>Actions</h3>
-            {actionData && (
-              <ResponsiveBar
-                data={actionData}
-                keys={['In Progress', 'Completed', 'Late', 'Not Started']}
-                indexBy="tasks"
-                margin={{ top: 20, right: 10, bottom: 130, left: 10 }}
-                layout="horizontal"
-                valueScale={{ type: 'linear' }}
-                indexScale={{ type: 'band', round: true }}
-                colors={{ scheme: 'nivo' }}
-                defs={[
-                  {
-                    id: 'dots',
-                    type: 'patternDots',
-                    background: 'inherit',
-                    color: '#38bcb2',
-                    size: 4,
-                    padding: 1,
-                    stagger: true
-                  },
-                  {
-                    id: 'lines',
-                    type: 'patternLines',
-                    background: 'inherit',
-                    color: '#eed312',
-                    rotation: -45,
-                    lineWidth: 6,
-                    spacing: 10
-                  }
-                ]}
-                fill={[
-                  {
-                    match: {
-                      id: 'In Control'
-                    },
-                    id: 'lines'
-                  }
-                ]}
-                borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-                axisTop={null}
-                axisRight={null}
-                axisBottom={{
-                  tickSize: 5,
-                  tickPadding: 5,
-                  tickRotation: 0,
-                  legend: 'Tasks',
-                  legendPosition: 'middle',
-                  legendOffset: 32
-                }}
-                axisLeft={null}
-                labelTextColor={{ from: 'color', modifiers: [['darker', '1.6']] }}
-                legends={[
-                  {
-                    dataFrom: 'keys',
-                    anchor: 'bottom',
-                    direction: 'row',
-                    justify: false,
-                    translateX: 45,
-                    translateY: 75,
-                    itemsSpacing: 10,
-                    itemWidth: 130,
-                    itemHeight: 27,
-                    itemDirection: 'left-to-right',
-                    itemOpacity: 0.85,
-                    symbolSize: 20,
-                    effects: [
-                      {
-                        on: 'hover',
-                        style: {
-                          itemOpacity: 1
-                        }
-                      }
-                    ]
-                  }
-                ]}
-                animate={true}
-                motionStiffness={90}
-                motionDamping={15}
-              />
-            )}
-          </div>
-          <div style={{ height: '230px' }}>
-            <h3>Something else</h3>
-          </div>
+        ))}
+      </div>
+      <div className={classes.RagChart}>
+        <div style={{ height: '230px' }}>
+          <h3>Something else</h3>
         </div>
       </div>
       {editActionNarrative ? (
