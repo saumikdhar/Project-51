@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 5000 --exit",
     "start": "node app.js",
     "start:dev": "nodemon app.js"
   },
@@ -12,8 +12,13 @@
   "author": "Saumik Dhar, Pedro Gomes, Evgeniy Tonchev, Daniel Addis, Amina Nessa",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.3.4",
+    "dotenv": "^8.2.0",
+    "mocha": "^8.3.2",
     "nodemon": "^2.0.7",
-    "prettier": "2.2.1"
+    "prettier": "2.2.1",
+    "sequelize-mock": "^0.10.2",
+    "sinon": "^9.2.4"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

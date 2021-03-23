@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { backendUrl } from '../../shared/utility';
 
-const AssignUsers = props => {
+export const AssignUsers = props => {
   const { addUserToProject, getProjectUsers, removeUserFromProject, setProjectUsers } = props;
   const [loadingButton, setLoadingButton] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
@@ -82,6 +82,7 @@ const AssignUsers = props => {
 
   let listOfUsers;
   listOfUsers = props.users;
+  console.log(listOfUsers);
 
   const removeUserFromProjectHandler = userId => {
     removeUserFromProject(userId, projectId);
