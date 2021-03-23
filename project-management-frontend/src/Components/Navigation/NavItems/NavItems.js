@@ -7,7 +7,7 @@ export const NavItems = props => {
   return (
     <ul className={classes.NavigationItems}>
       {props.isAuthorise && props.role === 'transformationTeam' ? (
-        <NavItem link="/adminActiveDash">Project Dashboard</NavItem>
+        <NavItem link="/adminDash">Project Dashboard</NavItem>
       ) : null}
       {props.isAuthorise && props.role === 'transformationTeam' ? (
         <NavItem link="/users">Users</NavItem>

@@ -3,6 +3,7 @@ const {
   projectDetails,
   getAllPendingProjects,
   getAllActiveProjects,
+  getAllArchivedProjects,
   projectAcceptUpdate,
   projectRejectUpdate,
   deleteProject,
@@ -19,6 +20,7 @@ router.get('/archiveProject/:id', archiveProject);
 router.post('/getMyProjects', getMyProjects);
 router.get('/getAllActiveProjects', getAllActiveProjects);
 router.get('/getAllPendingProjects', getAllPendingProjects);
+router.get('/getAllArchivedProjects', getAllArchivedProjects);
 router.post('/accept/:id', projectAcceptUpdate);
 router.post('/reject/:id', projectRejectUpdate);
 router.get('/questionnaire', addProjectController.getQuestionnaire);

@@ -322,3 +322,34 @@ exports.addUserToProject = async (req, res, next) => {
     next(error);
   }
 };
+
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to retrieve a users in management positions
+exports.getManagmentUsers = async (req,res,next) => {
+
+  // Tries to pull user information from the database returning as a JSON
+  try {
+    const users = await User.findAll({
+      where: {
+        [Op.or]: [
+          { role: 'manager' },
+          { role: 'transformationTeam' }
+        ]
+      }})
+    res.status(200).json({
+      success : true,
+      data : users
+    })
+  }
+
+    // On error return error message
+  catch (error) {
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({ error: error });
+  }
+}
+
+
