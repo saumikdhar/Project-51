@@ -73,7 +73,13 @@ const Project = sequelize.define('project', {
     type: Sequelize.JSON,
     allowNull: false,
     get: function () {
-      return JSON.parse(this.getDataValue('questions'));
+      try{
+        console.log("------------------>", this.getDataValue('questions'))
+        return JSON.parse(this.getDataValue('questions'));
+      } catch (e) {
+        console.log("json error", e)
+        return '{}';
+      }
     }
   }
 });

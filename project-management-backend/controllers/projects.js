@@ -1,5 +1,6 @@
 const Project = require('../models/project');
 const User = require('../models/user');
+const BusinessCase = require('../models/business-case');
 const UserProject = require('../models/user-project');
 const sequelize = require('../util/database');
 const { QueryTypes } = require('sequelize');
@@ -44,7 +45,8 @@ exports.projectDetails = async (req, res, next) => {
 exports.getAllActiveProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status active returning as a JSON
   try {
-    const projects = await Project.findAll({ where: { projectStatus: 'Active' } });
+    const projects = await Project.findAll({include: [User, BusinessCase],
+        where: { projectStatus: "Active" }})
     res.status(200).json({
       success: true,
       data: projects
@@ -61,7 +63,27 @@ exports.getAllActiveProjects = async (req, res, next) => {
 exports.getAllPendingProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status pending returning as a JSON
   try {
-    const projects = await Project.findAll({ where: { projectStatus: 'Pending' } });
+    const projects = await Project.findAll({include: [User, BusinessCase],
+        where: { projectStatus: "Pending" }})
+    res.status(200).json({
+      success: true,
+      data: projects
+    });
+  } catch (error) {
+    // On error return error message
+    console.log(error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    res.status(error.statusCode).json({ error: error });
+  }
+};
+
+exports.getAllArchivedProjects = async (req, res, next) => {
+  // Tries to pull project information from the database with status pending returning as a JSON
+  try {
+    const projects = await Project.findAll({include: [User, BusinessCase],
+      where: { projectStatus: "Archived" }})
     res.status(200).json({
       success: true,
       data: projects
@@ -80,22 +102,48 @@ exports.projectAcceptUpdate = async (req, res, next) => {
   // Tries to update project manager and transformation lead field based on id and change status to active
   try {
     const id = req.params.id;
-    const managerName = req.body.manager;
-    const transformationLead = req.body.transformationLead;
+    const quickWin = req.body.quickWin;
+    const priorityScore = req.body.priorityScore;
     const projectStatus = 'Active';
+    console.log("______________>", priorityScore)
 
-    const projects = await Project.update(
-      {
-        managerName: managerName,
-        transformationLead: transformationLead,
-        projectStatus: projectStatus
-      },
-      { where: { id: id } }
-    );
+    console.log("projectAccptUpdate",quickWin, priorityScore, id)
+    if (quickWin === 'isQuickWin'){
+      const smallProject = 'small'
+      const boolTrue = true
 
-    res.status(200).json({
-      success: true
-    });
+      const projects = await Project.update(
+        {
+          projectStatus: projectStatus,
+          projectScore: priorityScore,
+          quickWin: boolTrue,
+          projectSize: smallProject
+        },
+        { where: { id: id } }
+      );
+
+      res.status(200).json({
+        success: true
+      });
+    } else {
+      const largeProject = 'large'
+      const boolFalse = false
+      const projects = await Project.update(
+        {
+          projectStatus: projectStatus,
+          priorityScore: priorityScore,
+          quickWin: boolFalse,
+          projectSize: largeProject
+        },
+        { where: { id: id } }
+      );
+
+      res.status(200).json({
+        success: true
+      });
+
+    }
+
   } catch (error) {
     // On error return error message
     console.log(error);
