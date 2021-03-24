@@ -791,6 +791,7 @@
 }
 
 .floatRightSearch{
-    width: 250px;
+    width: 350px;
     float: right;
+    border: 1px solid lightblue;
 }
