@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker";
 import { addUserToProject } from '../../store/actions';
 import ProjectCard from './Modals/ProjectCardModal';
+const { TextArea } = Input;
 
 //----------------------------------------------------------------------------------------------------------------------
 // Antd design options defined
@@ -509,7 +510,7 @@ class AdminProjectReview extends Component {
                   label="Project benefit"
                   name="benefit"
                 >
-                  <Input defaultValue={this.state.benefit} value={this.state.benefit} onChange={this.onChangeBenefit}/>
+                  <TextArea defaultValue={this.state.benefit} value={this.state.benefit} onChange={this.onChangeBenefit}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -527,7 +528,7 @@ class AdminProjectReview extends Component {
                   label="Sponsor"
                   name="sponsor"
                 >
-                  <Input defaultValue={this.state.sponsor} value={this.state.sponsor} onChange={this.onChangeSponsor}/>
+                  <TextArea defaultValue={this.state.sponsor} value={this.state.sponsor} onChange={this.onChangeSponsor}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -536,7 +537,7 @@ class AdminProjectReview extends Component {
                   label="Executive Summary"
                   name="executiveSummary"
                 >
-                  <Input defaultValue={this.state.executiveSummary} value={this.state.executiveSummary} onChange={this.onChangeExecutiveSummary}/>
+                  <TextArea defaultValue={this.state.executiveSummary} value={this.state.executiveSummary} onChange={this.onChangeExecutiveSummary}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -545,7 +546,7 @@ class AdminProjectReview extends Component {
                   label="Reason"
                   name="reason"
                 >
-                  <Input defaultValue={this.state.reason} value={this.state.reason} onChange={this.onChangeReason}/>
+                  <TextArea defaultValue={this.state.reason} value={this.state.reason} onChange={this.onChangeReason}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -566,7 +567,7 @@ class AdminProjectReview extends Component {
                   label="Business Option"
                   name="businessOption"
                 >
-                  <Input defaultValue={this.state.businessOption} value={this.state.businessOption} onChange={this.onChangeBusinessOption}/>
+                  <TextArea defaultValue={this.state.businessOption} value={this.state.businessOption} onChange={this.onChangeBusinessOption}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -575,7 +576,7 @@ class AdminProjectReview extends Component {
                   label="Benefit Timescale"
                   name="benefitTimescale"
                 >
-                  <Input defaultValue={this.state.benefitTimescale} value={this.state.benefitTimescale} onChange={this.onChangeBenefitTimescale}/>
+                  <TextArea defaultValue={this.state.benefitTimescale} value={this.state.benefitTimescale} onChange={this.onChangeBenefitTimescale}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -584,7 +585,7 @@ class AdminProjectReview extends Component {
                   label="Negative Impact"
                   name="negativeImpact"
                 >
-                  <Input defaultValue={this.state.negativeImpact} value={this.state.negativeImpact} onChange={this.onChangeNegativeImpact}/>
+                  <TextArea defaultValue={this.state.negativeImpact} value={this.state.negativeImpact} onChange={this.onChangeNegativeImpact}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -593,7 +594,7 @@ class AdminProjectReview extends Component {
                   label="Customer Impact and Engagement"
                   name="customerImpact"
                 >
-                  <Input defaultValue={this.state.customerImpact} value={this.state.customerImpact} onChange={this.onChangeCustomerImpact}/>
+                  <TextArea defaultValue={this.state.customerImpact} value={this.state.customerImpact} onChange={this.onChangeCustomerImpact}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -602,7 +603,7 @@ class AdminProjectReview extends Component {
                   label="Major Risks"
                   name="majorRisks"
                 >
-                  <Input defaultValue={this.state.majorRisks} value={this.state.majorRisks} onChange={this.onChangeMajorRisks}/>
+                  <TextArea defaultValue={this.state.majorRisks} value={this.state.majorRisks} onChange={this.onChangeMajorRisks}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -611,7 +612,7 @@ class AdminProjectReview extends Component {
                   label="Diversity and inclusion considerations"
                   name="diversityAndInclusion"
                 >
-                  <Input defaultValue={this.state.diversityAndInclusion} value={this.state.diversityAndInclusion} onChange={this.onChangeDiversityAndInclusion}/>
+                  <TextArea defaultValue={this.state.diversityAndInclusion} value={this.state.diversityAndInclusion} onChange={this.onChangeDiversityAndInclusion}/>
                 </FormItem>
 
                 {/* ---------------------------------------------------------------------------------------------- */}
@@ -621,7 +622,7 @@ class AdminProjectReview extends Component {
                   name="investmentAppraisal"
                 >
                   {/* drop down mapped to management users */}
-                  <Input defaultValue={this.state.investmentAppraisal} value={this.state.investmentAppraisal} onChange={this.onChangeInvestmentAppraisal}/>
+                  <TextArea defaultValue={this.state.investmentAppraisal} value={this.state.investmentAppraisal} onChange={this.onChangeInvestmentAppraisal}/>
                 </FormItem>
               </>
             )}

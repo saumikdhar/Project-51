@@ -25,7 +25,7 @@ const ProjectCard = props => {
         )}
         {props.project.businessCase !== null ?
             <td>{props.project.businessCase.executiveSummary}</td> :
-            <td>{props.project.questions[28].answers}</td>
+            <td>{props.project.questions[7].answers}{props.project.questions[28].answers}</td>
         }
 
         {/* ---------------------------------------------------------------------------------------- */}
