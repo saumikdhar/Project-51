@@ -47,7 +47,6 @@ export default class AdminProjects extends Component {
     axios.get(`${backendUrl()}/projects/getAllPendingProjects`)
       .then(response => {
         this.setState({ pendingProjects:response.data.data })
-        console.log(JSON.stringify(response.data.data))
       })
 
       // Log error if unsuccessful
@@ -182,7 +181,6 @@ export default class AdminProjects extends Component {
           found = true;
         }
       } else if (filteredArray[i].businessCase === null) {
-        console.log("--------->", filteredArray[i])
         if (filteredArray[i].id.toString().toLowerCase().includes(search) ||
           filteredArray[i].name.toLowerCase().includes(search) ||
           filteredArray[i].projectSize.toLowerCase().includes(search) ||
@@ -252,8 +250,6 @@ export default class AdminProjects extends Component {
   // Maps projects to table; sorting by priority score
   projectListActive(){
     let projectArray = this.projectSort(this.state.activeProjects);
-
-    console.log(JSON.stringify(projectArray))
 
     return projectArray.sort(function(a, b) {
       return b.priorityScore - a.priorityScore

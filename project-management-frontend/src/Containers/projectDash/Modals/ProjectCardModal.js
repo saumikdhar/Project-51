@@ -49,7 +49,7 @@ const ProjectCard = props => {
 
               {/* Links to projects add user page */}
               <div style={{ marginTop: '10px' }} className={classes.antBtn}>
-                  <Link to={`/assign-projects/${props.project.id}`}>Manage Users</Link>
+                  <Link to={`/assign-projects/${props.project.id}`}>Assign Users</Link>
               </div>
           </td>)}
         {props.project.projectStatus !== 'Pending' && (
@@ -61,7 +61,11 @@ const ProjectCard = props => {
             }
           </>
         )}
-        <td>{props.project.projectSize}</td>
+        {props.project.businessCase !== null ?
+          <td>{props.project.projectSize}</td> :
+          <td>Small</td>
+        }
+
         <td>{props.project.projectType}</td>
         {props.project.projectStatus === 'Pending' && (
           <>
