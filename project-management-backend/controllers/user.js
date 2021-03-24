@@ -197,12 +197,12 @@ exports.getAllProjectUsers = async (req, res) => {
 
     for (let project of projects) {
       projectUsers = [];
-      userProject = await UserProject.findAll({where: {projectId: project.id}});
+      userProject = await UserProject.findAll({ where: { projectId: project.id } });
       for (let userP of userProject) {
         projectUsers.push(
           (
             await User.findOne({
-              where: {id: userP.userId},
+              where: { id: userP.userId },
               attributes: ['id', 'firstName', 'surname', 'email', 'role']
             })
           ).dataValues
@@ -216,17 +216,17 @@ exports.getAllProjectUsers = async (req, res) => {
     }
 
     users[0] = {
-      project: {id: 0, name: "All Users"},
+      project: { id: 0, name: 'All Users' },
       users: await User.findAll()
     };
 
-    res.status(200).json({users: users});
+    res.status(200).json({ users: users });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
     console.log(error);
-    res.status(error.statusCode).json({error: error});
+    res.status(error.statusCode).json({ error: error });
   }
 };
 
@@ -323,33 +323,42 @@ exports.addUserToProject = async (req, res, next) => {
   }
 };
 
-//----------------------------------------------------------------------------------------------------------------------
-// Controller to retrieve a users in management positions
-exports.getManagmentUsers = async (req,res,next) => {
+exports.getAllManagers = async (req, res, next) => {
+  try {
+    const managers = await User.findAll({ where: { role: 'manager' } });
+    if (!managers) {
+      const error = new Error('No managers found!');
+      error.statusCode = 404;
+      throw error;
+    }
 
+    res.status(200).json({ managers: managers });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
+
+exports.getManagmentUsers = async (req, res, next) => {
   // Tries to pull user information from the database returning as a JSON
   try {
     const users = await User.findAll({
       where: {
-        [Op.or]: [
-          { role: 'manager' },
-          { role: 'transformationTeam' }
-        ]
-      }})
+        [Op.or]: [{ role: 'manager' }, { role: 'transformationTeam' }]
+      }
+    });
     res.status(200).json({
-      success : true,
-      data : users
-    })
-  }
-
+      success: true,
+      data: users
+    });
+  } catch (error) {
     // On error return error message
-  catch (error) {
     console.log(error);
     if (!error.statusCode) {
       error.statusCode = 500;
     }
     res.status(error.statusCode).json({ error: error });
   }
-}
-
-
+};

@@ -112,8 +112,20 @@ const ProjectInfo = props => {
             <th>Quick Win</th>
             <th>Project Type</th>
             <th>Project Created At</th>
-            <th>Score Board</th>
-            <th>Business Case</th>
+   
+       
+                      { isLoaded ? project.projectType=='Simplify' || project.projectSize=='Small'
+                    ?
+                  null
+                  :
+                  
+                  
+                <>  <th>
+                 Score Board
+</th>
+<th>Business Case</th></>
+                :null} 
+
           </tr>
         </thead>
         <tbody>
@@ -126,12 +138,23 @@ const ProjectInfo = props => {
               <td>{project.quickWin}</td>
               <td>{project.projectType}</td>
               <td>{project.createdAt}</td>
-              <td>
-                <Link to={`/scoreboard/${project.id}`}>ScoreBoard</Link>{' '}
-              </td>
-              <td>
-                <Link to={`/businessCase/${project.id}`}>Business Case</Link>{' '}
-              </td>
+              
+                {
+                  project.projectType=='Simplify' || project.projectSize=='Small'
+                    ?
+                  null
+                  :
+                  <td>
+                  <Link to={`/scoreboard/${project.id}`}>ScoreBoard</Link>{' '}
+</td>
+                }              
+             {
+              project.projectType=='Simplify' || project.projectSize=='Small' ?
+              null:
+
+                <td> <Link to={`/businessCase/${project.id}`}>Business Case</Link>{' '}</td>
+              }
+              
             </tr>
           ) : (
             <tr>
@@ -171,6 +194,9 @@ const ProjectInfo = props => {
         )}
       </div>
     </div>
+
+
+
   );
 };
 

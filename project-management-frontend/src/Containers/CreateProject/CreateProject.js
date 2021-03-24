@@ -10,12 +10,22 @@ import { backendUrl } from '../../shared/utility';
 const CreateProject = props => {
   const [questionnaireForm, setQuestionnaireForm] = useState([]);
   const [error, setError] = useState(null);
+  const [managers, setManagers] = useState([]);
 
-  const inputChangeHandler = (event, questionId, date) => {
+  const inputChangeHandler = (event, questionId) => {
     event.preventDefault();
     let updatedQuestionnaireForm = [...questionnaireForm];
     updatedQuestionnaireForm.map(
       questions => questions.id === questionId && (questions.answer = [event.target.value])
+    );
+    updatedQuestionnaireForm = showOrHideQuestionOne(updatedQuestionnaireForm);
+    setQuestionnaireForm(showOrHideQuestions(updatedQuestionnaireForm));
+  };
+
+  const numberOrDropdownHandler = (event, questionId, value) => {
+    let updatedQuestionnaireForm = [...questionnaireForm];
+    updatedQuestionnaireForm.map(
+      questions => questions.id === questionId && (questions.answer = [value])
     );
     updatedQuestionnaireForm = showOrHideQuestionOne(updatedQuestionnaireForm);
     setQuestionnaireForm(showOrHideQuestions(updatedQuestionnaireForm));
@@ -111,6 +121,29 @@ const CreateProject = props => {
           };
         });
         setQuestionnaireForm(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const url = `${backendUrl()}/users/managers`;
+    const method = 'GET';
+    const header = { 'Content-Type': 'application/json' };
+
+    fetch(url, {
+      method: method,
+      headers: header
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(res.message || 'Failed to get fetch');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        setManagers(resData.managers);
       })
       .catch(error => {
         console.log(error);
@@ -270,17 +303,17 @@ const CreateProject = props => {
         return optionType;
       case 'dropdown':
         optionType = (
-          <Select defaultValue="" style={{ minWidth: '300px' }} onChange="">
-            {question.options.map((answerOption, index) => (
-              <OptionType inputType={question.optionType} key={index} answerOption={answerOption} />
-            ))}
-          </Select>
+          <OptionType
+            onChange={(event, value) => numberOrDropdownHandler(event, question.id, value)}
+            inputType={question.optionType}
+            answerOption={managers}
+          />
         );
         return optionType;
       case 'number':
         optionType = (
           <OptionType
-            onChange={event => inputChangeHandler(event, question.id)}
+            onChange={(event, value) => numberOrDropdownHandler(event, question.id, value)}
             inputType={question.optionType}
           />
         );

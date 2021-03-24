@@ -9,11 +9,15 @@ export const NavItems = props => {
       {props.isAuthorise && props.role === 'transformationTeam' ? (
         <NavItem link="/adminDash">Project Dashboard</NavItem>
       ) : null}
+     
       {props.isAuthorise && props.role === 'transformationTeam' ? (
         <NavItem link="/users">Users</NavItem>
       ) : null}
       {props.isAuthorise ? (
+<>
+        <NavItem link="/projects">All Projects</NavItem>
         <NavItem link="/logout">Logout</NavItem>
+        </>
       ) : (
         <NavItem link="/auth">Login</NavItem>
       )}

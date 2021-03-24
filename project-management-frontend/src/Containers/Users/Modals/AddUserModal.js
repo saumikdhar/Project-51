@@ -15,7 +15,9 @@ class AddUserModal extends React.Component {
     const { visible, hideModal } = this.props;
     // removing "all users" as an option for initial projects
     let switchItems = this.props.switchItems;
-    if (switchItems["0"] !== null) { delete switchItems["0"]}
+    if (switchItems['0'] !== null) {
+      delete switchItems['0'];
+    }
 
     return (
       <Modal
@@ -68,7 +70,7 @@ class AddUserModal extends React.Component {
             rules={[
               { required: true, message: "Please enter the new user's email" },
               {
-                pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                 message: 'Sorry, please enter a valid email'
               }
             ]}
@@ -143,7 +145,6 @@ class AddUserModal extends React.Component {
               {switchItems}
             </Select>
           </FormItem>
-
         </Form>
       </Modal>
     );
