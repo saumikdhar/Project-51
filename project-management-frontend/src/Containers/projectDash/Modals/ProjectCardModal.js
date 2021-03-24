@@ -54,9 +54,9 @@ const ProjectCard = props => {
           </td>)}
         {props.project.projectStatus !== 'Pending' && (
           <>
-            <td>{props.project.createdAt}</td>
+            <td>{props.project.createdAt.duration.substring(0,10)}</td>
             {props.project.businessCase !== null ?
-                <td>{props.project.businessCase.duration}</td> :
+                <td>{props.project.businessCase.duration.duration.substring(0,10)}</td> :
                 <td>Simplify project</td>
             }
           </>
