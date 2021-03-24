@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import classes from './Projects.module.css';
-import { Tag, Tooltip, Button } from 'antd';
+import { Tag, Tooltip, Button,Select,Input } from 'antd';
 import 'antd/lib/tag/style';
 import 'antd/lib/tooltip/style';
 import 'antd/lib/button/style';
@@ -10,15 +10,18 @@ import { PlusOutlined } from '@ant-design/icons';
 import * as actions from '../../store/actions';
 import { backendUrl } from '../../shared/utility';
 
+const {Option}=Select;
 const Projects = props => {
   const [projects, setProjects] = useState([]);
-  const { removeUserFromProject } = props;
+  const [searchField,setSearchField]=useState('name')
+  const [keyword,setKeyWord]=useState("");
 
-  useEffect(() => {
-    const userId = props.userId;
+  const { removeUserFromProject } = props;
+const getMyProjects=(url1)=>{
+  const userId = props.userId;
     const role = props.role;
 
-    const url = `${backendUrl()}/projects/getMyProjects`;
+    const url = `${backendUrl()}/${url1}`;
     const method = 'post';
     const header = { 'Content-Type': 'application/json' };
     fetch(url, {
@@ -35,18 +38,45 @@ const Projects = props => {
         return res.json();
       })
       .then(resData => {
-        console.log('projects consoled', resData);
+        console.log('projects consoled',resData)
         const data = resData.projects.flatMap(projects => projects);
         setProjects(data);
       })
       .catch(error => {
         console.log('error occur', error);
       });
+}
+  useEffect(() => {
+  getMyProjects('projects/getMyProjects')
   }, []);
+const handleSearch =(e)=>{
+  e.preventDefault();
+  getMyProjects(`projects/getSearchedProducts?keyword=${keyword}&searchField=${searchField}`)
 
+  
+  
+}
   return (
     <div className={classes.Projects}>
-      <h1>All Projects1</h1>
+      <h1>All Projects</h1>
+      <div className=''>
+      <Select style={{width:150}} defaultValue='name'  value={searchField} onChange={e=>{
+
+        setSearchField(e)
+      }
+      }>
+      
+        <Option value='managername'>Manager</Option>
+        <Option value='name'>Project Name</Option>
+        <Option value='projectSize'>Project Size	</Option>
+        <Option value='projectType' >Project Type</Option>
+      </Select>
+<Input placeholder='Search' style={{maxWidth:200}} value={keyword} onChange={e=>{
+  setKeyWord(e.target.value)
+}} />
+<Button onClick={handleSearch}>Search</Button>
+<br/> <br/>
+      </div>
       <table className={classes.Table}>
         <thead>
           <tr>
@@ -75,7 +105,7 @@ const Projects = props => {
                 <td>
                   {project.users.map(user => (
                     <>
-                      <Tooltip key={Math.random(1, 39393393)} placement="top" title={user.role}>
+                      <Tooltip key={Math.random(1,39393393)} placement="top" title={user.role}>
                         <Tag
                           onClose={() => removeUserFromProject(user.id, project.id)}
                           closable={

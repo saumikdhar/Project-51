@@ -220,13 +220,13 @@ exports.getAllProjectUsers = async (req, res) => {
       users: await User.findAll()
     };
 
-    res.status(200).json({users: users});
+    res.status(200).json({ users: users });
   } catch (error) {
     if (!error.statusCode) {
       error.statusCode = 500;
     }
     console.log(error);
-    res.status(error.statusCode).json({error: error});
+    res.status(error.statusCode).json({ error: error });
   }
 };
 

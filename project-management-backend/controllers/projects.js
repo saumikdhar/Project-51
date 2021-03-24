@@ -254,3 +254,131 @@ exports.projectRejectUpdate = async (req, res, next) => {
     res.status(error.statusCode).json({ error: error });
   }
 };
+
+
+//----------------------------------------------------------------------------------------------------------------------
+// Controller to search for projects assinged to you.
+
+exports.getSearchedProducts = async (req, res, next) => {
+  const userId = req.body.userId;
+  const role = req.body.role;
+  let projects;
+  const {keyword,searchField}=req.query;
+
+  try {
+    if (role !== 'transformationTeam') {
+      projects = await UserProject.findAll({
+        where: {
+          userId: userId,
+          
+        }
+      });
+      let projectToDeliver = [];
+
+      for (let i = 0; i < projects.length; i++) {
+        let project;
+        if(searchField=='name'){
+           project = await Project.findAll({
+            where: {
+              id: projects[i].projectId,
+              projectStatus: "Active",
+              name:keyword
+            },
+            include: [User]
+          });
+        }
+
+      else   if(searchField=='managername'){
+           project = await Project.findAll({
+            where: {
+              id: projects[i].projectId,
+              projectStatus: "Active",
+              managername:keyword
+            },
+            include: [User]
+          });
+        } else if(searchField=='projectSize'){
+           project = await Project.findAll({
+            where: {
+              id: projects[i].projectId,
+              projectStatus: "Active",
+              projectSize:keyword
+            },
+            include: [User]
+          });
+        }
+        else if(searchField=='projectType'){
+           project = await Project.findAll({
+            where: {
+              id: projects[i].projectId,
+              projectStatus: "Active",
+              projectType:keyword
+            },
+            include: [User]
+          });
+        }
+
+        projectToDeliver.push(project);
+      }
+
+      projects = [...projectToDeliver];
+      console.log('proejcts.leng',projects.length);
+    } else {
+      if(searchField=='name'){
+        projects = await Project.findAll({
+          where: {
+            projectStatus: "Active",
+            
+            name:keyword
+          },
+          through: { UserProject },
+          include: [User]
+        });
+     }
+
+   else   if(searchField=='managername'){
+    projects = await Project.findAll({
+      where: {
+        projectStatus: "Active",
+        managername:keyword
+      },
+      through: { UserProject },
+      include: [User]
+    });
+     } else if(searchField=='projectSize'){
+      projects = await Project.findAll({
+        where: {
+          projectStatus: "Active",
+          projectSize:keyword
+
+        },
+        through: { UserProject },
+        include: [User]
+      });
+     }
+     else if(searchField=='projectType'){
+      projects = await Project.findAll({
+        where: {
+          projectStatus: "Active",
+          projectType:keyword
+
+        },
+        through: { UserProject },
+        include: [User]
+      });
+     }
+console.log('projects leng',projects.length)
+    
+    }
+    console.log('len',projects.length)
+    res.status(200).json({
+      success: true,
+      projects: projects
+    });
+  } catch (error) {
+    if (!error.statusCode) {
+      error.statusCode = 500;
+    }
+    next(error);
+  }
+};
