@@ -439,6 +439,15 @@ const populateDummyData = async () => {
     role: 'transformationTeam'
   });
 
+  const user4 = await User.create({
+    firstName: 'fn4',
+    surname: 'sur4',
+    email: 'it@aa.com',
+    password: hpw2,
+    role: 'it'
+  });
+
+
   const project1 = await Project.create({
     name: 'My Dummy Project',
     managerName: 'Peter Parker',
@@ -497,6 +506,11 @@ const populateDummyData = async () => {
 
   const userProject3 = await UserProject.create({
     userId: user3.id,
+    projectId: project1.id
+  });
+
+  const userProject4 = await UserProject.create({
+    userId: user4.id,
     projectId: project1.id
   });
 
@@ -657,10 +671,10 @@ const createUser = async () => {
   }
 };
 
- // sequelize
- //   .sync({ force: true }) // Only use this when changing tables or fields
- //   // .sync()
- //   .then(dummyData => {
- //     return populateDummyData(), createQuestionnaire();
- //   })
- //   .catch(err => console.log(err));
+ sequelize
+   .sync({ force: true }) // Only use this when changing tables or fields
+   // .sync()
+   .then(dummyData => {
+     return populateDummyData(), createQuestionnaire();
+   })
+   .catch(err => console.log(err));
