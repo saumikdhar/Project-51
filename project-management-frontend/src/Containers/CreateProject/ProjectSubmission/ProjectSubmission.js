@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './ProjectSubmission.module.css';
-import hafodLogo from '../../../Assets/Hafod-logo.png';
+import hafodLogo from '../../../assets/Hafod-logo.png';
 
 const ProjectSubmission = () => {
   return (
