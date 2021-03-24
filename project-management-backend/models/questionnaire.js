@@ -19,11 +19,14 @@ const Questionnaire = sequelize.define(
       allowNull: false
     },
     options: {
-      type: Sequelize.JSON,
+      type: Sequelize.TEXT,
       allowNull: true,
       get: function () {
         return JSON.parse(this.getDataValue('options'));
-      }
+      },
+        set: function (value) {
+         this.setDataValue('options', JSON.stringify(value));
+         }
     }
   },
   { timestamps: false }
