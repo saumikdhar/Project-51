@@ -8,7 +8,8 @@ const {
   projectRejectUpdate,
   deleteProject,
   getMyProjects,
-  archiveProject
+  archiveProject,
+  getSearchedProducts
 } = require('../controllers/projects');
 const addProjectController = require('../controllers/addProject');
 const router = express.Router();
@@ -18,6 +19,7 @@ router.get('/projectdetails/:id', projectDetails);
 router.get('/deleteProject/:id', deleteProject);
 router.get('/archiveProject/:id', archiveProject);
 router.post('/getMyProjects', getMyProjects);
+router.post('/getSearchedProducts', getSearchedProducts);
 router.get('/getAllActiveProjects', getAllActiveProjects);
 router.get('/getAllPendingProjects', getAllPendingProjects);
 router.get('/getAllArchivedProjects', getAllArchivedProjects);

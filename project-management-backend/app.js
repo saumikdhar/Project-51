@@ -454,8 +454,8 @@ const populateDummyData = async () => {
   const project2 = await Project.create({
     name: 'My Dummy Project 2',
     projectScore: '10',
-    projectStatus: 'Pending',
-    projectSize: 'Large',
+    projectStatus: 'Active',
+    projectSize: 'Small',
     quickWin: true,
     projectType: 'Dummy Project',
     questions: [{question:'a', answers:'a'}, {question:'a', answers:'a'}]
@@ -464,8 +464,8 @@ const populateDummyData = async () => {
   const project3 = await Project.create({
     name: 'My Dummy Project 3',
     projectScore: '8',
-    projectStatus: 'Pending',
-    projectSize: 'Large',
+    projectStatus: 'Active',
+    projectSize: 'Small',
     quickWin: true,
     projectType: 'Dummy Project',
     questions: [{question:'a', answers:'a'}, {question:'a', answers:'a'}]
@@ -657,10 +657,10 @@ const createUser = async () => {
   }
 };
 
- // sequelize
- //   .sync({ force: true }) // Only use this when changing tables or fields
- //   // .sync()
- //   .then(dummyData => {
- //     return populateDummyData(), createQuestionnaire();
- //   })
- //   .catch(err => console.log(err));
+ sequelize
+   .sync({ force: true }) // Only use this when changing tables or fields
+   // .sync()
+   .then(dummyData => {
+     return populateDummyData(), createQuestionnaire();
+   })
+   .catch(err => console.log(err));
