@@ -346,7 +346,7 @@ export default class AdminProjects extends Component {
       <div className={classes.Projects}>
         {/*----------------------------------------------------------------------------------------------------------*/}
         {/* Page title with button to show the add filter modal */}
-        <h1>Project Dash</h1>
+        <h1>Project Dashboard</h1>
         <Button type="primary"
                 onClick={() => this.showAddFilterModal()}>
           Add Filter +

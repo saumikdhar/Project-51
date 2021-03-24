@@ -657,10 +657,10 @@ const createUser = async () => {
   }
 };
 
- sequelize
-   .sync({ force: true }) // Only use this when changing tables or fields
-   // .sync()
-   .then(dummyData => {
-     return populateDummyData(), createQuestionnaire();
-   })
-   .catch(err => console.log(err));
+ // sequelize
+ //   .sync({ force: true }) // Only use this when changing tables or fields
+ //   // .sync()
+ //   .then(dummyData => {
+ //     return populateDummyData(), createQuestionnaire();
+ //   })
+ //   .catch(err => console.log(err));

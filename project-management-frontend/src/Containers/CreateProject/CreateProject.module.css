@@ -7,14 +7,15 @@
 }
 
 .CreateProject .Box {
-    display: inline-block;
+    /*display: inline-block;*/
+    margin: auto;
     padding: 20px;
     border: 3px solid #77bc1f;
     border-radius: 1rem;
     width: 40rem;
     margin-bottom: 50px;
     background-color: #a5b19721;
-    margin-right: 20px;
+    /*margin-right: 20px;*/
 }
 
 .Button {

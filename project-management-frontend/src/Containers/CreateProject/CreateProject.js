@@ -343,7 +343,7 @@ const CreateProject = props => {
             {error}
           </h4>
         )}
-        <Form>
+        <Form layout="vertical">
           {questionnaireForm.map(
             question =>
               question.isShown === true && (

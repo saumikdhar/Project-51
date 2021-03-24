@@ -52,7 +52,7 @@ const App = props => {
         <Route path="/adminDash" component={AdminDash} />
         <Route path="/adminReviewProject/:id" component={AdminPendingReview} />
         <Route path="/users" component={Users} />
-        <Redirect to="/projects" />
+        {props.role !== 'transformationTeam' ? <Redirect to="/projects" /> : <Redirect to="/adminDash" />}
         {/*<Redirect to="/projects" />*/}
       </Switch>
     );
@@ -68,7 +68,8 @@ const App = props => {
 
 const mapStateToProps = state => {
   return {
-    isAuthorise: state.auth.token !== null
+    isAuthorise: state.auth.token !== null,
+    role: state.auth.role
   };
 };
 
