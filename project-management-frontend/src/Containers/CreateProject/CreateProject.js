@@ -313,7 +313,7 @@ const CreateProject = props => {
       case 'number':
         optionType = (
           <OptionType
-            onChange={(event, value) => numberOrDropdownHandler(event, question.id, value)}
+            onChange={value => numberOrDropdownHandler(null, question.id, value)}
             inputType={question.optionType}
           />
         );
