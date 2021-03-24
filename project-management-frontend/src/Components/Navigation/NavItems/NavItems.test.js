@@ -16,9 +16,9 @@ describe('NavItems', () => {
     expect(wrapper.find(NavItem)).toHaveLength(2);
   });
 
-  it('should show four NavItem element if user is Authorised and they are a manager', () => {
+  it('should show three NavItem element if user is Authorised and they are a manager', () => {
     wrapper.setProps({ isAuthorise: true, role: 'manager' });
-    expect(wrapper.find(NavItem)).toHaveLength(2);
+    expect(wrapper.find(NavItem)).toHaveLength(3);
   });
 
   it('should show three NavItem element if user is Authorised and they are a member of the Transformation Team', () => {
