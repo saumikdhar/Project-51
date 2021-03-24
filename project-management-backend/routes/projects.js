@@ -1,3 +1,5 @@
+const isAuth = require('../middleware/is-auth');
+
 const express = require('express');
 const {
   projectDetails,
@@ -9,6 +11,7 @@ const {
   deleteProject,
   getMyProjects,
   archiveProject,
+  editProject,
   getSearchedProducts
 } = require('../controllers/projects');
 const addProjectController = require('../controllers/addProject');
@@ -27,6 +30,7 @@ router.post('/accept/:id', projectAcceptUpdate);
 router.post('/reject/:id', projectRejectUpdate);
 router.get('/questionnaire', addProjectController.getQuestionnaire);
 router.post('/createProject', addProjectController.createProject);
+router.post('/editProject/:id', isAuth, editProject);
 
 // Export router
 module.exports = router;

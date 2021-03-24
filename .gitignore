@@ -280,5 +280,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-nodemon.json
+
+nodedemon.json
 # End of https://www.toptal.com/developers/gitignore/api/node,react,vscode,jetbrains+all,macos,windows
