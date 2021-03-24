@@ -45,8 +45,10 @@ exports.projectDetails = async (req, res, next) => {
 exports.getAllActiveProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status active returning as a JSON
   try {
-    const projects = await Project.findAll({include: [User, BusinessCase],
-        where: { projectStatus: "Active" }})
+    const projects = await Project.findAll({
+      include: [User, BusinessCase],
+      where: { projectStatus: 'Active' }
+    });
     res.status(200).json({
       success: true,
       data: projects
@@ -63,8 +65,10 @@ exports.getAllActiveProjects = async (req, res, next) => {
 exports.getAllPendingProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status pending returning as a JSON
   try {
-    const projects = await Project.findAll({include: [User, BusinessCase],
-        where: { projectStatus: "Pending" }})
+    const projects = await Project.findAll({
+      include: [User, BusinessCase],
+      where: { projectStatus: 'Pending' }
+    });
     res.status(200).json({
       success: true,
       data: projects
@@ -82,8 +86,10 @@ exports.getAllPendingProjects = async (req, res, next) => {
 exports.getAllArchivedProjects = async (req, res, next) => {
   // Tries to pull project information from the database with status pending returning as a JSON
   try {
-    const projects = await Project.findAll({include: [User, BusinessCase],
-      where: { projectStatus: "Archived" }})
+    const projects = await Project.findAll({
+      include: [User, BusinessCase],
+      where: { projectStatus: 'Archived' }
+    });
     res.status(200).json({
       success: true,
       data: projects
@@ -180,9 +186,7 @@ exports.projectAcceptUpdate = async (req, res, next) => {
       res.status(200).json({
         success: true
       });
-
     }
-
   } catch (error) {
     // On error return error message
     console.log(error);
@@ -294,6 +298,55 @@ exports.projectRejectUpdate = async (req, res, next) => {
   }
 };
 
+//Controller to edit a project
+exports.editProject = async (req, res, next) => {
+  const id = req.params.id;
+  const name = req.body.projectName;
+  const managerName = req.body.managerName;
+  const projectStatus = req.body.projectStatus;
+  const projectSize = req.body.projectSize;
+  const quickWin = req.body.quickWin;
+  const projectType = req.body.projectType;
+  console.log('req.body', req.body);
+  console.log('req.params', req.params);
+  console.log('req.args', req.args);
+  console.log('req.form', req.form);
+
+  try {
+    console.log('ID: ', id);
+    const project = await Project.findOne({ where: { id: id } });
+    if (project == null) {
+      const error = new Error('Project does not exist');
+      error.statusCode = 400;
+      throw error;
+    }
+    console.log('project is trying to update in backend');
+    await Project.update(
+      {
+        name: name,
+        managerName: managerName,
+        projectStatus: projectStatus,
+        projectSize: projectSize,
+        quickWin: quickWin,
+        projectType: projectType
+      },
+      { where: { id: id } }
+    );
+    console.log('editing is occuring in backend');
+
+    res.status(200).json({
+      success: true
+    });
+  } catch (error) {
+    console.log('this is an errrrroorrrrrrrr', error);
+    if (!error.statusCode) {
+      error.statusCode = 500;
+      console.log('error occured when ediitng project');
+    }
+    console.log('error in backend for editing project');
+    res.status(error.statusCode).json({ error: error });
+  }
+};
 
 //----------------------------------------------------------------------------------------------------------------------
 // Controller to search for projects assinged to you.
@@ -302,7 +355,7 @@ exports.getSearchedProducts = async (req, res, next) => {
   const userId = req.body.userId;
   const role = req.body.role;
   let projects;
-  const {keyword,searchField}=req.query;
+  const { keyword, searchField } = req.query;
 
   try {
     if (role !== 'transformationTeam') {
@@ -316,42 +369,39 @@ exports.getSearchedProducts = async (req, res, next) => {
 
       for (let i = 0; i < projects.length; i++) {
         let project;
-        if(searchField=='name'){
-           project = await Project.findAll({
+        if (searchField == 'name') {
+          project = await Project.findAll({
             where: {
               id: projects[i].projectId,
-              projectStatus: "Active",
-              name:keyword
+              projectStatus: 'Active',
+              name: keyword
             },
             include: [User]
           });
-        }
-
-      else   if(searchField=='managername'){
-           project = await Project.findAll({
+        } else if (searchField == 'managername') {
+          project = await Project.findAll({
             where: {
               id: projects[i].projectId,
-              projectStatus: "Active",
-              managername:keyword
+              projectStatus: 'Active',
+              managername: keyword
             },
             include: [User]
           });
-        } else if(searchField=='projectSize'){
-           project = await Project.findAll({
+        } else if (searchField == 'projectSize') {
+          project = await Project.findAll({
             where: {
               id: projects[i].projectId,
-              projectStatus: "Active",
-              projectSize:keyword
+              projectStatus: 'Active',
+              projectSize: keyword
             },
             include: [User]
           });
-        }
-        else if(searchField=='projectType'){
-           project = await Project.findAll({
+        } else if (searchField == 'projectType') {
+          project = await Project.findAll({
             where: {
               id: projects[i].projectId,
-              projectStatus: "Active",
-              projectType:keyword
+              projectStatus: 'Active',
+              projectType: keyword
             },
             include: [User]
           });
@@ -361,9 +411,9 @@ exports.getSearchedProducts = async (req, res, next) => {
       }
 
       projects = [...projectToDeliver];
-      console.log('proejcts.leng',projects.length);
+      console.log('proejcts.leng', projects.length);
     } else {
-      if(searchField=='name'){
+      if (searchField == 'name') {
         projects = await Project.findAll({
           where: {
             projectStatus: "Active",
@@ -409,7 +459,7 @@ exports.getSearchedProducts = async (req, res, next) => {
 console.log('projects leng',projects.length)
 
     }
-    console.log('len',projects.length)
+    console.log('len', projects.length);
     res.status(200).json({
       success: true,
       projects: projects
