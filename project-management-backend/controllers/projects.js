@@ -264,7 +264,7 @@ exports.archiveProject = async (req, res, next) => {
   const id = req.params.id;
   await Project.update(
     {
-      projectStatus: 'Archive'
+      projectStatus: 'Archived'
     },
     { where: { id: id } }
   );
