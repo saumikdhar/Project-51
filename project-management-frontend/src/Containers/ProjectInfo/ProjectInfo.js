@@ -165,7 +165,7 @@ const ProjectInfo = props => {
       </table>
 
       <div className={classes.ProjectInfo} style={{ float: 'right' }}>
-        {props.role === 'transformationTeam' && (
+        {props.role === 'transformationTeam'  && (
           <>
             <Modal
               title="Delete project "
@@ -192,11 +192,26 @@ const ProjectInfo = props => {
             </Button>
           </>
         )}
+        {props.role === 'it'  && (
+          <>
+                      <Modal
+              title="Archive"
+              visible={isModalVisible2}
+              onOk={handleOk2}
+              onCancel={handleCancel2}
+            >
+              <p>Are you sure you want to archive this project ?</p>
+            </Modal>
+            &nbsp;&nbsp;&nbsp;{' '}
+            <Button type="primary" onClick={showModal2}>
+              Archive
+            </Button>
+          </>
+        )}
+
+
       </div>
     </div>
-
-
-
   );
 };
 
