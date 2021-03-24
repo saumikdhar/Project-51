@@ -105,11 +105,10 @@ exports.projectAcceptUpdate = async (req, res, next) => {
     const quickWin = req.body.quickWin;
     const priorityScore = req.body.priorityScore;
     const projectStatus = 'Active';
-    console.log("______________>", priorityScore)
 
-    console.log("projectAccptUpdate",quickWin, priorityScore, id)
     if (quickWin === 'isQuickWin'){
       const smallProject = 'small'
+      const projectType = "Simplify";
       const boolTrue = true
 
       const projects = await Project.update(
@@ -117,7 +116,8 @@ exports.projectAcceptUpdate = async (req, res, next) => {
           projectStatus: projectStatus,
           projectScore: priorityScore,
           quickWin: boolTrue,
-          projectSize: smallProject
+          projectSize: smallProject,
+          projectType: projectType
         },
         { where: { id: id } }
       );
@@ -125,19 +125,58 @@ exports.projectAcceptUpdate = async (req, res, next) => {
       res.status(200).json({
         success: true
       });
-    } else {
+    } else if (quickWin === 'notQuickWin') {
       const largeProject = 'large'
       const boolFalse = false
+      const projectType = "Large Project";
+
+      const benefit = req.body.benefit
+      const estimatedCost = req.body.estimatedCost
+      const sponsor = req.body.sponsor
+      const executiveSummary = req.body.executiveSummary
+      const reason = req.body.reason
+      const duration = req.body.duration
+      const businessOption = req.body.businessOption
+      const benefitTimescale = req.body.benefitTimescale
+      const negativeImpact = req.body.negativeImpact
+      const customerImpact = req.body.customerImpact
+      const majorRisks = req.body.majorRisks
+      const diversityAndInclusion = req.body.diversityAndInclusion
+      const investmentAppraisal = req.body.investmentAppraisal
+
       const projects = await Project.update(
         {
           projectStatus: projectStatus,
-          priorityScore: priorityScore,
+          projectScore: priorityScore,
           quickWin: boolFalse,
-          projectSize: largeProject
+          projectSize: largeProject,
+          projectType: projectType
         },
         { where: { id: id } }
-      );
+      )
 
+      const businessCaseRemove = await BusinessCase.destroy(
+        { where: { projectId: id } }
+      )
+
+      const businessCase = await BusinessCase.create(
+        {
+          benefit: benefit,
+          estimatedCost: estimatedCost,
+          sponsor: sponsor,
+          executiveSummary: executiveSummary,
+          reason: reason,
+          duration: duration,
+          businessOption:businessOption,
+          benefitTimescale: benefitTimescale,
+          negativeImpact:negativeImpact,
+          customerImpactAndEngagement:customerImpact,
+          majorRisks: majorRisks,
+          diversityAndInclusionConsiderations: diversityAndInclusion,
+          investmentAppraisal: investmentAppraisal,
+          projectId: id
+        }
+      )
       res.status(200).json({
         success: true
       });
@@ -270,7 +309,7 @@ exports.getSearchedProducts = async (req, res, next) => {
       projects = await UserProject.findAll({
         where: {
           userId: userId,
-          
+
         }
       });
       let projectToDeliver = [];
@@ -328,7 +367,7 @@ exports.getSearchedProducts = async (req, res, next) => {
         projects = await Project.findAll({
           where: {
             projectStatus: "Active",
-            
+
             name:keyword
           },
           through: { UserProject },
@@ -368,7 +407,7 @@ exports.getSearchedProducts = async (req, res, next) => {
       });
      }
 console.log('projects leng',projects.length)
-    
+
     }
     console.log('len',projects.length)
     res.status(200).json({

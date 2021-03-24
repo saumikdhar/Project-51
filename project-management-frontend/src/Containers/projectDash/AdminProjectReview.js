@@ -8,6 +8,8 @@ import 'antd/dist/antd.css';
 import classes from './Projects.module.css';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
+import "react-datepicker/dist/react-datepicker.css"
+import DatePicker from "react-datepicker";
 import { addUserToProject } from '../../store/actions';
 import ProjectCard from './Modals/ProjectCardModal';
 
@@ -34,19 +36,36 @@ class AdminProjectReview extends Component {
   constructor(props) {
     super(props);
 
+    // Initialises state for project information and business information aswell as form fields
+    this.state = {
+      Projectinfo: [], BusinessInfo: [], questionsArray: [], displayInfo: 'Project',
+      quickWin: 'isQuickWin', priorityScore: '', questions: '',
+      benefit: '', estimatedCost: '', sponsor: '', executiveSummary: '',
+      reason: '', businessOption: '', benefitTimescale: '', duration: new Date(),
+      negativeImpact: '', customerImpact: '', majorRisks: '',
+      diversityAndInclusion: '', investmentAppraisal: ''
+    };
+
     const {addUserToProject} = props
     // Binds all methods in the class to the correct implementation
     this.onChangeQuickWin = this.onChangeQuickWin.bind(this);
     this.onChangePriorityScore = this.onChangePriorityScore.bind(this);
     this.onChangeQuestions = this.onChangeQuestions.bind(this);
+    this.onChangeBenefit = this.onChangeBenefit.bind(this);
+    this.onChangeEstimatedCost = this.onChangeEstimatedCost.bind(this);
+    this.onChangeSponsor = this.onChangeSponsor.bind(this);
+    this.onChangeExecutiveSummary = this.onChangeExecutiveSummary.bind(this);
+    this.onChangeReason = this.onChangeReason.bind(this);
+    this.onChangeDuration = this.onChangeDuration.bind(this);
+    this.onChangeBusinessOption = this.onChangeBusinessOption.bind(this);
+    this.onChangeBenefitTimescale = this.onChangeBenefitTimescale.bind(this);
+    this.onChangeNegativeImpact = this.onChangeNegativeImpact.bind(this);
+    this.onChangeCustomerImpact = this.onChangeCustomerImpact.bind(this);
+    this.onChangeMajorRisks = this.onChangeMajorRisks.bind(this);
+    this.onChangeDiversityAndInclusion = this.onChangeDiversityAndInclusion.bind(this);
+    this.onChangeInvestmentAppraisal = this.onChangeInvestmentAppraisal.bind(this);
     this.onSubmitAccept = this.onSubmitAccept.bind(this);
     this.onSubmitReject = this.onSubmitReject.bind(this);
-
-    // Initialises state for project information and business information aswell as form fields
-    this.state = {
-      Projectinfo: [], BusinessInfo: [], questionsArray: [], displayInfo: 'Project',
-      quickWin: 'isQuickWin', priorityScore: '', questions: ''
-    };
   }
 
   //------------------------------------------------------------------------------------------------------------------
@@ -71,6 +90,19 @@ class AdminProjectReview extends Component {
     axios.get('http://localhost:8080/businessCase/getBusinessCase/' + this.props.match.params.id)
       .then(response => {
         this.setState({ BusinessInfo: response.data.data[0] });
+
+        if (JSON.stringify(response.data.data) !== "[]") {
+          this.setState({ benefit: response.data.data[0].benefit,
+            estimatedCost: response.data.data[0].estimatedCost, sponsor: response.data.data[0].sponsor,
+            executiveSummary: response.data.data[0].executiveSummary, reason: response.data.data[0].reason,
+            businessOption: response.data.data[0].businessOption,
+            benefitTimescale: response.data.data[0].benefitTimescale,
+            negativeImpact: response.data.data[0].negativeImpact,
+            customerImpact: response.data.data[0].customerImpactAndEngagement,
+            majorRisks: response.data.data[0].majorRisks,
+            diversityAndInclusion: response.data.data[0].diversityAndInclusionConsiderations,
+            investmentAppraisal: response.data.data[0].investmentAppraisal });
+        }
       })
 
       // Log error if unsuccessful
@@ -108,10 +140,114 @@ class AdminProjectReview extends Component {
   }
 
   //--------------------------------------------------------------------------------------------------------------------
-  // Update the duration from a form
+  // Update the question from a form
   onChangeQuestions(e) {
     this.setState({
       questions: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the benefit from a form
+  onChangeBenefit(e) {
+    this.setState({
+      benefit: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the estimatedCost from a form
+  onChangeEstimatedCost(e) {
+    this.setState({
+      estimatedCost: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the sponsor from a form
+  onChangeSponsor(e) {
+    this.setState({
+      sponsor: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the summary from a form
+  onChangeExecutiveSummary(e) {
+    this.setState({
+      executiveSummary: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the reason from a form
+  onChangeReason(e) {
+    this.setState({
+      reason: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the businessOption from a form
+  onChangeBusinessOption(e) {
+    this.setState({
+      businessOption: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the duration from a form
+  onChangeDuration(e) {
+    this.setState({
+      duration: e
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the benefitTimescale from a form
+  onChangeBenefitTimescale(e) {
+    this.setState({
+      benefitTimescale: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the negativeImpact from a form
+  onChangeNegativeImpact(e) {
+    this.setState({
+      negativeImpact: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the customerImpact from a form
+  onChangeCustomerImpact(e) {
+    this.setState({
+      customerImpact: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the majorRisks from a form
+  onChangeMajorRisks(e) {
+    this.setState({
+      majorRisks: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the diversityAndInclusion from a form
+  onChangeDiversityAndInclusion(e) {
+    this.setState({
+      diversityAndInclusion: e.target.value
+    });
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Update the diversityAndInclusion from a form
+  onChangeInvestmentAppraisal(e) {
+    this.setState({
+      investmentAppraisal: e.target.value
     });
   }
 
@@ -121,12 +257,31 @@ class AdminProjectReview extends Component {
 
     const token = localStorage.getItem('token');
     const header = { Authorization: 'Bearer ' + token };
+    let acceptUpdate = '';
 
     // Gets form data into variable
-    const acceptUpdate = {
-      quickWin: this.state.quickWin,
-      priorityScore: this.state.priorityScore
-    };
+    if (this.state.quickWin === 'isQuickWin'){
+      acceptUpdate = {
+        quickWin: this.state.quickWin,
+        priorityScore: this.state.priorityScore
+      };
+    } else if (this.state.quickWin === 'notQuickWin') {
+      acceptUpdate = {
+        quickWin: this.state.quickWin,
+        priorityScore: this.state.priorityScore,
+        benefit: this.state.benefit,
+        estimatedCost: this.state.estimatedCost, sponsor: this.state.sponsor,
+        executiveSummary: this.state.executiveSummary, reason: this.state.reason,
+        duration: this.state.duration,
+        businessOption: this.state.businessOption,
+        benefitTimescale: this.state.benefitTimescale,
+        negativeImpact: this.state.negativeImpact,
+        customerImpact: this.state.customerImpact,
+        majorRisks: this.state.majorRisks,
+        diversityAndInclusion: this.state.diversityAndInclusion,
+        investmentAppraisal: this.state.investmentAppraisal
+      };
+    }
 
     // Submits the data
     axios.post('http://localhost:8080/projects/accept/' + this.props.match.params.id, acceptUpdate)
@@ -194,7 +349,7 @@ class AdminProjectReview extends Component {
         <Button type={this.state.displayInfo === 'Project' && "primary"} onClick={() =>
           this.setDisplayFilter('Project')}>Project Information
         </Button>
-        {this.state.BusinessInfo === [] && (
+        {typeof this.state.BusinessInfo !== "undefined" && (
           <Button type={this.state.displayInfo === 'Business' && "primary"} onClick={() =>
             this.setDisplayFilter('Business')}>Business Information
           </Button>
@@ -324,13 +479,13 @@ class AdminProjectReview extends Component {
                   {'Yes'}
                 </Option>
                 <Option key={'notQuickWin'} value={'notQuickWin'}>
-                  {'NO'}
+                  {'No'}
                 </Option>
               </Select>
             </FormItem>
 
             {/* ---------------------------------------------------------------------------------------------- */}
-            {/* drop down to select the transformation lead */}
+            {/* Input for the priority score */}
             <FormItem
               label="Project priority score"
               extra="This will determine priority of the project"
@@ -343,9 +498,133 @@ class AdminProjectReview extends Component {
                 }
               ]}
             >
-              {/* drop down mapped to management users */}
               <InputNumber value={this.state.priorityScore} onChange={this.onChangePriorityScore}/>
             </FormItem>
+
+            {this.state.quickWin === "notQuickWin" && (
+              <>
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the benefit */}
+                <FormItem
+                  label="Project benefit"
+                  name="benefit"
+                >
+                  <Input defaultValue={this.state.benefit} value={this.state.benefit} onChange={this.onChangeBenefit}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the cost */}
+                <FormItem
+                  label="Estimate Cost"
+                  name="estimateCost"
+                >
+                  <Input defaultValue={this.state.estimatedCost} value={this.state.estimatedCost} onChange={this.onChangeEstimatedCost}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the sponsor */}
+                <FormItem
+                  label="Sponsor"
+                  name="sponsor"
+                >
+                  <Input defaultValue={this.state.sponsor} value={this.state.sponsor} onChange={this.onChangeSponsor}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the executive summary */}
+                <FormItem
+                  label="Executive Summary"
+                  name="executiveSummary"
+                >
+                  <Input defaultValue={this.state.executiveSummary} value={this.state.executiveSummary} onChange={this.onChangeExecutiveSummary}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the reason */}
+                <FormItem
+                  label="Reason"
+                  name="reason"
+                >
+                  <Input defaultValue={this.state.reason} value={this.state.reason} onChange={this.onChangeReason}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the reason */}
+                <FormItem
+                  label="End date"
+                  name="duration"
+                >
+                  <DatePicker
+                    selected={this.state.duration}
+                    onChange={this.onChangeDuration}
+                  />
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the business option */}
+                <FormItem
+                  label="Business Option"
+                  name="businessOption"
+                >
+                  <Input defaultValue={this.state.businessOption} value={this.state.businessOption} onChange={this.onChangeBusinessOption}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the benefit timescale */}
+                <FormItem
+                  label="Benefit Timescale"
+                  name="benefitTimescale"
+                >
+                  <Input defaultValue={this.state.benefitTimescale} value={this.state.benefitTimescale} onChange={this.onChangeBenefitTimescale}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the negative impact */}
+                <FormItem
+                  label="Negative Impact"
+                  name="negativeImpact"
+                >
+                  <Input defaultValue={this.state.negativeImpact} value={this.state.negativeImpact} onChange={this.onChangeNegativeImpact}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the customer impact */}
+                <FormItem
+                  label="Customer Impact and Engagement"
+                  name="customerImpact"
+                >
+                  <Input defaultValue={this.state.customerImpact} value={this.state.customerImpact} onChange={this.onChangeCustomerImpact}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the risks */}
+                <FormItem
+                  label="Major Risks"
+                  name="majorRisks"
+                >
+                  <Input defaultValue={this.state.majorRisks} value={this.state.majorRisks} onChange={this.onChangeMajorRisks}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the diversity and inclusion */}
+                <FormItem
+                  label="Diversity and inclusion considerations"
+                  name="diversityAndInclusion"
+                >
+                  <Input defaultValue={this.state.diversityAndInclusion} value={this.state.diversityAndInclusion} onChange={this.onChangeDiversityAndInclusion}/>
+                </FormItem>
+
+                {/* ---------------------------------------------------------------------------------------------- */}
+                {/* Input for the investment appraisal */}
+                <FormItem
+                  label="Investment Appraisal"
+                  name="investmentAppraisal"
+                >
+                  {/* drop down mapped to management users */}
+                  <Input defaultValue={this.state.investmentAppraisal} value={this.state.investmentAppraisal} onChange={this.onChangeInvestmentAppraisal}/>
+                </FormItem>
+              </>
+            )}
 
             {/* ------------------------------------------------------------------------------------------------ */}
             {/* Button to submit the sccept form */}

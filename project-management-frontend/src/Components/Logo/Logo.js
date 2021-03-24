@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Logo.module.css';
-import messageLogo from '../../assets/Hafod-logo.png';
+import messageLogo from '../../Assets/Hafod-logo.png';
 
 const Logo = props => {
   return (
