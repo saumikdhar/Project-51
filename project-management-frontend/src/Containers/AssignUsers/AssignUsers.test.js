@@ -50,6 +50,6 @@ describe('<AssignUsers>', () => {
         location={location}
       />
     );
-    expect(wrapper.find(Tag)).toHaveLength(1);
+    expect(wrapper.find(Tag)).toHaveLength(2);
   });
 });

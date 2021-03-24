@@ -9,78 +9,94 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 
 const ProjectCard = props => {
-    const { removeUserFromProject } = props;
+  const { removeUserFromProject } = props;
 
-    return(
+  return (
     <tr key={props.project.id}>
-        <td>{props.project.id}</td>
-        {props.project.projectStatus !== 'Pending' && (
-          <td><Link to={"/projectinfo/" + props.project.id}>{props.project.name}</Link></td>)
-        }{props.project.projectStatus === 'Pending' && (
-      <td><Link to={"/adminReviewProject/" + props.project.id}>{props.project.name}</Link></td>)
-    }
+      <td>{props.project.id}</td>
+      {props.project.projectStatus !== 'Pending' && (
+        <td>
+          <Link to={'/projectinfo/' + props.project.id}>{props.project.name}</Link>
+        </td>
+      )}
+      {props.project.projectStatus === 'Pending' && (
+        <td>
+          <Link to={'/adminReviewProject/' + props.project.id}>{props.project.name}</Link>
+        </td>
+      )}
 
-        {props.project.projectStatus !== 'Pending' && (
-            <td>{props.project.projectScore}</td>
-        )}
-        {props.project.businessCase !== null ?
-            <td>{props.project.businessCase.executiveSummary}</td> :
-            <td>{props.project.questions[7].answers}{props.project.questions[28].answers}</td>
-        }
+      {props.project.projectStatus !== 'Pending' && <td>{props.project.projectScore}</td>}
+      {props.project.businessCase !== null ? (
+        <td>{props.project.businessCase.executiveSummary}</td>
+      ) : (
+        <td>
+          {props.project.questions[7].answers}
+          {props.project.questions[28].answers}
+        </td>
+      )}
 
-        {/* ---------------------------------------------------------------------------------------- */}
-        {/* Maps related users into project tab including the assign user feature */}
-        {props.project.projectStatus === 'Active' && (
-          <td>{props.project.users.map(user => (
+      {/* ---------------------------------------------------------------------------------------- */}
+      {/* Maps related users into project tab including the assign user feature */}
+      {props.project.projectStatus === 'Active' && (
+        <td>
+          {props.project.users.map(user => (
             <>
-                <Tooltip key={user.id} placement="top" title={user.role}>
-
-                    {/* Allows a user to be removed from a project */}
-                    <Tag
-                      onClose={() => removeUserFromProject(user.id, props.project.id)}
-                      closable={
-                          user.role === 'employee' ||
-                          user.role === 'manager'
-                      }
-                    >{`${user.firstName} ${user.surname}`}</Tag>
-                </Tooltip>
+              <Tooltip key={user.id} placement="top" title={user.role}>
+                {/* Allows a user to be removed from a project */}
+                <Tag
+                  color={
+                    user.role === 'manager'
+                      ? 'orange'
+                      : user.role === 'transformationTeam'
+                      ? 'blue'
+                      : user.role === 'employee'
+                      ? 'cyan'
+                      : 'magenta'
+                  }
+                  onClose={() => removeUserFromProject(user.id, props.project.id)}
+                  closable={user.role === 'employee' || user.role === 'manager'}
+                >{`${user.firstName} ${user.surname}`}</Tag>
+              </Tooltip>
             </>
           ))}
 
-              {/* Links to projects add user page */}
-              <div style={{ marginTop: '10px' }} className={classes.antBtn}>
-                  <Link to={`/assign-projects/${props.project.id}`}>Assign Users</Link>
-              </div>
-          </td>)}
-        {props.project.projectStatus !== 'Pending' && (
-          <>
-            <td>{props.project.createdAt.duration.substring(0,10)}</td>
-            {props.project.businessCase !== null ?
-                <td>{props.project.businessCase.duration.duration.substring(0,10)}</td> :
-                <td>Simplify project</td>
-            }
-          </>
-        )}
-        {props.project.businessCase !== null ?
-          <td>{props.project.projectSize}</td> :
-          <td>Small</td>
-        }
+          {/* Links to projects add user page */}
+          <div style={{ marginTop: '10px' }} className={classes.antBtn}>
+            <Link to={`/assign-projects/${props.project.id}`}>Assign Users</Link>
+          </div>
+        </td>
+      )}
+      {props.project.projectStatus !== 'Pending' && (
+        <>
+          <td>{props.project.createdAt.substring(0, 10)}</td>
+          {props.project.businessCase !== null ? (
+            <td>{props.project.businessCase.duration.substring(0, 10)}</td>
+          ) : (
+            <td>Simplify project</td>
+          )}
+        </>
+      )}
+      {props.project.businessCase !== null ? <td>{props.project.projectSize}</td> : <td>Small</td>}
 
-        <td>{props.project.projectType}</td>
-        {props.project.projectStatus === 'Pending' && (
-          <>
-            <td><Link to={"/adminReviewProject/" + props.project.id}><Button>Review</Button></Link></td>
-          </>
-        )}
+      <td>{props.project.projectType}</td>
+      {props.project.projectStatus === 'Pending' && (
+        <>
+          <td>
+            <Link to={'/adminReviewProject/' + props.project.id}>
+              <Button>Review</Button>
+            </Link>
+          </td>
+        </>
+      )}
     </tr>
-    )
-}
+  );
+};
 
 const mapDispatchToProps = dispatch => {
-    return {
-        removeUserFromProject: (userId, projectId) =>
-          dispatch(actions.removeUserFromProject(userId, projectId))
-    };
+  return {
+    removeUserFromProject: (userId, projectId) =>
+      dispatch(actions.removeUserFromProject(userId, projectId))
+  };
 };
 // Exports modal
 export default connect(null, mapDispatchToProps)(ProjectCard);
