@@ -1,3 +1,5 @@
+//----------------------------------------------------------------------------------------------------------------------
+// Import frontend functionality
 import './App.css';
 import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -12,9 +14,11 @@ import Projects from './Containers/Projects/Projects';
 import ProjectInfo from './Containers/ProjectInfo/ProjectInfo';
 import ScoreBoard from './Containers/Scoreboard/Scoreboard';
 import BusinessCase from './Containers/BusinessCase/BusinessCase';
-import AdminActiveDash from './Containers/projectDash/project_dash.component';
-import AdminPendingDash from './Containers/projectDash/project_dash_pending.component';
-import AdminPendingReview from './Containers/projectDash/project_review.component';
+import AdminDash from './Containers/projectDash/AdminProjects';
+import AdminPendingReview from './Containers/projectDash/AdminProjectReview';
+
+//----------------------------------------------------------------------------------------------------------------------
+// Import layout and styling options
 import Layout from './hoc/Layout/Layout';
 import ProjectSubmission from './Containers/CreateProject/ProjectSubmission/ProjectSubmission';
 
@@ -45,11 +49,11 @@ const App = props => {
         <Route path="/projectinfo/:id" component={ProjectInfo} />
         <Route path="/scoreboard/:id" component={ScoreBoard} />
         <Route path="/businessCase/:id" component={BusinessCase} />
-        <Route path="/adminPendingDash" component={AdminPendingDash} />
-        <Route path="/adminActiveDash" component={AdminActiveDash} />
+        <Route path="/adminDash" component={AdminDash} />
         <Route path="/adminReviewProject/:id" component={AdminPendingReview} />
         <Route path="/users" component={Users} />
-        <Redirect to="/projects" />
+        {props.role !== 'transformationTeam' ? <Redirect to="/projects" /> : <Redirect to="/adminDash" />}
+        {/*<Redirect to="/projects" />*/}
       </Switch>
     );
   }
@@ -64,7 +68,8 @@ const App = props => {
 
 const mapStateToProps = state => {
   return {
-    isAuthorise: state.auth.token !== null
+    isAuthorise: state.auth.token !== null,
+    role: state.auth.role
   };
 };
 

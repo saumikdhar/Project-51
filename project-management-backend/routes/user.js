@@ -11,6 +11,8 @@ router.post('/delete', isAuth, userController.deleteUser);
 router.post('/employees', isAuth, userController.getUsers);
 router.post('/projectUsers', isAuth, userController.getUserProjects);
 router.patch('/removeUserFromProject', isAuth, userController.removeUserFromProject);
-router.post('/addUserToProject', isAuth, userController.addUserToProject);
+router.post('/addUserToProject', userController.addUserToProject);
+router.get('/getManagementUsers', userController.getManagmentUsers);
+router.get('/managers', userController.getAllManagers);
 
 module.exports = router;

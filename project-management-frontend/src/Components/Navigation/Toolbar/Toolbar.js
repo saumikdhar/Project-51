@@ -12,7 +12,7 @@ const Toolbar = (props) => {
                 <Logo/>
             </div>
             <div className={classes.AppTitle}>
-              {!props.role ? 'Project Management' : props.role}
+              Hafod Project Management
             </div>
             <nav className={classes.DesktopOnly}>
                 <NavItems/>
@@ -22,7 +22,6 @@ const Toolbar = (props) => {
 };
 const mapStateToProps = state => {
   return {
-    role: state.auth.role
   };
 };
 export default connect(mapStateToProps)(Toolbar);
