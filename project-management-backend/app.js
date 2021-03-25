@@ -439,6 +439,14 @@ const populateDummyData = async () => {
     role: 'transformationTeam'
   });
 
+  const user4 = await User.create({
+    firstName: 'fn4',
+    surname: 'sur4',
+    email: 'it@aa.com',
+    password: hpw2,
+    role: 'it'
+  });
+
   const project1 = await Project.create({
     name: 'My Dummy Project',
     managerName: 'Peter Parker',
@@ -448,29 +456,55 @@ const populateDummyData = async () => {
     projectSize: 'Large',
     quickWin: true,
     projectType: 'Dummy Project',
-    questions: {}
+    questions: [
+      { question: 'a', answers: 'a' },
+      { question: 'a', answers: 'a' }
+    ]
   });
 
   const project2 = await Project.create({
     name: 'My Dummy Project 2',
     projectScore: '10',
-    projectStatus: 'Pending',
-    projectSize: 'Large',
+    projectStatus: 'Active',
+    projectSize: 'Small',
     quickWin: true,
     projectType: 'Dummy Project',
-    questions: {}
+    questions: [
+      { question: 'a', answers: 'a' },
+      { question: 'a', answers: 'a' }
+    ]
   });
 
   const project3 = await Project.create({
     name: 'My Dummy Project 3',
     projectScore: '8',
-    projectStatus: 'Pending',
+    projectStatus: 'Active',
+    projectSize: 'Small',
+    quickWin: true,
+    projectType: 'Dummy Project',
+    questions: [
+      { question: 'a', answers: 'a' },
+      { question: 'a', answers: 'a' }
+    ]
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy project to the database
+  const project4 = await Project.create({
+    name: 'My Dummy Project 4',
+    projectScore: '6',
+    projectStatus: 'Archived',
     projectSize: 'Large',
     quickWin: true,
     projectType: 'Dummy Project',
-    questions: {}
+    questions: [
+      { question: 'a', answers: 'a' },
+      { question: 'a', answers: 'a' }
+    ]
   });
 
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy userProject to the database
   const userProject1 = await UserProject.create({
     userId: user1.id,
     projectId: project1.id
@@ -486,6 +520,11 @@ const populateDummyData = async () => {
     projectId: project1.id
   });
 
+  const userProject4 = await UserProject.create({
+    userId: user4.id,
+    projectId: project1.id
+  });
+
   const businessCase1 = await BusinessCase.create({
     benefit: 'Big Benefit',
     estimatedCost: '20000',
@@ -497,7 +536,7 @@ const populateDummyData = async () => {
     benefitTimescale: 'Long',
     negativeImpact: 'Low',
     customerImpactAndEngagement: 'High',
-    majorRisks: null,
+    majorRisks: 'none',
     diversityAndInclusionConsiderations: 'Yes',
     investmentAppraisal: '30000',
     projectId: '1'
@@ -514,7 +553,7 @@ const populateDummyData = async () => {
     benefitTimescale: 'Long',
     negativeImpact: 'Low',
     customerImpactAndEngagement: 'High',
-    majorRisks: null,
+    majorRisks: 'none',
     diversityAndInclusionConsiderations: 'Yes',
     investmentAppraisal: '30000',
     projectId: '2'
@@ -531,10 +570,29 @@ const populateDummyData = async () => {
     benefitTimescale: 'Long',
     negativeImpact: 'Low',
     customerImpactAndEngagement: 'High',
-    majorRisks: null,
+    majorRisks: 'none',
     diversityAndInclusionConsiderations: 'Yes',
     investmentAppraisal: '30000',
     projectId: '3'
+  });
+
+  //--------------------------------------------------------------------------------------------------------------------
+  // Add dummy business case to the database
+  const businessCase4 = await BusinessCase.create({
+    benefit: 'Big Benefit',
+    estimatedCost: '20000',
+    sponsor: 'George Tester',
+    executiveSummary: 'Big and Good Summary',
+    reason: 'Important Reason',
+    businessOption: 'The Option',
+    duration: '2021-05-06T12:00:00.000Z',
+    benefitTimescale: 'Long',
+    negativeImpact: 'Low',
+    customerImpactAndEngagement: 'High',
+    majorRisks: 'none',
+    diversityAndInclusionConsiderations: 'Yes',
+    investmentAppraisal: '30000',
+    projectId: '4'
   });
 
   const scoreboard1 = await Scoreboard.create({

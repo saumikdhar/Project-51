@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, Table, Button, Input } from 'antd';
+import { Tag, Table, Button, Input, Tooltip } from 'antd';
 
 import 'antd/lib/table/style/css';
 import 'antd/lib/button/style/css';
@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import { backendUrl } from '../../shared/utility';
 
-const AssignUsers = props => {
+export const AssignUsers = props => {
   const { addUserToProject, getProjectUsers, removeUserFromProject, setProjectUsers } = props;
   const [loadingButton, setLoadingButton] = useState(false);
   const [loadingTable, setLoadingTable] = useState(false);
@@ -149,15 +149,25 @@ const AssignUsers = props => {
         {/*{authRedirect}*/}
         <h2> Employees assigned to this project</h2>
         {listOfUsers.map(user => (
-          <Tag
-            onClose={() => removeUserFromProjectHandler(user.key)}
-            // color={colours[Math.round(Math.random() * colours.length) + 1]}
-            closable={
-              props.role === 'transformationTeam' ||
-              (props.role === 'manager' && user.role !== 'transformationTeam')
-            }
-            key={user.key}
-          >{`${user.firstName} ${user.surname}`}</Tag>
+          <Tooltip key={user.id} placement="top" title={user.role}>
+            <Tag
+              onClose={() => removeUserFromProjectHandler(user.key)}
+              color={
+                user.role === 'manager'
+                  ? 'orange'
+                  : user.role === 'transformationTeam'
+                  ? 'blue'
+                  : user.role === 'employee'
+                  ? 'cyan'
+                  : 'magenta'
+              }
+              closable={
+                props.role === 'transformationTeam' ||
+                (props.role === 'manager' && user.role !== 'transformationTeam')
+              }
+              key={user.key}
+            >{`${user.firstName} ${user.surname}`}</Tag>
+          </Tooltip>
         ))}
       </div>
       <div className={classes.User}>

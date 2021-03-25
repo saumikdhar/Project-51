@@ -28,6 +28,7 @@
 .Table th {
   padding-top: 12px;
   padding-bottom: 12px;
+  background-color: #f28a07;
 }
 
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */

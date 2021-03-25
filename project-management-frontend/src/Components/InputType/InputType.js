@@ -10,6 +10,7 @@ import 'antd/lib/date-picker/style/css';
 
 const OptionType = props => {
   const { Option } = Select;
+  const { TextArea } = Input;
   let optionType = null;
   const date = new Date();
   const dateFormat = 'DD/MM/YYYY';
@@ -29,14 +30,7 @@ const OptionType = props => {
       );
       break;
     case 'textArea':
-      optionType = (
-        <textarea
-          style={{ maxHeight: '300px', height: '200px', resize: 'none' }}
-          onChange={props.onChange}
-          rows="4"
-          cols="50"
-        />
-      );
+      optionType = <TextArea onChange={props.onChange} autoSize={{ minRows: 1, maxRows: 8 }} />;
       break;
     case 'y/n':
       optionType = (
@@ -53,7 +47,7 @@ const OptionType = props => {
     case 'date':
       optionType = (
         <DatePicker
-          defaultValue={moment(date, dateFormat)}
+          placeholder="Select a date"
           format={dateFormat}
           disabledDate={disabledDate}
           onChange={props.onChange}
@@ -85,7 +79,18 @@ const OptionType = props => {
     case 'dropdown':
       optionType = (
         <div className={classes.InputType}>
-          <Option value={props.answerOption}>{props.answerOption}</Option>
+          <Select
+            placeholder="Select a manager"
+            onChange={props.onChange}
+            key={props.answerOption.map(manager => manager.id)}
+            style={{ minWidth: '300px' }}
+          >
+            {props.answerOption.map(manager => (
+              <Option
+                value={`${manager.firstName} ${manager.surname}`}
+              >{`${manager.firstName} ${manager.surname}`}</Option>
+            ))}
+          </Select>
         </div>
       );
       break;
@@ -95,14 +100,10 @@ const OptionType = props => {
           <InputNumber
             style={{ width: '200px', maxHeight: '30px' }}
             max={10000000}
-            min={1000}
             formatter={value => `£ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={value => value.replace(/\s?|(,*)/g, '')}
+            parser={value => value.replace(/£\s?|(,*)/g, '')}
             onChange={props.onChange}
-            // value={''}
-          >
-            {props.answerOption}
-          </InputNumber>
+          />
         </div>
       );
       break;

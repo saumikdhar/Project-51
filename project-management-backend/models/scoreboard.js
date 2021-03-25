@@ -9,13 +9,13 @@ const Scoreboard = sequelize.define('scoreboard', {
     primaryKey: true
   },
   riskNarrative: {
-    type: Sequelize.STRING(10000)
+    type: Sequelize.TEXT
   },
   objectiveNarrative: {
-    type: Sequelize.STRING(10000)
+    type: Sequelize.TEXT
   },
   actionNarrative: {
-    type: Sequelize.STRING(10000)
+    type: Sequelize.TEXT
   }
 });
 

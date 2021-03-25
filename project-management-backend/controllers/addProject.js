@@ -1,4 +1,3 @@
-const BusinessCase = require('../models/business-case');
 const Project = require('../models/project');
 // const Op = require('../util/database');
 const { body } = require('express-validator');
@@ -27,7 +26,7 @@ exports.createProject = async (req, res, next) => {
   try {
     await Project.create({
       name: newProject.name,
-      projectStatus: 'pending',
+      projectStatus: 'Pending',
       projectSize: newProject.projectSize,
       projectType: newProject.projectType,
       managerName: newProject.managerName,

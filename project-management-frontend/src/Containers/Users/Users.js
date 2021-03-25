@@ -1,19 +1,22 @@
-import React from "react";
-import classes from "./Users.module.css";
-import {addUser, editUser, deleteUser, getUser, getUsers} from "../../store/actions/index";
-import {connect} from "react-redux";
-import {Button, Divider, Select, Table} from 'antd';
+import React from 'react';
+import classes from './Users.module.css';
+import { addUser, editUser, deleteUser, getUser, getUsers } from '../../store/actions/index';
+import { connect } from 'react-redux';
+import { Button, Divider, Select, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import {UserAddOutlined} from '@ant-design/icons';
-import AddUserModal from './Modals/AddUserModal'
-import EditUserModal from './Modals/EditUserModal'
-import DeleteUserModal from './Modals/DeleteUserModal'
+import { UserAddOutlined } from '@ant-design/icons';
+import AddUserModal from './Modals/AddUserModal';
+import EditUserModal from './Modals/EditUserModal';
+import DeleteUserModal from './Modals/DeleteUserModal';
 
-const {Option} = Select;
-const roles = {"transformationTeam": "Transformation Team", "manager": "Project Manager", "employee": "Employee"};
+const { Option } = Select;
+const roles = {
+  transformationTeam: 'Transformation Team',
+  manager: 'Project Manager',
+  employee: 'Employee'
+};
 
 class Users extends React.Component {
-
   refreshUsers = () => this.props.dispatch(getUsers());
 
   componentDidMount() {
@@ -28,32 +31,32 @@ class Users extends React.Component {
     projectId: null
   };
 
-  showAddUserModal = () => this.setState({addUserModalVisible: true});
+  showAddUserModal = () => this.setState({ addUserModalVisible: true });
 
-  hideAddUserModal = () => this.setState({addUserModalVisible: false});
+  hideAddUserModal = () => this.setState({ addUserModalVisible: false });
 
-  showEditUserModal = (user) => this.setState({editUserModalVisible: true, userToEdit: user});
+  showEditUserModal = user => this.setState({ editUserModalVisible: true, userToEdit: user });
 
-  hideEditUserModal = () => this.setState({editUserModalVisible: false, userToEdit: null});
+  hideEditUserModal = () => this.setState({ editUserModalVisible: false, userToEdit: null });
 
-  showDeleteUserModal = (user) => this.setState({deleteUserModalVisible: true, userToEdit: user});
+  showDeleteUserModal = user => this.setState({ deleteUserModalVisible: true, userToEdit: user });
 
-  hideDeleteUserModal = () => this.setState({deleteUserModalVisible: false, userToEdit: null});
+  hideDeleteUserModal = () => this.setState({ deleteUserModalVisible: false, userToEdit: null });
 
-  submitUser = (values) => {
+  submitUser = values => {
     this.props.dispatch(addUser(values));
   };
 
-  editUser = (values) => {
+  editUser = values => {
     this.props.dispatch(editUser(values));
   };
 
-  deleteUser = (values) => {
-    this.props.dispatch(deleteUser(values));//this.deleteUser(record.id)
+  deleteUser = values => {
+    this.props.dispatch(deleteUser(values)); //this.deleteUser(record.id)
   };
 
-  onSwitchChange = (value) => {
-    this.setState({projectId: value});
+  onSwitchChange = value => {
+    this.setState({ projectId: value });
   };
 
   constructor(props) {
@@ -62,25 +65,23 @@ class Users extends React.Component {
       {
         title: 'First name',
         key: 'Firstname',
-        render: (text, record) => (<p key={record.firstName}>{record.firstName}</p>),
-
+        render: (text, record) => <p key={record.firstName}>{record.firstName}</p>
       },
       {
         title: 'Surname',
         key: 'Surname',
-        render: (text, record) => (<p key={record.surname}>{record.surname}</p>),
+        render: (text, record) => <p key={record.surname}>{record.surname}</p>
       },
       {
         title: 'Email',
         key: 'Email',
-        render: (text, record) => (<p key={record.email}>{record.email}</p>),
+        render: (text, record) => <p key={record.email}>{record.email}</p>
       },
       {
         title: 'Role',
         key: 'Role',
         width: '15%',
-        render: (text, record) => (<p key={record.role}>{roles[record.role]}</p>),
-
+        render: (text, record) => <p key={record.role}>{roles[record.role]}</p>
       },
       {
         title: 'Action',
@@ -90,30 +91,25 @@ class Users extends React.Component {
           return (
             <>
               <span>
-                <Button type="link"
-                  onClick={() => this.showEditUserModal(record)}
-                >
-                  <EditOutlined/> Edit
+                <Button type="link" onClick={() => this.showEditUserModal(record)}>
+                  <EditOutlined /> Edit
                 </Button>
 
-                <Divider type="vertical"/>
+                <Divider type="vertical" />
 
-                <Button type="link"
-                  onClick={() => this.showDeleteUserModal(record)}
-                >
-                  <DeleteOutlined/> Delete
+                <Button type="link" onClick={() => this.showDeleteUserModal(record)}>
+                  <DeleteOutlined /> Delete
                 </Button>
               </span>
             </>
-          )
+          );
         }
-
-      },
+      }
     ];
   }
 
   render() {
-    const {users, loading} = this.props;
+    const { users, loading } = this.props;
     const projectId = this.state.projectId;
 
     let switchItems = [];
@@ -122,15 +118,19 @@ class Users extends React.Component {
     if (users.length !== 1) {
       switchItems = [];
       for (let [key, value] of Object.entries(users)) {
-        switchItems.push(<Option value={key} key={key}>{value?.project.name}</Option>)
+        switchItems.push(
+          <Option value={key} key={key}>
+            {value?.project.name}
+          </Option>
+        );
       }
       displayUsers = users[projectId]?.users;
       if (projectId == null && users.length !== 0) {
-        this.setState({projectId: Object.keys(users)[0]})
+        this.setState({ projectId: Object.keys(users)[0] });
       }
     } else {
       displayUsers = users;
-      noProjects = (<h3>There are no active projects for which to display users.</h3>)
+      noProjects = <h3>There are no active projects for which to display users.</h3>;
     }
 
     return (
@@ -138,11 +138,10 @@ class Users extends React.Component {
         <div className={classes.Users}>
           <h1>Project Users</h1>
           {noProjects}
-          <div style={{textAlign: "left", width: "50%", display: "inline-block"}}>
-
+          <div style={{ textAlign: 'left', width: '50%', display: 'inline-block' }}>
             <Select
               showSearch
-              style={{width: 200}}
+              style={{ width: 200 }}
               optionFilterProp="children"
               onChange={this.onSwitchChange}
               filterOption={(input, option) =>
@@ -154,10 +153,13 @@ class Users extends React.Component {
             </Select>
           </div>
 
-          <div style={{textAlign: "right", width: "50%", display: "inline-block"}}>
-            <Button style={{marginBottom: "10px"}} type="primary"
-                    icon={<UserAddOutlined/>}
-                    onClick={this.showAddUserModal}>
+          <div style={{ textAlign: 'right', width: '50%', display: 'inline-block' }}>
+            <Button
+              style={{ marginBottom: '10px' }}
+              type="primary"
+              icon={<UserAddOutlined />}
+              onClick={this.showAddUserModal}
+            >
               <b> Add User</b>
             </Button>
           </div>
@@ -166,10 +168,9 @@ class Users extends React.Component {
             bordered
             dataSource={displayUsers}
             columns={this.columns}
-            scroll={{x: '100%'}}
+            scroll={{ x: '100%' }}
             loading={loading}
           />
-
         </div>
 
         <AddUserModal

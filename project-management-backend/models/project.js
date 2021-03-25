@@ -70,10 +70,18 @@ const Project = sequelize.define('project', {
   //--------------------------------------------------------------------------------------------------------------------
   // Project questions / notes
   questions: {
-    type: Sequelize.JSON,
+    type: Sequelize.TEXT,
     allowNull: false,
     get: function () {
-      return JSON.parse(this.getDataValue('questions'));
+      try{
+        return JSON.parse(this.getDataValue('questions'));
+      } catch (e) {
+        console.log("json error", e)
+        return '{}';
+      }
+    },
+    set: function (value) {
+      this.setDataValue('questions', JSON.stringify(value));
     }
   }
 });
