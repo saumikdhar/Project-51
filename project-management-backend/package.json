@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "architecture": "nodemon architecture/index.js",
     "test": "mocha --timeout 5000 --exit",
     "start": "node app.js",
     "start:dev": "nodemon app.js"
@@ -17,8 +18,8 @@
     "mocha": "^8.3.2",
     "nodemon": "^2.0.7",
     "prettier": "2.2.1",
-    "sequelize-mock": "^0.10.2",
-    "sinon": "^9.2.4"
+    "sinon": "^9.2.4",
+    "structurizr-typescript": "^1.0.11"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
