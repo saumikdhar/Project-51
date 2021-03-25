@@ -182,7 +182,7 @@ const ProjectInfo = props => {
           <tr>
             <th>Project Name</th>
             <th>Manager Name</th>
-            <th>Proect Status</th>
+            <th>Project Status</th>
             <th>Project Size</th>
             <th>Quick Win</th>
             <th>Project Type</th>
