@@ -13,7 +13,8 @@ const { Option } = Select;
 const roles = {
   transformationTeam: 'Transformation Team',
   manager: 'Project Manager',
-  employee: 'Employee'
+  employee: 'Employee',
+  it: 'IT Department Member'
 };
 
 class Users extends React.Component {

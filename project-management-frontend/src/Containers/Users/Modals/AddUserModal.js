@@ -121,6 +121,9 @@ class AddUserModal extends React.Component {
               <Option key={'employee'} value={'employee'}>
                 {'Employee'}
               </Option>
+              <Option key={'ITDM'} value={'it'}>
+                {'IT Department Member'}
+              </Option>
               <Option key={'TransformationTeam'} value={'transformationTeam'}>
                 {'Transformation Team'}
               </Option>
