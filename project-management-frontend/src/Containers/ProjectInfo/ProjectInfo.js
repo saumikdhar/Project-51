@@ -4,6 +4,7 @@ import { Button, Form, Input, Switch, Modal, Select } from 'antd';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import classes from './../Projects/Projects.module.css';
+import classes1 from './ProjectInfo.module.css';
 import { backendUrl } from '../../shared/utility';
 import CustomButton from '../../Components/UI/Button/Button';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -230,7 +231,7 @@ const ProjectInfo = props => {
       </table>
 
       <div className={classes.ProjectInfo} style={{ float: 'right' }}>
-        {props.role === 'transformationTeam'  && (
+        {props.role === 'transformationTeam' && (
           <>
             <Modal
               title="Edit project "
@@ -331,9 +332,9 @@ const ProjectInfo = props => {
                 </FormItem>
               </Form>
             </Modal>
-            <Button type="primary" onClick={showModal3}>
+            <button className={classes1.button2} type="primary" onClick={showModal3}>
               Edit
-            </Button>
+            </button>
             &nbsp;&nbsp;&nbsp;
             <Modal
               title="Delete project "
@@ -343,9 +344,9 @@ const ProjectInfo = props => {
             >
               <p>Are you sure you want to delete this project ?</p>
             </Modal>
-            <Button type="primary" onClick={showModal} danger>
+            <button className={classes1.button1} type="primary" onClick={showModal} danger>
               Delete
-            </Button>
+            </button>
             <Modal
               title="Archive"
               visible={isModalVisible2}
@@ -355,9 +356,9 @@ const ProjectInfo = props => {
               <p>Are you sure you want to archive this project ?</p>
             </Modal>
             &nbsp;&nbsp;&nbsp;{' '}
-            <Button type="primary" onClick={showModal2}>
+            <button className={classes1.button3} type="primary" onClick={showModal2}>
               Archive
-            </Button>
+            </button>
             {/*  <Modal*/}
             {/*    title="Delete project "*/}
             {/*    visible={isModalVisible}*/}
@@ -383,9 +384,9 @@ const ProjectInfo = props => {
             {/*  </Button>*/}
           </>
         )}
-        {props.role === 'it'  && (
+        {props.role === 'it' && (
           <>
-                      <Modal
+            <Modal
               title="Archive"
               visible={isModalVisible2}
               onOk={handleOk2}
@@ -394,13 +395,11 @@ const ProjectInfo = props => {
               <p>Are you sure you want to archive this project ?</p>
             </Modal>
             &nbsp;&nbsp;&nbsp;{' '}
-            <Button type="primary" onClick={showModal2}>
+            <button type="primary" onClick={showModal2}>
               Archive
-            </Button>
+            </button>
           </>
         )}
-
-
       </div>
     </div>
   );
