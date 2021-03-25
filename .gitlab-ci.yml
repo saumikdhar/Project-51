@@ -84,7 +84,7 @@ automated-heroku-deployment:
     DOCKER_TLS_CERTDIR: ""
   before_script:
     - apk add curl nodejs bash
-    - curl https://cli-assets.heroku.com/install.sh | sh
+    - curl https://cli-Assets.heroku.com/install.sh | sh
   script:
     - cd ./project-management-backend
     - docker login -u _ -p $HEROKU_TOKEN registry.heroku.com
