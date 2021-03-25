@@ -79,7 +79,7 @@ const ProjectCard = props => {
       {props.project.businessCase !== null ? <td>{props.project.projectSize}</td> : <td>Small</td>}
 
       <td>{props.project.projectType}</td>
-      {props.project.projectStatus === 'Pending' && (
+      {props.project.projectStatus !== 'Archived' && (
         <>
           <td>
             <Link to={'/adminReviewProject/' + props.project.id}>

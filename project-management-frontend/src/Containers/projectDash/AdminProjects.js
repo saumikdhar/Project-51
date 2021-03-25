@@ -391,9 +391,9 @@ export default class AdminProjects extends Component {
               )}
               <th>Size</th>
               <th>Project Type</th>
-              {this.state.projectStatusFilter === 'Pending' && (
+              {this.state.projectStatusFilter !== 'Archived' && (
                 <>
-                  <th>Review</th>
+                  <th>Review business information</th>
                 </>
               )}
             </tr>

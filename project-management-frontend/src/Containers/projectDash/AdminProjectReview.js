@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker";
+import { backendUrl } from '../../shared/utility';
 import { addUserToProject } from '../../store/actions';
 import ProjectCard from './Modals/ProjectCardModal';
 const { TextArea } = Input;
@@ -74,7 +75,7 @@ class AdminProjectReview extends Component {
   componentDidMount() {
 
     // Retrieves all project information by project id form the database
-    axios.get('http://localhost:8080/projects/projectdetails/' + this.props.match.params.id)
+    axios.get(`${backendUrl()}/projects/projectdetails/` + this.props.match.params.id)
       .then(response => {
         let tempArray = response.data.data
         this.setState({ questionsArray: tempArray.questions });
@@ -88,7 +89,7 @@ class AdminProjectReview extends Component {
       });
 
     // Retrieves all business case information by project id form the database
-    axios.get('http://localhost:8080/businessCase/getBusinessCase/' + this.props.match.params.id)
+    axios.get(`${backendUrl()}/businessCase/getBusinessCase/` + this.props.match.params.id)
       .then(response => {
         this.setState({ BusinessInfo: response.data.data[0] });
 
@@ -110,18 +111,6 @@ class AdminProjectReview extends Component {
       .catch((error) => {
         console.log(error);
       });
-
-    // Retrieves management user information form the database
-    axios.get('http://localhost:8080/users/getManagementUsers')
-      .then(response => {
-        this.setState({ managmentUsers: response.data.data });
-      })
-
-      // Log error if unsuccessful
-      .catch((error) => {
-        console.log(error);
-      });
-
   }
 
   //--------------------------------------------------------------------------------------------------------------------
